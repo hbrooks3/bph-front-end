@@ -3,10 +3,12 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import ProfilePage from "./profile-page";
+import HomePage from "./home-page";
+import PlansPage from "./plans-page";
 
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
@@ -22,7 +24,9 @@ export default function App() {
     <Router>
       <div>
         <Navbar bg="primary" variant="dark" expand="lg">
-          <Navbar.Brand href="#home">Badger Powerlifting Hub</Navbar.Brand>
+          <Navbar.Brand href="/">
+            {`Badger Powerlifting Hub`}
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
@@ -34,43 +38,16 @@ export default function App() {
         </Navbar>
         <Switch>
           <Route exact path="/">
-            <Home />
+            <HomePage />
           </Route>
           <Route path="/plans">
-            <Plan />
+            <PlansPage />
           </Route>
           <Route path="/profile">
-            <Profile />
+            <ProfilePage />
           </Route>
         </Switch>
       </div>
     </Router>
-  );
-}
-
-// You can think of these components as "pages"
-// in your app.
-
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
-
-function Plan() {
-  return (
-    <div>
-      <h2>Plan Page</h2>
-    </div>
-  );
-}
-
-function Profile() {
-  return (
-    <div>
-      <h2>Profile</h2>
-    </div>
   );
 }
