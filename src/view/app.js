@@ -6,9 +6,9 @@ import {
 } from "react-router-dom";
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import ProfilePage from "./profile-page";
-import HomePage from "./home-page";
-import PlansPage from "./plans-page";
+import ProfilePage from "./ProfilePage";
+import HomePage from "./HomePage";
+import PlansPage from "./PlansPage";
 
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
