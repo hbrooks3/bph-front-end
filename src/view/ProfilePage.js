@@ -4,32 +4,33 @@ import useUser from "../dummy-presenter/User";
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
+import Spinner from 'react-bootstrap/Spinner'
 
 export default function ProfilePage(props) {
   const { user, isLoading } = useUser();
 
   return (
-    <Container>
-      <Col>
-        <Card>
-          <Card.Title>
-            
-          </Card.Title>
-          <Card.Body>
-
-          </Card.Body>
-
-        </Card>
-      </Col>
-      <Col>
-      </Col>
-
-  <div>
-      <h2>
-      {isLoading && "Loading..."}
-      {!isLoading && user && `ID: ${user.id}`}
-      </h2>
-    </div>
-    </Container>
+    <>
+      {isLoading && (
+        <Spinner animation="grow">
+          <span className="sr-only">Loading...</span>
+        </Spinner>)}
+      {!isLoading && user && (
+        <Container>
+          <Col sm={4}>
+            <Card>
+              <Card.Title>
+                General Information
+              </Card.Title>
+              <Card.Body>
+                Height: {user.height}    
+              </Card.Body>    
+            </Card>
+          </Col>
+          <Col>
+          </Col>
+        </Container>
+      )}
+    </>
   );
 }
