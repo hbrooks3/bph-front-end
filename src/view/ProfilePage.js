@@ -1,9 +1,9 @@
 import React from "react";
 // import UseUser from "../dummy-presenter/User";
-import UseUser from "../presenter/User";
+import useUser from "../presenter/User";
 
 export default function ProfilePage(props) {
-  const { user, isLoading } = UseUser();
+  const { user, isLoading } = useUser();
 
   return (
     <div>
