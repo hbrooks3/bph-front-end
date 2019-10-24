@@ -9,7 +9,7 @@ export default function ProfilePage(props) {
     <div>
       <h2>
       {isLoading && "Loading..."}
-      {!isLoading && user && `User ID: ${user.id}`}
+      {!isLoading && user && `ID: ${user.id}`}
       </h2>
     </div>
   );
