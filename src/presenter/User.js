@@ -7,7 +7,7 @@ export default function UseUser() {
 
   // const apiAddress = `${Root}/api/User/GetUser/`;
   
-  
+  // https://jsonplaceholder.typicode.com/
   const apiAddress = 'https://jsonplaceholder.typicode.com/posts/1';
 
   useEffect(() => {
