@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
+import { Root } from './Root';
 
 export default function UseUser() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  const apiAddress = `.../api/User/GetUser/`;
+  // const apiAddress = `${Root}/api/User/GetUser/`;
+  
+  
+  const apiAddress = 'https://jsonplaceholder.typicode.com/posts/1';
 
   useEffect(() => {
     fetch(
@@ -13,8 +17,9 @@ export default function UseUser() {
         method: `GET`,
       },
     ).then((response) => {
-      response.json();
-    }).then((data) => {
+      return response.json();
+    }).then((data) => { 
+      console.log(data);
       setUser(data);
       setIsLoading(false);
     }).catch((error) => {
