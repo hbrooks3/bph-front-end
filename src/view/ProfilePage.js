@@ -8,6 +8,7 @@ import Spinner from 'react-bootstrap/Spinner'
 
 export default function ProfilePage(props) {
   const { user, isLoading } = useUser();
+  //com
 
   return (
     <>
