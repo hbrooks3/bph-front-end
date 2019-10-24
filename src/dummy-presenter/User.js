@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function UseUser() {
+export default function useUser() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
