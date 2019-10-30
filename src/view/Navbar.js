@@ -7,9 +7,12 @@ import Modal from 'react-bootstrap/Modal';
 
 export default function NavBar() {
     const [show, setShow] = useState(false);
+    const handleCloseLogin = () => setShow(false);
+    const handleShowLogin = () => setShow(true);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [display, setDisplay] = useState(false);
+    const handleCloseAccount = () => setDisplay(false);
+    const handleShowAccount = () => setDisplay(true);
   
     return (
 
@@ -26,28 +29,77 @@ export default function NavBar() {
                 <Nav.Link href="/profile">Profile</Nav.Link>
             </Nav>
             <Form inline>
-            <Button variant="primary" onClick={handleShow}>Login</Button>
+              <Button variant="primary" onClick={handleShowLogin}>Login</Button>
             </Form>
             </Navbar.Collapse>
         </Navbar>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleCloseLogin}>
         <Modal.Header closeButton>
           <Modal.Title>Login</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Login fields go here</Modal.Body>
+        <Modal.Body>  
+          <Form>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+              </Form.Text>
+            </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" />
+            </Form.Group>
+            <Nav.Item>
+              <Nav.Link eventKey="link-1" onClick={onCreateAccountClick}>Don't have an account? Create one here</Nav.Link>
+            </Nav.Item>
+          </Form>
+        </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleCloseLogin}>
             Login
           </Button>
+          <Button variant="secondary" onClick={handleCloseLogin}>
+            Close
+          </Button>
         </Modal.Footer>
-      </Modal>        
+      </Modal>   
+
+      <Modal show={display} onHide={handleCloseAccount}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create Account</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>  
+          <Form>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+              </Form.Text>
+            </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseAccount}>
+            Create
+          </Button>
+          <Button variant="secondary" onClick={handleCloseAccount}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal> 
     </>
     )
 
 
-
+    function onCreateAccountClick(event){
+      handleShowAccount();
+      handleCloseLogin();
+    }
 }
