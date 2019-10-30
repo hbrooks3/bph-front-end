@@ -52,7 +52,7 @@ export default function NavBar() {
               <Form.Control type="password" placeholder="Password" />
             </Form.Group>
             <Nav.Item>
-              <Nav.Link eventKey="link-1" onClick={onCreateAccountClick}>Don't have an account? Create one here</Nav.Link>
+              <Nav.Link eventKey="link-1" onClick={onNeedAccountClick}>Don't have an account? Create one here</Nav.Link>
             </Nav.Item>
           </Form>
         </Modal.Body>
@@ -86,7 +86,7 @@ export default function NavBar() {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleCloseAccount}>
+          <Button variant="primary" onClick={onCreateAccountClick}>
             Create
           </Button>
           <Button variant="secondary" onClick={handleCloseAccount}>
@@ -98,8 +98,13 @@ export default function NavBar() {
     )
 
 
-    function onCreateAccountClick(event){
+    function onNeedAccountClick(event){
       handleShowAccount();
       handleCloseLogin();
+    }
+
+    function onCreateAccountClick(event){
+      handleCloseAccount();
+      handleShowLogin();
     }
 }
