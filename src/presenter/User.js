@@ -13,6 +13,18 @@ export function createAccount(email, password) {
   );
 }
 
+export function loginUser(email, password) {
+  const apiRoute = ROOT + '/User/LoginUser'
+
+  fetch(
+    apiRoute,
+    {
+      method: 'POST',
+      body: JSON.stringify({email: email, password: password}),
+    },
+  );
+}
+
 export function useUser() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);

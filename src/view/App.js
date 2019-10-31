@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import ProfilePage from "./ProfilePage";
 import HomePage from "./HomePage";
 import PlansPage from "./PlansPage";
+import CreatePlan from "./CreatePlan";
 
 export default function App() {
 
@@ -21,6 +22,9 @@ export default function App() {
           </Route>
           <Route path="/plans">
             <PlansPage />
+          </Route>
+          <Route path="/create-Plan">
+            <CreatePlan />
           </Route>
           <Route path="/profile">
             <ProfilePage />
