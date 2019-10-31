@@ -1,7 +1,19 @@
 import { useState, useEffect } from 'react';
-// import { Root } from './Root';
+import { ROOT } from './Root';
 
-export default function useUser() {
+export function createAccount(email, password) {
+  const apiRoute = ROOT + '/User/CreateAccount'
+
+  fetch(
+    apiRoute,
+    {
+      method: 'POST',
+      body: JSON.stringify({email: email, password: password}),
+    },
+  );
+}
+
+export function useUser() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 

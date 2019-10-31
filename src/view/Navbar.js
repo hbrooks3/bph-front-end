@@ -1,9 +1,14 @@
+// React imports
 import React, {useState} from "react";
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+
+// Presenter imports
+import { createAccount } from "../dummy-presenter/User";
+// import { createAccount } from "../presenter/User";
 
 export default function NavBar() {
     const [show, setShow] = useState(false);
@@ -13,6 +18,8 @@ export default function NavBar() {
     const [display, setDisplay] = useState(false);
     const handleCloseAccount = () => setDisplay(false);
     const handleShowAccount = () => setDisplay(true);
+
+
   
     return (
 

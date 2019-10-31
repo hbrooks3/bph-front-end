@@ -1,17 +1,43 @@
 import React from "react";
+import Card from 'react-bootstrap/Card';
+import CardColumns from 'react-bootstrap/CardColumns';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
-/*
-import Image from "react-bootstrap/image";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-test commit
-*/
 
 export default function HomePage(props) {
   return (
-    <div>
-      <h2>Home</h2>
-    </div>
+    
+    <Container>
+      <Row>
+        <Col>
+          <Card className="text-center">
+          <Card.Header>
+            Notifications
+          </Card.Header>
+          <Card.Body>
+            <Card.Text>* Notifications shown here * 
+            </Card.Text>
+          </Card.Body>    
+          </Card>
+        </Col>
+        <Col xs={6}>
+          <Card className="text-center">
+            <Card.Header>
+              Today's Training
+            </Card.Header>
+            <Card.Body>
+              <Card.Text>* Workout shown here * 
+              </Card.Text>
+            </Card.Body>    
+          </Card>
+        </Col> 
+      </Row>
+    </Container>
+  
+
+
+    
   );
 }

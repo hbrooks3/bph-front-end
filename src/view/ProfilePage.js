@@ -1,6 +1,6 @@
 import React from "react";
-import useUser from "../dummy-presenter/User";
-// import useUser from "../presenter/User";
+import { useUser } from "../dummy-presenter/User";
+// import { useUser } from "../presenter/User";
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import CardColumns from 'react-bootstrap/CardColumns';
