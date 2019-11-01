@@ -4,6 +4,10 @@ export function createAccount(email, password) {
   console.log(`Creating account for ${email} with password: ${password}`);
 }
 
+export function loginUser(email, password) {
+  console.log(`Logging in ${email} with password: ${password}`);
+}
+
 export function useUser() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
