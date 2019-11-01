@@ -34,6 +34,7 @@ export default function NavBar() {
                 <Nav.Link href="/">Home</Nav.Link>
                 <Nav.Link href="/plans">Plans</Nav.Link>
                 <Nav.Link href="/profile">Profile</Nav.Link>
+                <Nav.Link href="/create-plan">Create Plan</Nav.Link>
             </Nav>
             <Form inline>
               <Button variant="primary" onClick={handleShowLogin}>Login</Button>
