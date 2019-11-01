@@ -5,7 +5,6 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import ReactDOM from 'react-dom';
 
 // Presenter imports
 import { createAccount, loginUser } from "../dummy-presenter/User";
