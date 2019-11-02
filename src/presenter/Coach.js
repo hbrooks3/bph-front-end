@@ -35,7 +35,7 @@ export function createWorkout(workout, planID) {
   );
 }
 
-export function usePlan() {
+export function usePlan(planId) {
   const [isLoading, setIsLoading] = useState(true);
   const [plan, setPlan] = useState(null);
 
@@ -50,6 +50,7 @@ export function usePlan() {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
+        body: JSON.stringify(planId),
         credentials: 'include',
       },
     ).then((response) => {
@@ -62,12 +63,12 @@ export function usePlan() {
     }).catch((error) => {
       console.log(error);
     });
-  }, [apiRoute]);
+  }, [apiRoute,planId]);
 
   return { plan, isLoading };
 }
 
-export function useWorkout() {
+export function useWorkout(workoutId) {
   const [isLoading, setIsLoading] = useState(true);
   const [workout, setWorkout] = useState(null);
 
@@ -78,6 +79,7 @@ export function useWorkout() {
       apiRoute,
       {
         method: `GET`,
+        body: JSON.stringify(workoutId),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -94,7 +96,7 @@ export function useWorkout() {
     }).catch((error) => {
       console.log(error);
     });
-  }, [apiRoute]);
+  }, [apiRoute,workoutId]);
 
   return { workout, isLoading };
 }
