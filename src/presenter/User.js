@@ -19,7 +19,7 @@ export function createAccount(email, password) {
 }
 
 export function loginUser(email, password) {
-  const apiRoute = ROOT + '/User/LogoutUser'
+  const apiRoute = ROOT + '/User/LoginUser'
 
   fetch(
     apiRoute,
