@@ -36,18 +36,18 @@ function PageBody(props) {
   const UPDATE_FUNCTION = 1;
   const INITIAL_VALUE = 2;
 
-  const height = [...useState(props.user.Height), props.user.Height];
-  const weight = [...useState(props.user.Weight), props.user.Weight];
-  const email = [...useState(props.user.Email), props.user.Email];
-  const firstName = [...useState(props.user.FirstName), props.user.FirstName];
-  const lastName = [...useState(props.user.LastName), props.user.LastName];
+  const height = [...useState(props.user.height), props.user.height];
+  const weight = [...useState(props.user.weight), props.user.weight];
+  const email = [...useState(props.user.email), props.user.email];
+  const firstName = [...useState(props.user.firstName), props.user.firstName];
+  const lastName = [...useState(props.user.lastName), props.user.lastName];
 
   const user = {
-    Height: height[VALUE],
-    Weight: weight[VALUE],
-    Email: email[VALUE],
-    FirstName: firstName[VALUE],
-    LastName: lastName[VALUE],
+    height: height[VALUE],
+    weight: weight[VALUE],
+    email: email[VALUE],
+    firstName: firstName[VALUE],
+    lastName: lastName[VALUE],
   };
 
   const pushUpdate = (event) => {
