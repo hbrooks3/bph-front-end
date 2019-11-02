@@ -68,7 +68,7 @@ function PageBody(props) {
       body: [
         {label: `First Name`, value: firstName[VALUE], update: firstName[UPDATE_FUNCTION], reset: firstName[INITIAL_VALUE]},
         {label: `Last Name`, value: lastName[VALUE], update: lastName[UPDATE_FUNCTION], reset: lastName[INITIAL_VALUE]},
-        {label: `Email`, value: weight[VALUE], update: weight[UPDATE_FUNCTION], reset: weight[INITIAL_VALUE]},
+        {label: `Email`, value: email[VALUE], update: email[UPDATE_FUNCTION], reset: email[INITIAL_VALUE]},
       ]
     },
   ];
