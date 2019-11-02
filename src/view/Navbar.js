@@ -7,8 +7,8 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
 // Presenter imports
-import { createAccount, loginUser } from "../dummy-presenter/User";
-// import { createAccount, loginUser } from "../presenter/User";
+import { createAccount, loginUser, useSession, logoutUser} from "../dummy-presenter/User";
+// import { createAccount, loginUser, useSession, logoutUser } from "../presenter/User";
 
 export default function NavBar() {
   const [loginEmail, setLoginEmail] = useState('');
@@ -18,6 +18,8 @@ export default function NavBar() {
 
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+
+  const activeSession = useSession();
 
   const closeLoginModal = () => setShowLogin(false);
   const openLoginModal = () => setShowLogin(true);
@@ -38,6 +40,10 @@ export default function NavBar() {
     closeRegisterModal();
     openLoginModal();
   }
+
+  const handleLogout = () => {
+    logoutUser();
+  }
   
   return (
   <>
@@ -53,9 +59,10 @@ export default function NavBar() {
         <Nav.Link href="/profile">Profile</Nav.Link>
         <Nav.Link href="/create-plan">Create Plan</Nav.Link>
       </Nav>
-      <Form inline>
+      {activeSession ? 
+        <Button variant="primary" onClick={handleLogout}>Logout</Button> :
         <Button variant="primary" onClick={openLoginModal}>Login</Button>
-      </Form>
+      }
       </Navbar.Collapse>
     </Navbar>
 
