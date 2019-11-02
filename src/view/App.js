@@ -9,7 +9,8 @@ import ProfilePage from "./ProfilePage";
 import HomePage from "./HomePage";
 import PlansPage from "./PlansPage";
 import CreatePlan from "./CreatePlan";
-import { useSession } from "../dummy-presenter/User";
+// import { useSession } from "../dummy-presenter/User";
+import { useSession } from "../presenter/User";
 
 export default function App() {
   const sessionStatus = useSession();

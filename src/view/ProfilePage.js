@@ -12,8 +12,8 @@ import Form from 'react-bootstrap/Form';
 
 
 // Presenter imports
-import { useUser, updateUser } from "../dummy-presenter/User";
-// import { useUser, updateUser } from "../presenter/User";
+// import { useUser, updateUser } from "../dummy-presenter/User";
+import { useUser, updateUser } from "../presenter/User";
 
 export default function ProfilePage(props) {
   const { user, isLoading } = useUser();
