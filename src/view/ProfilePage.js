@@ -31,58 +31,40 @@ export default function ProfilePage(props) {
 function PageBody(props) {
   const initialUser = props.user;
 
-  // const reduceUser = (state, action) => {
-  //   switch (action.key) {
-  //     case 'height':
-  //       return {...state, height: action.value};
-  //     default:
-  //       throw new Error();
-  //   }
-  // }
-
-  // const [user, editUser] = useReducer(reduceUser, initialUser);
   const [user, editUser] = useState(initialUser);
-
-
-  // const VALUE = 0;
-  // const UPDATE_FUNCTION = 1;
-  // const INITIAL_VALUE = 2;
 
   const pushUpdate = (event) => {
     event.preventDefault();
     updateUser(user);
   };
 
-  // console.log(Object.keys(user));
-
-  
-
-  const update = Object.keys(user).reduce((accumulator, key) => {
-    accumulator[key] = (value) => {
+  // Updates contians update functions for each 
+  const controls = Object.keys(user).reduce((accumulator, key) => {
+    accumulator.update[key] = (value) => {
       let newUser = {...user};
       newUser[key] = value;
       editUser(newUser);
     };
+    accumulator.reset[key] = () => {
+      editUser(initialUser);
+    };
     return accumulator;
-  }, {});
-
-  console.log(update);
+  }, {update: {}, reset: {}});
 
   const pageData = [
     {
       title: `General Information`,
       body: [
-        // {label: `Height`, value: user.height, update: (value) => editUser({...user, height: value}), reset: initialUser.height},
-        {label: `Height`, value: user.height, update: update.height, reset: initialUser.height},
-        // {label: `Weight`, value: weight[VALUE], update: weight[UPDATE_FUNCTION], reset: weight[INITIAL_VALUE]},
+        {label: `Height`, value: user.height, update: controls.update.height, reset: controls.reset.height},
+        {label: `Weight`, value: user.weight, update: controls.update.weight, reset: controls.reset.weight},
       ]
     },
     {
       title: `Contact Information`,
       body: [
-        // {label: `First Name`, value: firstName[VALUE], update: firstName[UPDATE_FUNCTION], reset: firstName[INITIAL_VALUE]},
-        // {label: `Last Name`, value: lastName[VALUE], update: lastName[UPDATE_FUNCTION], reset: lastName[INITIAL_VALUE]},
-        // {label: `Email`, value: weight[VALUE], update: weight[UPDATE_FUNCTION], reset: weight[INITIAL_VALUE]},
+        {label: `First Name`, value: user.firstName, update: controls.update.firstName, reset: controls.reset.firstName},
+        {label: `Last Name`, value: user.lastName, update: controls.update.lastName, reset: controls.reset.lastName},
+        {label: `Email`, value: user.email, update: controls.update.email, reset: controls.reset.email},
       ]
     },
   ];
@@ -109,8 +91,8 @@ function DisplayCard(props) {
   }
 
   const cancelEdit = () => {
+    card.body.forEach(field => field.reset());
     setLock(true);
-    card.body.forEach((field) => field.update(field.reset));
   }
 
   return (
