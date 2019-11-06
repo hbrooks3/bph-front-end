@@ -7,13 +7,10 @@ import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Form from 'react-bootstrap/Form';
-// import Container from 'react-bootstrap/Container';
-// import Row from 'react-bootstrap/Row';
-
 
 // Presenter imports
-// import { useUser, updateUser } from "../dummy-presenter/User";
-import { useUser, updateUser } from "../presenter/User";
+import { useUser, updateUser } from "../dummy-presenter/User";
+// import { useUser, updateUser } from "../presenter/User";
 
 export default function ProfilePage(props) {
   const { user, isLoading } = useUser();
@@ -32,43 +29,60 @@ export default function ProfilePage(props) {
 }
 
 function PageBody(props) {
-  const VALUE = 0;
-  const UPDATE_FUNCTION = 1;
-  const INITIAL_VALUE = 2;
+  const initialUser = props.user;
 
-  const height = [...useState(props.user.Height), props.user.Height];
-  const weight = [...useState(props.user.Weight), props.user.Weight];
-  const email = [...useState(props.user.Email), props.user.Email];
-  const firstName = [...useState(props.user.FirstName), props.user.FirstName];
-  const lastName = [...useState(props.user.LastName), props.user.LastName];
+  // const reduceUser = (state, action) => {
+  //   switch (action.key) {
+  //     case 'height':
+  //       return {...state, height: action.value};
+  //     default:
+  //       throw new Error();
+  //   }
+  // }
 
-  const user = {
-    Height: height[VALUE],
-    Weight: weight[VALUE],
-    Email: email[VALUE],
-    FirstName: firstName[VALUE],
-    LastName: lastName[VALUE],
-  };
+  // const [user, editUser] = useReducer(reduceUser, initialUser);
+  const [user, editUser] = useState(initialUser);
+
+
+  // const VALUE = 0;
+  // const UPDATE_FUNCTION = 1;
+  // const INITIAL_VALUE = 2;
 
   const pushUpdate = (event) => {
     event.preventDefault();
-    updateUser(Object.assign(props.user,user));
+    updateUser(user);
   };
+
+  // console.log(Object.keys(user));
+
+  
+
+  const update = Object.keys(user).reduce((accumulator, key) => {
+    accumulator[key] = (value) => {
+      let newUser = {...user};
+      newUser[key] = value;
+      editUser(newUser);
+    };
+    return accumulator;
+  }, {});
+
+  console.log(update);
 
   const pageData = [
     {
       title: `General Information`,
       body: [
-        {label: `Height`, value: height[VALUE], update: height[UPDATE_FUNCTION], reset: height[INITIAL_VALUE]},
-        {label: `Weight`, value: weight[VALUE], update: weight[UPDATE_FUNCTION], reset: weight[INITIAL_VALUE]},
+        // {label: `Height`, value: user.height, update: (value) => editUser({...user, height: value}), reset: initialUser.height},
+        {label: `Height`, value: user.height, update: update.height, reset: initialUser.height},
+        // {label: `Weight`, value: weight[VALUE], update: weight[UPDATE_FUNCTION], reset: weight[INITIAL_VALUE]},
       ]
     },
     {
       title: `Contact Information`,
       body: [
-        {label: `First Name`, value: firstName[VALUE], update: firstName[UPDATE_FUNCTION], reset: firstName[INITIAL_VALUE]},
-        {label: `Last Name`, value: lastName[VALUE], update: lastName[UPDATE_FUNCTION], reset: lastName[INITIAL_VALUE]},
-        {label: `Email`, value: weight[VALUE], update: weight[UPDATE_FUNCTION], reset: weight[INITIAL_VALUE]},
+        // {label: `First Name`, value: firstName[VALUE], update: firstName[UPDATE_FUNCTION], reset: firstName[INITIAL_VALUE]},
+        // {label: `Last Name`, value: lastName[VALUE], update: lastName[UPDATE_FUNCTION], reset: lastName[INITIAL_VALUE]},
+        // {label: `Email`, value: weight[VALUE], update: weight[UPDATE_FUNCTION], reset: weight[INITIAL_VALUE]},
       ]
     },
   ];
