@@ -51,7 +51,7 @@ function PageBody(props) {
     return accumulator;
   }, {});
 
-  const pageData = [
+  const cards = [
     {
       title: `General Information`,
       fields: [
@@ -73,7 +73,7 @@ function PageBody(props) {
     },
   ];
 
-  const pageDisplay = pageData.map((card, index) =>
+  const pageDisplay = cards.map((card, index) =>
     <EditableCard key={index} {...card}/>
   );
 
