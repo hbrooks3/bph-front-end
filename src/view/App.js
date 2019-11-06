@@ -8,9 +8,9 @@ import Navbar from './Navbar';
 import ProfilePage from "./ProfilePage";
 import HomePage from "./HomePage";
 import PlansPage from "./PlansPage";
-import CreatePlan from "./CreatePlan";
-// import { useSession } from "../dummy-presenter/User";
-import { useSession } from "../presenter/User";
+// import CreatePlan from "./CreatePlan";
+import { useSession } from "../dummy-presenter/User";
+// import { useSession } from "../presenter/User";
 
 export default function App() {
   const sessionStatus = useSession();
@@ -28,7 +28,7 @@ export default function App() {
               <PlansPage />
             </Route>
             <Route path="/create-Plan">
-              <CreatePlan />
+              {/* <CreatePlan /> */}
             </Route>
             <Route path="/profile">
               <ProfilePage />
