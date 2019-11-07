@@ -1,5 +1,5 @@
 // React imports
-import React, {useState} from "react";
+import React, {useCallback, useReducer, useMemo} from "react";
 
 // Bootstrap Imports
 import CardColumns from 'react-bootstrap/CardColumns';
@@ -28,28 +28,45 @@ export default function ProfilePage(props) {
   );
 }
 
+function reduceUser (state, action) {
+  switch (action.type) {
+    case 'edit':
+      return {...state, ...action.value};
+    default:
+      throw new Error();
+  }
+}
+
+const userFields = ['height', 'weight', 'lastName', 'firstName', 'email'];
+
 function PageBody(props) {
   const initialUser = props.user;
-
-  const [user, editUser] = useState(initialUser);
+  const [user, editUser] = useReducer(reduceUser, initialUser);
 
   const pushUpdate = () => {
     updateUser(user);
   };
 
-  function resetForm() {
-    editUser(initialUser);
-  }
+  const resetForm = useCallback(() => {
+    editUser({
+      type: 'edit',
+      value: initialUser,
+    });
+  }, [initialUser]);
 
-  // An object contiaining an update function for each value in a user
-  const updaters = Object.keys(user).reduce((accumulator, key) => {
-    accumulator[key] = (value) => {
-      let newUser = {...user};
-      newUser[key] = value;
-      editUser(newUser);
-    };
-    return accumulator;
-  }, {});
+  const updaters = useMemo(() => {
+    return userFields.reduce((accumulator, key) => {
+      accumulator[key] = (value) => {
+        let newUser = {};
+        newUser[key] = value;
+        editUser({
+          type: 'edit',
+          value: newUser,
+        });
+      };
+      return accumulator;
+    }, {});
+  }, [])
 
   const cards = [
     {
