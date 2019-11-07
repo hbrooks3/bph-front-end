@@ -7,8 +7,8 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
 // Presenter imports
-// import { createAccount, loginUser, useSession, logoutUser} from "../dummy-presenter/User";
-import { createAccount, loginUser, useSession, logoutUser } from "../presenter/User";
+import { createAccount, loginUser, useSession, logoutUser} from "../dummy-presenter/User";
+// import { createAccount, loginUser, useSession, logoutUser } from "../presenter/User";
 
 export default function NavBar() {
   const [loginEmail, setLoginEmail] = useState('');
