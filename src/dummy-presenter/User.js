@@ -10,8 +10,6 @@ let GlobalUser = {
 
 let loggedIn = true;
 
-let counter = 0;
-
 let editUser = null;
 
 export function createAccount(email, password) {
@@ -28,8 +26,8 @@ export function logoutUser() {
 }
 
 export function updateUser(newUser) {
+  console.log(`User synced with server:`);
   console.log(newUser);
-  console.log(++counter);
 
   GlobalUser = newUser;
 
@@ -42,7 +40,7 @@ export function useSession() {
   const [sessionStatus, setSessionStatus] = useState(false);
 
   useEffect(() => {
-    console.log(loggedIn);
+    // console.log(loggedIn);
     setSessionStatus(loggedIn);
   },[]);
 
