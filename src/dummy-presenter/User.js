@@ -12,35 +12,35 @@ let loggedIn = true;
 
 let editUser = null;
 
+let editStatus = null;
+
 export function createAccount(email, password) {
   console.log(`Creating account for ${email} with password: ${password}`);
 }
 
-export function loginUser(email, password) {
-  loggedIn = true;
+export function loginUser(email, password, callback) {
+  // editStatus(true);
   console.log(`Logging in ${email} with password: ${password}`);
+  setTimeout(callback, 100);
 }
 
 export function logoutUser() {
-  loggedIn = false;
+  editStatus(false);
 }
 
 export function updateUser(newUser) {
   console.log(`User synced with server:`);
   console.log(newUser);
 
-  GlobalUser = newUser;
-
   editUser(newUser);
-  
-  // console.log(Object.assign(GlobalUser, newUser));
 }
 
 export function useSession() {
-  const [sessionStatus, setSessionStatus] = useState(false);
+  const [sessionStatus, setSessionStatus] = useState(true);
+
+  editStatus = setSessionStatus;
 
   useEffect(() => {
-    // console.log(loggedIn);
     setSessionStatus(loggedIn);
   },[]);
 
