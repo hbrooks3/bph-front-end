@@ -1,39 +1,46 @@
 import { useState, useEffect } from 'react';
 
 let GlobalUser = {
-  Email: "lifter1@gmail.com",
-  FirstName: "Phil",
-  LastName: "Myez",
-  Height: "6'4\"",
-  Weight: "800lbs",
+  email: "lifter1@gmail.com",
+  firstName: "Phil",
+  lastName: "Myez",
+  height: "6'4\"",
+  weight: "800lbs",
 }
 
 let loggedIn = true;
+
+let editUser = null;
+
+let editStatus = null;
 
 export function createAccount(email, password) {
   console.log(`Creating account for ${email} with password: ${password}`);
 }
 
-export function loginUser(email, password) {
-  loggedIn = true;
+export function loginUser(email, password, callback) {
+  // editStatus(true);
   console.log(`Logging in ${email} with password: ${password}`);
+  setTimeout(callback, 100);
 }
 
 export function logoutUser() {
-  loggedIn = false;
+  editStatus(false);
 }
 
 export function updateUser(newUser) {
+  console.log(`User synced with server:`);
   console.log(newUser);
-  
-  // console.log(Object.assign(GlobalUser, newUser));
+
+  editUser(newUser);
 }
 
 export function useSession() {
-  const [sessionStatus, setSessionStatus] = useState(false);
+  const [sessionStatus, setSessionStatus] = useState(true);
+
+  editStatus = setSessionStatus;
 
   useEffect(() => {
-    console.log(loggedIn);
     setSessionStatus(loggedIn);
   },[]);
 
@@ -42,12 +49,14 @@ export function useSession() {
 
 export function useUser() {
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(GlobalUser);
+
+  editUser = setUser;
 
   useEffect(() => {
     setIsLoading(false);
     setUser(GlobalUser);
   }, []);
 
-  return { user, isLoading };
+  return { user, isLoading};
 }

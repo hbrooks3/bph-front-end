@@ -8,3 +8,11 @@ $theme-colors: (
 
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';
+
+.card {
+  margin: 1.5rem;
+}
+
+.btn {
+  margin: .2rem;
+}

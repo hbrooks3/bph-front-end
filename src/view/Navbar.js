@@ -6,9 +6,11 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
+import { Link } from "react-router-dom";
+
 // Presenter imports
-// import { createAccount, loginUser, useSession, logoutUser} from "../dummy-presenter/User";
-import { createAccount, loginUser, useSession, logoutUser } from "../presenter/User";
+import { createAccount, loginUser, useSession, logoutUser} from "../dummy-presenter/User";
+// import { createAccount, loginUser, useSession, logoutUser } from "../presenter/User";
 
 export default function NavBar() {
   const [loginEmail, setLoginEmail] = useState('');
@@ -49,15 +51,15 @@ export default function NavBar() {
   <>
     <Navbar bg="primary" variant="dark" expand="lg">
       <Navbar.Brand href="/">
-      {`Badger Powerlifting Hub`}
+      Badger Powerlifting Hub
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
       <Nav className="mr-auto">
-        <Nav.Link href="/">Home</Nav.Link>
-        <Nav.Link href="/plans">Plans</Nav.Link>
-        <Nav.Link href="/profile">Profile</Nav.Link>
-        <Nav.Link href="/create-plan">Create Plan</Nav.Link>
+        <Link className="nav-link" to="/home">Home</Link>
+        <Link className="nav-link" to="/plans">Plans</Link>
+        <Link className="nav-link" to="/profile">Profile</Link>
+        <Link className="nav-link" to="/create-plan">Create Plan</Link>
       </Nav>
       {activeSession ? 
         <Button variant="primary" onClick={handleLogout}>Logout</Button> :
