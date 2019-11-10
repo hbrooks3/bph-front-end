@@ -57,11 +57,9 @@ function PageBody(props) {
   const updaters = useMemo(() => {
     return userFields.reduce((accumulator, key) => {
       accumulator[key] = (value) => {
-        let newUser = {};
-        newUser[key] = value;
         editUser({
           type: 'edit',
-          value: newUser,
+          value: { [key]: value },
         });
       };
       return accumulator;
