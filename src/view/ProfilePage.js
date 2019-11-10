@@ -1,5 +1,5 @@
 // React imports
-import React, {useCallback, useReducer, useState, useMemo} from "react";
+import React, {useReducer, useMemo} from "react";
 
 // Bootstrap Imports
 import CardColumns from 'react-bootstrap/CardColumns';
@@ -34,19 +34,14 @@ const userFields = ['height', 'weight', 'lastName', 'firstName', 'email'];
 
 function PageBody(props) {
   const initialUser = props.user;
+
   const [user, editUser] = useReducer(reduceUser, initialUser);
-  // const [user, editUser] = useState(initialUser);
 
+  const pushUpdate = () => updateUser(user);
 
-  const pushUpdate = () => {
-    updateUser(user);
-  };
+  const resetForm = () => editUser(initialUser);
 
-  const resetForm = useCallback(() => {
-    editUser(initialUser);
-  }, [initialUser]);
-
-  const updaters = useMemo(() => 
+  const fieldUpdaters = useMemo(() => 
     userFields.reduce((updaters, field) =>
       ({...updaters, [field]: (value) => editUser({[field]: value})}),
       {}
@@ -57,8 +52,8 @@ function PageBody(props) {
     {
       title: `General Information`,
       fields: [
-        {label: `Height`, value: user.height, update: updaters.height},
-        {label: `Weight`, value: user.weight, update: updaters.weight},
+        {label: `Height`, value: user.height, update: fieldUpdaters.height},
+        {label: `Weight`, value: user.weight, update: fieldUpdaters.weight},
       ],
       submit: pushUpdate,
       reset: resetForm,
@@ -66,9 +61,9 @@ function PageBody(props) {
     {
       title: `Contact Information`,
       fields: [
-        {label: `First Name`, value: user.firstName, update: updaters.firstName},
-        {label: `Last Name`, value: user.lastName, update: updaters.lastName},
-        {label: `Email`, value: user.email, update: updaters.email},
+        {label: `First Name`, value: user.firstName, update: fieldUpdaters.firstName},
+        {label: `Last Name`, value: user.lastName, update: fieldUpdaters.lastName},
+        {label: `Email`, value: user.email, update: fieldUpdaters.email},
       ],
       submit: pushUpdate,
       reset: resetForm,
