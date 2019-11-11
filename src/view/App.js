@@ -12,8 +12,8 @@ import PlansPage from "./PlansPage";
 // import CreatePlan from "./CreatePlan";
 import LandingPage from "./LandingPage";
 
-// import { useSession } from "../dummy-presenter/User";
-// import { useSession } from "../presenter/User";
+// redux
+import { useSelector } from 'react-redux';
 
 export default function App() {
   return (
@@ -22,10 +22,10 @@ export default function App() {
         <Navbar />
 
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/welcome">
             <LandingPage />
           </Route>
-          <PrivateRoute exact path="/Home">
+          <PrivateRoute exact path="/">
             <HomePage />
           </PrivateRoute>
           <PrivateRoute path="/plans">
@@ -47,7 +47,7 @@ export default function App() {
 }
 
 function PrivateRoute({ children, ...rest }) {
-  const sessionStatus = true;
+  const sessionStatus = useSelector(state => state.auth.loggedIn);
 
   return (
     <Route
@@ -58,7 +58,7 @@ function PrivateRoute({ children, ...rest }) {
         ) : (
           <Redirect
             to={{
-              pathname: "/",
+              pathname: "/welcome",
               state: { from: location }
             }}
           />
