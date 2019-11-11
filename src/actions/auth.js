@@ -24,17 +24,33 @@ export const login = (email, password) => (dispatch) => {
     credentials: 'include',
     }
   ).then(
-    response => response.json().then(response => dispatch({
-      type: LOGIN_SUCCESS,
-      payload: response,
-    })),
-    error => dispatch({
-      type: LOGIN_FAILURE,
-      payload: error.message,
-    }),
-  )
+    response => {
+      if (response.ok) {
+        const time = Date.now();
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: time,
+        });
+      } else {
+        dispatch({
+          type: LOGIN_FAILURE,
+          payload: response.statusText,
+        });
+      };
+    },
+    error => console.log(error.message)
+  );
 };
 
 export const LOGIN_DISMISS_ERROR = 'LOGIN_DISMISS_ERROR';
 
 export const dismissLoginError = () => ({type: LOGIN_DISMISS_ERROR});
+
+export const LOGOUT = 'LOGOUT';
+
+export const logout = () => (dispatch) => {
+  // Update app state to loading
+  dispatch({type: LOGOUT,});
+
+  return fetch('/api/User/LogoutUser');
+}
