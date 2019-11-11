@@ -7,19 +7,13 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
 
-// redux
+const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
 
-const LoginModal = ({
-  openRegister, handleLogin
-}) => {
-  const [showLogin, setShowLogin] = useState(false);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
-  const closeLoginModal = () => setShowLogin(false);
-
   return (
-    <Modal show={showLogin} onHide={closeLoginModal}>
+    <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Login</Modal.Title>
       </Modal.Header>
@@ -47,15 +41,15 @@ const LoginModal = ({
             />
           </Form.Group>
           <Nav.Item>
-            <Nav.Link eventKey="link-1" onClick={openRegister}>Don't have an account? Create one here</Nav.Link>
+            <Nav.Link eventKey="link-1" onClick={switchToRegister}>Don't have an account? Create one here</Nav.Link>
           </Nav.Item>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleLogin}>
+        <Button variant="primary" onClick={()=>onLogin(email, password)}>
           Login
         </Button>
-        <Button variant="secondary" onClick={closeLoginModal}>
+        <Button variant="secondary" onClick={onClose}>
           Close
         </Button>
       </Modal.Footer>

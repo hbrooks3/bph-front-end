@@ -21,9 +21,7 @@ export default function NavBar() {
   
   return (
   <Navbar bg="primary" variant="dark" expand="lg">
-    <Navbar.Brand href="/">
-    Badger Powerlifting Hub
-    </Navbar.Brand>
+    <Navbar.Brand href="/">Badger Powerlifting Hub</Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
     {sessionStatus &&

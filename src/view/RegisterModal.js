@@ -6,22 +6,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
-// redux
-
-const RegisterModal = ({
-  openRegister, handleRegister, handleClose
-}) => {
-  const [show, setShow] = useState(true);
+const RegisterModal = ({show, onClose, onRegister}) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
-  const close = () => {
-    setShow(false);
-    handleClose();
-  };
-
   return (
-    <Modal show={show} onHide={close}>
+    <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Create Account</Modal.Title>
       </Modal.Header>
@@ -51,10 +41,10 @@ const RegisterModal = ({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleRegister}>
+        <Button variant="primary" onClick={()=>onRegister(email, password)}>
           Create
         </Button>
-        <Button variant="secondary" onClick={close}>
+        <Button variant="secondary" onClick={onClose}>
           Close
         </Button>
       </Modal.Footer>

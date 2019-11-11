@@ -1,16 +1,20 @@
+// react
 import React from "react";
+
+// react-router
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
+
+// views
 import Navbar from './Navbar';
 import ProfilePage from "./ProfilePage";
 import HomePage from "./HomePage";
 import PlansPage from "./PlansPage";
 // import CreatePlan from "./CreatePlan";
-import LandingPage from "./LandingPage";
 
 // redux
 import { useSelector } from 'react-redux';
@@ -22,12 +26,9 @@ export default function App() {
         <Navbar />
 
         <Switch>
-          <Route exact path="/welcome">
-            <LandingPage />
-          </Route>
-          <PrivateRoute exact path="/">
+          <Route exact path="/">
             <HomePage />
-          </PrivateRoute>
+          </Route>
           <PrivateRoute path="/plans">
             <PlansPage />
           </PrivateRoute>
@@ -58,7 +59,7 @@ function PrivateRoute({ children, ...rest }) {
         ) : (
           <Redirect
             to={{
-              pathname: "/welcome",
+              pathname: "/",
               state: { from: location }
             }}
           />
