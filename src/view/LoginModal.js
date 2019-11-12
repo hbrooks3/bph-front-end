@@ -8,7 +8,6 @@ import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
 
 const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
-
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
