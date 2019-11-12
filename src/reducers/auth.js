@@ -6,6 +6,7 @@ const initialState = {
   loggedIn: true,
   isFetching: false,
   isError: false,
+  id: 123,
 };
 
 const auth = (state = initialState, action) => {
@@ -20,7 +21,8 @@ const auth = (state = initialState, action) => {
         ...state,
         isFetching: false,
         loggedIn: true,
-        lastUpdated: action.payload,
+        lastUpdated: action.payload.time,
+        id: action.payload.id,
       };
     case LOGIN_FAILURE:
       return {
@@ -36,8 +38,9 @@ const auth = (state = initialState, action) => {
       };
     case LOGOUT:
       return {
-        ...state,
         loggedIn: false,
+        isFetching: false,
+        isError: false,
       };
     default:
       return state;
