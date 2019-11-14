@@ -1,5 +1,6 @@
 import {
   LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR, LOGOUT,
+  REGISTER_ATTEMPT, REGISTER_SUCCESS, REGISTER_FAILURE, REGISTER_DISSMISS_ERROR,
 } from '../actions/auth';
 
 // const initialState = {
@@ -18,9 +19,11 @@ const initialState = {
 const auth = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_ATTEMPT:
+    case REGISTER_ATTEMPT:
       return {
         ...state,
         isFetching: true,
+        isError: false,
       };
     case LOGIN_SUCCESS:
       return {
@@ -30,7 +33,13 @@ const auth = (state = initialState, action) => {
         lastUpdated: action.payload.time,
         id: action.payload.id,
       };
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+      };
     case LOGIN_FAILURE:
+    case REGISTER_FAILURE:
       return {
         ...state,
         isFetching: false,
@@ -38,6 +47,7 @@ const auth = (state = initialState, action) => {
         errorMessage: action.payload,
       };
     case LOGIN_DISMISS_ERROR:
+    case REGISTER_DISSMISS_ERROR:
       return {
         ...state,
         isError: false,

@@ -12,10 +12,10 @@ import Alert from 'react-bootstrap/Alert';
 import { useSelector, useDispatch } from 'react-redux';
 
 // views
-import LoadingCard from './LoadingCard';
+import Spinner from 'react-bootstrap/Spinner';
 
 // actions
-import { dismissLoginError } from '../actions/auth';
+import { dismissLoginError, login } from '../actions/auth';
 
 const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
   const [password, setPassword] = useState('');
@@ -24,42 +24,59 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
   const auth = useSelector(state=>state.auth);
   const dispatch = useDispatch();
 
-  if (auth.isFetching) {
-    return <Modal><LoadingCard /></Modal>;
-  }
+  const close = () => {
+    if (auth.isError) {
+      dispatch(dismissLoginError());
+    };
+    onClose();
+  };
+
+  const moveToRegister = () => {
+    close();
+    switchToRegister();
+  };
 
   return (
-    <Modal show={show} onHide={onClose}>
+    <Modal show={show} onHide={close}>
       <Modal.Header closeButton>
         <Modal.Title>Login</Modal.Title>
       </Modal.Header>
-      <Modal.Body>  
-        <Form>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              value={email}
-              onChange={event => setEmail(event.target.value)}
-              placeholder="Enter email"
-            />
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={event => setPassword(event.target.value)}
-            />
-          </Form.Group>
-          <Nav.Item>
-            <Nav.Link eventKey="link-1" onClick={switchToRegister}>Don't have an account? Create one here</Nav.Link>
-          </Nav.Item>
-        </Form>
+      <Modal.Body>
+        {
+          auth.isFetching ?
+          <div className="text-center">
+            <Spinner animation="border" />
+          </div> :
+          <Form>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={event => setEmail(event.target.value)}
+                placeholder="Enter email"
+              />
+              <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+              </Form.Text>
+            </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={event => setPassword(event.target.value)}
+              />
+            </Form.Group>
+            <Nav.Item>
+              <Nav.Link onClick={moveToRegister}>
+                Don't have an account? Create one here
+              </Nav.Link>
+            </Nav.Item>
+          </Form>
+        }
+        
         {
           auth.isError &&
           <Alert variant="danger" onClose={() => dispatch(dismissLoginError())} dismissible>
@@ -69,10 +86,10 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
         }
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={()=>onLogin(email, password)}>
+        <Button variant="primary" onClick={()=>dispatch(login(email,password))} disabled={auth.isFetching}>
           Login
         </Button>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant="secondary" onClick={close} disabled={auth.isFetching}>
           Close
         </Button>
       </Modal.Footer>
