@@ -41,8 +41,7 @@ export const login = (email, password) => (dispatch) => {
           });
         });
       };
-    },
-    error => console.log(error.message)
+    }
   );
 };
 
@@ -69,6 +68,8 @@ export const logout = () => (dispatch) => {
     },
   );
 }
+
+
 
 export {
   LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR, LOGOUT,
