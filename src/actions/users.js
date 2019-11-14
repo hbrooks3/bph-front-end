@@ -13,10 +13,10 @@ export const fetchUser = (id) => (dispatch) => {
 
   // Make call to backend
   return fetch(
-    '/api/getUser', //TODO: Make correct call
+    '/api/User/GetCurrentUser', //TODO: Make correct call
     {
-      method: 'FETCH',
-      body: JSON.stringify({ id }),
+      method: 'GET',
+      // body: JSON.stringify({ id }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
