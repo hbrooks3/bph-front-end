@@ -6,10 +6,27 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
+import Alert from 'react-bootstrap/Alert';
+
+// redux
+import { useSelector, useDispatch } from 'react-redux';
+
+// views
+import LoadingCard from './LoadingCard';
+
+// actions
+import { dismissLoginError } from '../actions/auth';
 
 const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+
+  const auth = useSelector(state=>state.auth);
+  const dispatch = useDispatch();
+
+  if (auth.isFetching) {
+    return <Modal><LoadingCard /></Modal>;
+  }
 
   return (
     <Modal show={show} onHide={onClose}>
@@ -43,6 +60,13 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
             <Nav.Link eventKey="link-1" onClick={switchToRegister}>Don't have an account? Create one here</Nav.Link>
           </Nav.Item>
         </Form>
+        {
+          auth.isError &&
+          <Alert variant="danger" onClose={() => dispatch(dismissLoginError())} dismissible>
+          <Alert.Heading>Login Error!</Alert.Heading>
+          <p>{auth.errorMessage}</p>
+        </Alert>
+        }
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={()=>onLogin(email, password)}>
