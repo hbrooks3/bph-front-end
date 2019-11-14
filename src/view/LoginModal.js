@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 
 // actions
-import { dismissLoginError } from '../actions/auth';
+import { dismissLoginError, login } from '../actions/auth';
 
 const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
   const [password, setPassword] = useState('');
@@ -86,7 +86,7 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
         }
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={()=>onLogin(email, password)} disabled={auth.isFetching}>
+        <Button variant="primary" onClick={()=>dispatch(login(email,password))} disabled={auth.isFetching}>
           Login
         </Button>
         <Button variant="secondary" onClick={close} disabled={auth.isFetching}>
