@@ -14,6 +14,7 @@ import Navbar from './Navbar';
 import ProfilePage from "./ProfilePage";
 import HomePage from "./HomePage";
 import PlansPage from "./PlansPage";
+import WorkoutPage from "./WorkoutPage"
 // import CreatePlan from "./CreatePlan";
 
 // redux
@@ -28,19 +29,25 @@ export default function App() {
         <Switch>
           <Route exact path="/">
             <HomePage />
-          </Route>
+          </Route>          
           <PrivateRoute path="/plans">
             <PlansPage />
-          </PrivateRoute>
-          <PrivateRoute path="/create-Plan">
-            {/* <CreatePlan /> */}
           </PrivateRoute>
           <PrivateRoute path="/profile">
             <ProfilePage />
           </PrivateRoute>
-          <PrivateRoute path="/testing">
-            <ProfilePage />
+          <PrivateRoute path="/plan/:id">
+            <WorkoutPage />
           </PrivateRoute>
+          <PrivateRoute path="/workout/:id">
+            <WorkoutPage />
+          </PrivateRoute>
+          <PrivateRoute path="/exercise/:id">
+            <WorkoutPage />
+          </PrivateRoute>
+          <Route path="*">
+            <Redirect to="/"/>
+          </Route>
         </Switch>
       </>
     </Router>

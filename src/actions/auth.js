@@ -1,8 +1,10 @@
-import fetch from 'cross-fetch'
+import fetch from 'cross-fetch';
 
-export const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT';
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+import { clearUsers } from './users';
+
+const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT';
+const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const LOGIN_FAILURE = 'LOGIN_FAILURE';
 
 export const login = (email, password) => (dispatch) => {
   // Update app state to loading
@@ -20,21 +22,23 @@ export const login = (email, password) => (dispatch) => {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
-    },
-    credentials: 'include',
+      },
+      credentials: 'include',
     }
   ).then(
     response => {
       if (response.ok) {
         const time = Date.now();
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: time,
-        });
+          dispatch({
+            type: LOGIN_SUCCESS,
+            payload: {time},
+          });
       } else {
-        dispatch({
-          type: LOGIN_FAILURE,
-          payload: response.statusText,
+        response.json().then(response => {
+          dispatch({
+            type: LOGIN_FAILURE,
+            payload: response.error,
+          });
         });
       };
     },
@@ -42,15 +46,30 @@ export const login = (email, password) => (dispatch) => {
   );
 };
 
-export const LOGIN_DISMISS_ERROR = 'LOGIN_DISMISS_ERROR';
+const LOGIN_DISMISS_ERROR = 'LOGIN_DISMISS_ERROR';
 
 export const dismissLoginError = () => ({type: LOGIN_DISMISS_ERROR});
 
-export const LOGOUT = 'LOGOUT';
+const LOGOUT = 'LOGOUT';
 
 export const logout = () => (dispatch) => {
   // Update app state to loading
   dispatch({type: LOGOUT,});
+  dispatch(clearUsers());
 
-  return fetch('/api/User/LogoutUser');
+  return fetch(
+    '/api/User/LogoutUser',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+  );
+}
+
+export {
+  LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR, LOGOUT,
 }

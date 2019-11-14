@@ -2,8 +2,15 @@ import {
   LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR, LOGOUT,
 } from '../actions/auth';
 
+// const initialState = {
+//   loggedIn: true,
+//   isFetching: false,
+//   isError: false,
+//   id: 123,
+// };
+
 const initialState = {
-  loggedIn: true,
+  loggedIn: false,
   isFetching: false,
   isError: false,
 };
@@ -20,7 +27,8 @@ const auth = (state = initialState, action) => {
         ...state,
         isFetching: false,
         loggedIn: true,
-        lastUpdated: action.payload,
+        lastUpdated: action.payload.time,
+        id: action.payload.id,
       };
     case LOGIN_FAILURE:
       return {
@@ -36,8 +44,9 @@ const auth = (state = initialState, action) => {
       };
     case LOGOUT:
       return {
-        ...state,
         loggedIn: false,
+        isFetching: false,
+        isError: false,
       };
     default:
       return state;
