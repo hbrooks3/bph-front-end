@@ -34,9 +34,11 @@ export const login = (email, password) => (dispatch) => {
             payload: {time},
           });
       } else {
-        dispatch({
-          type: LOGIN_FAILURE,
-          payload: response.statusText,
+        response.json().then(response => {
+          dispatch({
+            type: LOGIN_FAILURE,
+            payload: response.error,
+          });
         });
       };
     },
