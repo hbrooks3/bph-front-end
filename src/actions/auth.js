@@ -1,6 +1,6 @@
 import fetch from 'cross-fetch';
 
-import { clearUsers } from './users';
+import { fetchUser, clearUsers } from './users';
 
 const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -28,11 +28,14 @@ export const login = (email, password) => (dispatch) => {
   ).then(
     response => {
       if (response.ok) {
-        const time = Date.now();
+        response.json().then(response => {
+          const time = Date.now();
           dispatch({
             type: LOGIN_SUCCESS,
             payload: {time},
           });
+          dispatch(fetchUser(response.userId));
+        });
       } else {
         response.json().then(response => {
           dispatch({
