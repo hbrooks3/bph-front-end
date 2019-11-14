@@ -22,19 +22,17 @@ export const login = (email, password) => (dispatch) => {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
-    },
-    credentials: 'include',
+      },
+      credentials: 'include',
     }
   ).then(
     response => {
       if (response.ok) {
-        response.json().then(response => {
-          const time = Date.now();
+        const time = Date.now();
           dispatch({
             type: LOGIN_SUCCESS,
-            payload: {time, id: response.id},
+            payload: {time},
           });
-        });
       } else {
         dispatch({
           type: LOGIN_FAILURE,
@@ -57,7 +55,17 @@ export const logout = () => (dispatch) => {
   dispatch({type: LOGOUT,});
   dispatch(clearUsers());
 
-  return fetch('/api/User/LogoutUser');
+  return fetch(
+    '/api/User/LogoutUser',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+  );
 }
 
 export {

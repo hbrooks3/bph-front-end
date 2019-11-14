@@ -2,11 +2,17 @@ import {
   LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR, LOGOUT,
 } from '../actions/auth';
 
+// const initialState = {
+//   loggedIn: true,
+//   isFetching: false,
+//   isError: false,
+//   id: 123,
+// };
+
 const initialState = {
-  loggedIn: true,
+  loggedIn: false,
   isFetching: false,
   isError: false,
-  id: 123,
 };
 
 const auth = (state = initialState, action) => {
