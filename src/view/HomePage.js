@@ -6,6 +6,9 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import CardColumns from 'react-bootstrap/CardColumns';
 
+// react-router
+import { useHistory } from 'react-router-dom';
+
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,6 +20,8 @@ import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 
 function PrivatePage(props) {
+  const history = useHistory();
+
   return (
     <CardColumns>
     <Card className="text-center">
@@ -40,7 +45,7 @@ function PrivatePage(props) {
           <Card.Text>* Workout shown here *</Card.Text>
           <Card.Text>*</Card.Text>
           <Card.Text>*</Card.Text>
-          <Button variant="primary">View Workout</Button>
+          <Button onClick={()=>history.push("workout/123")} variant="primary">View Workout</Button>
         </Card.Body>    
       </Card>
       </CardColumns>
@@ -67,7 +72,7 @@ function PublicPage(props) {
 
   return (
     <>
-
+    
     <Card className="text-center">
       <Card.Body>
         <h1>You need to login to access Badger Powerlifting Hub</h1>
