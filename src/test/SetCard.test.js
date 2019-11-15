@@ -15,7 +15,7 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <SetCard props={'type', 'id', 'fetch', 'dismissError'}/>
+        <SetCard set={'id'}/>
       </Provider>,
     div
   );
