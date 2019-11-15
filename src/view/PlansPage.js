@@ -6,26 +6,29 @@ import Button from 'react-bootstrap/Button';
 import CardColumns from 'react-bootstrap/CardColumns';
 
 // redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // views
 import LoadingCard from './LoadingCard';
+import FetchingCard from './FetchingCard'
 
 // react-router
 import { useHistory } from 'react-router-dom';
 
 export default function PlansPage(props) {
   const user = useSelector(state=>state.users[state.auth.uid]);
-  
-  if (!user) {
-    return <LoadingCard />;
-  }
 
-  const cards = user && user.plans.map(plan =>
-    <PlanCard key={plan} planId={plan} />
-  )
+  const cards = (
+    user ?
+    user.plans.map(plan => <PlanCard key={plan} planId={plan} />) :
+    <LoadingCard />
+  );
 
-  return <CardColumns>{cards}</CardColumns>;
+  return (
+    <CardColumns>
+      {cards}
+    </CardColumns>
+  );
 }
 
 function PlanCard({planId}) {
@@ -33,7 +36,12 @@ function PlanCard({planId}) {
   const history = useHistory();
 
   if (!plan) {
-    return <LoadingCard />;
+    return <FetchingCard 
+      id={planId}
+      type='plans'
+      fetch={()=>{}}
+      dismissError={()=>{}}
+    />;
   }
 
   return (
