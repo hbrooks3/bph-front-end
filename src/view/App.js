@@ -15,7 +15,6 @@ import ProfilePage from "./ProfilePage";
 import HomePage from "./HomePage";
 import PlansPage from "./PlansPage";
 import WorkoutPage from "./WorkoutPage"
-// import CreatePlan from "./CreatePlan";
 
 // redux
 import { useSelector } from 'react-redux';
