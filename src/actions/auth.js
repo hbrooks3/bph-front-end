@@ -42,10 +42,7 @@ export const login = (email, password) => (dispatch) => {
           payload: json.error,
         });
       }
-    }).catch(dispatch({
-      type: LOGIN_FAILURE,
-      payload: 'Unable to login',
-    }))
+    })
   );
 };
 
@@ -119,11 +116,51 @@ const REGISTER_DISSMISS_ERROR = 'REGISTER_DISSMISS_ERROR';
 
 export const dissmissRegisterError = () => ({type: REGISTER_DISSMISS_ERROR});
 
-// const STATUS_ = 'CHECK_STATUS';
+const CHECK_SESSION = 'CHECK_SESSION';
+const SESSION_VALID = 'SESSION_VALID';
+const SESSION_INVALID= 'SESSION_INVALID';
 
+export const status = () => (dispatch) => {
+  dispatch({type: CHECK_SESSION});
+
+  return fetch(
+    '/api/User/CheckSessionStatus',
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    }
+  ).then(
+    response => response.json().then(json => {
+      if (response.ok) {
+        if (json.validSession) {
+          dispatch({
+            type: SESSION_VALID,
+            payload: {uid: json.userId},
+          });
+          dispatch( fetchUser(json.userId) );
+        } else {
+          dispatch({
+            type: SESSION_INVALID,
+            payload: {error: json.error},
+          })
+        }
+      } else {
+        dispatch({
+          type: SESSION_INVALID,
+          payload: {error: json.error},
+        });
+      }
+    })
+  );
+}
 
 export {
   LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR,
   LOGOUT,
   REGISTER_ATTEMPT, REGISTER_SUCCESS, REGISTER_FAILURE, REGISTER_DISSMISS_ERROR,
+  CHECK_SESSION, SESSION_VALID, SESSION_INVALID
 }

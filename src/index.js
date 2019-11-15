@@ -10,10 +10,15 @@ import reducer from './reducers';
 import thunkMiddleware from 'redux-thunk';
 import logger from 'redux-logger';
 
+// actions
+import { status } from './actions/auth';
+
 const store = createStore(
   reducer,
   applyMiddleware(thunkMiddleware,logger),
 );
+
+store.dispatch(status());
 
 ReactDOM.render(
   <Provider store={store}>

@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 // views
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
+import LoadingCard from './cards/LoadingCard';
 
 function PrivatePage(props) {
   const history = useHistory();
@@ -63,10 +64,15 @@ function PublicPage(props) {
     setShowRegister(true);
   };
 
+  const loading = useSelector(state => state.auth.isFetching);
+
   return (
     <>
-    
-    <Card className="text-center">
+
+    {
+      loading ?
+      <LoadingCard /> :
+      <Card className="text-center">
       <Card.Body>
         <h1>You need to login to access Badger Powerlifting Hub</h1>
       </Card.Body>
@@ -75,6 +81,7 @@ function PublicPage(props) {
         <Button onClick={()=>setShowRegister(true)}>Register</Button>
       </Card.Body>
     </Card>
+    }    
 
     <LoginModal
       show={showLogin}
