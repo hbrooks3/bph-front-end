@@ -6,13 +6,13 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
-import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
 
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 
 // views
-import Spinner from 'react-bootstrap/Spinner';
+import ErrorAlert from './ErrorAlert';
 
 // actions
 import { dismissLoginError, login } from '../actions/auth';
@@ -28,6 +28,9 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
     if (auth.isError) {
       dispatch(dismissLoginError());
     };
+    if (auth.isFetching) {
+      return;
+    }
     onClose();
   };
 
@@ -79,10 +82,11 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
         
         {
           auth.isError &&
-          <Alert variant="danger" onClose={() => dispatch(dismissLoginError())} dismissible>
-          <Alert.Heading>Login Error!</Alert.Heading>
-          <p>{auth.errorMessage}</p>
-        </Alert>
+          <ErrorAlert 
+            heading='Login Error!'
+            message={auth.errorMessage}
+            callback={() => dispatch(dismissLoginError())}
+          />
         }
       </Modal.Body>
       <Modal.Footer>
