@@ -18,7 +18,9 @@ export const login = (email, password) => (dispatch) => {
     '/api/User/LoginUser',
     {
       method: 'POST',
-      body: JSON.stringify({Email: email, Password: password}),
+      body: JSON.stringify({
+        Email: email ? email : '', Password: password ? password : '',
+      }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -26,25 +28,24 @@ export const login = (email, password) => (dispatch) => {
       credentials: 'include',
     }
   ).then(
-    response => {
+    response => response.json().then(json => {
       if (response.ok) {
-        response.json().then(response => {
-          const time = Date.now();
-          dispatch({
-            type: LOGIN_SUCCESS,
-            payload: {time},
-          });
-          dispatch(fetchUser(response.userId));
+        const time = Date.now();
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: {time},
         });
+        dispatch( fetchUser(json.id) );
       } else {
-        response.json().then(response => {
-          dispatch({
-            type: LOGIN_FAILURE,
-            payload: response.error,
-          });
+        dispatch({
+          type: LOGIN_FAILURE,
+          payload: json.error,
         });
-      };
-    }
+      }
+    }).catch(dispatch({
+      type: LOGIN_FAILURE,
+      payload: 'Unable to login',
+    }))
   );
 };
 
