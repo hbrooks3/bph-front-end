@@ -3,10 +3,11 @@ import React, { useEffect } from "react";
 
 // react-bootstrap
 import Card from 'react-bootstrap/Card';
+import Spinner from 'react-bootstrap/Spinner';
 
 // views
-import LoadingCard from './LoadingCard';
-import ErrorAlert from './ErrorAlert';
+// import LoadingCard from './LoadingCard';
+import ErrorAlert from '../ErrorAlert';
 
 // redux
 import { useSelector } from 'react-redux';
@@ -22,7 +23,6 @@ export default function FetchingCardBody ({type, id, fetch, dismissError}) {
 
   if (item && item.isError) {
     return (
-      <Card border="light">
         <Card.Body>
           <ErrorAlert
             heading='Loading Error'
@@ -30,9 +30,12 @@ export default function FetchingCardBody ({type, id, fetch, dismissError}) {
             callback={dismissError}
           />
         </Card.Body>
-      </Card>
     )
   }
 
-  return <LoadingCard />;
+  return <Card.Body>
+    <div className="text-center">
+      <Spinner animation="border" />
+    </div>
+  </Card.Body>;
 }
