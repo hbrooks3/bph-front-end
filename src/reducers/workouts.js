@@ -11,7 +11,9 @@ const initialState = {
     id: 'abc',
     isFetching: false,
     isError: false,
+    isLoaded: true,
     lastUpdated: 123456789,
+    exercises: ['cat', 'dog']
   },
   def: {
     id: 'def',
@@ -32,23 +34,29 @@ const workout = (state = {}, action) => {
   switch (action.type) {
     case WORKOUT_FETCH_ATTEMPT:
       return {
+        ...state,
         id: action.payload.id,
         isFetching: true,
         isError: false,
+        isLoaded: false,
       };
     case WORKOUT_FETCH_SUCCESS:
       return {
+        ...state,
         isFetching: false,
         lastUpdated: action.payload.time,
+        isLoaded: true,
       };
     case WORKOUT_FETCH_FAILURE:
       return {
+        ...state,
         isFetching: false,
         isError: true,
-        errorMessage: action.payload.errorMessage,
+        errorMessage: action.payload.error,
       };
     case WORKOUT_FETCH_DISMISS_ERROR:
       return {
+        ...state,
         isError: false,
       };
     default:

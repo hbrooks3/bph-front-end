@@ -14,7 +14,7 @@ const user = (state = {}, action) => {
       return {
         isFetching: false,
         lastUpdated: action.payload.time,
-        ...action.payload,
+        ...action.payload.response,
       };
     case USER_FETCH_FAILURE:
       return {

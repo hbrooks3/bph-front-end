@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch'
+import fetch from 'cross-fetch';
 
 const USER_FETCH_ATTEMPT = 'USER_FETCH_ATTEMPT';
 const USER_FETCH_SUCCESS = 'USER_FETCH_SUCCESS';
@@ -13,7 +13,7 @@ export const fetchUser = (id) => (dispatch) => {
 
   // Make call to backend
   return fetch(
-    '/api/User/GetCurrentUser', //TODO: Make correct call
+    '/api/User/GetCurrentUser',
     {
       method: 'GET',
       // body: JSON.stringify({ id }),

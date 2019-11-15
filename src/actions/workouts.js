@@ -24,27 +24,34 @@ export const fetchWorkout = (id) => (dispatch) => {
     credentials: 'include',
     }
   ).then(
-    response => {
+    response => response.json().then(json => {
       if (response.ok) {
         const time = Date.now();
         dispatch({
           type: WORKOUT_FETCH_SUCCESS,
-          payload: time, response,
+          payload: {id, time, ...json}
         });
       } else {
         dispatch({
           type: WORKOUT_FETCH_FAILURE,
-          payload: response.statusText,
+          payload: {id, error: json.error}
         });
       };
-    },
-    error => console.log(error.message)
+    }).catch(
+      dispatch({
+        type: WORKOUT_FETCH_FAILURE,
+        payload: {id, error: 'Failed to load workout'}
+      })
+    )
   );
 };
 
 export const WORKOUT_FETCH_DISMISS_ERROR = 'WORKOUT_FETCH_DISMISS_ERROR';
 
-export const dismissWorkoutFetchError = () => ({type: WORKOUT_FETCH_DISMISS_ERROR});
+export const dismissWorkoutFetchError = (id) => ({
+  type: WORKOUT_FETCH_DISMISS_ERROR,
+  payload: {id}
+});
 
 export const WORKOUT_CLEAR_ALL = 'WORKOUT_CLEAR_ALL';
 
