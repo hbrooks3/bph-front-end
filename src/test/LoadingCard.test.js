@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LoginModal from '../view/LoginModal.js';
+import LoadingCard from '../view/cards/LoadingCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
-import auth from '../reducers/auth.js';
 
 
 const store = createStore(
@@ -16,18 +15,7 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <LoginModal />
-      </Provider>,
-    div
-  );
-  ReactDOM.unmountComponentAtNode(div);
-});
-
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(
-    <Provider store={store}>
-        <LoginModal state={auth.isFetching} />
+        <LoadingCard />
       </Provider>,
     div
   );

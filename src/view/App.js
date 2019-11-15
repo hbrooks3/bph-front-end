@@ -55,7 +55,7 @@ export default function App() {
   );
 }
 
-function PrivateRoute({ children, ...rest }) {
+export function PrivateRoute({ children, ...rest }) {
   const sessionStatus = useSelector(state => state.auth.loggedIn);
 
   return (

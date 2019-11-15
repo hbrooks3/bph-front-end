@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LoginModal from '../view/LoginModal.js';
+import WorkoutCard from '../view/cards/WorkoutCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
-import auth from '../reducers/auth.js';
+import { useHistory } from 'react-router-dom';
+
 
 
 const store = createStore(
@@ -16,20 +17,11 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <LoginModal />
+        <WorkoutCard />
       </Provider>,
     div
   );
   ReactDOM.unmountComponentAtNode(div);
 });
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(
-    <Provider store={store}>
-        <LoginModal state={auth.isFetching} />
-      </Provider>,
-    div
-  );
-  ReactDOM.unmountComponentAtNode(div);
-});
+
