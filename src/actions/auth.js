@@ -35,6 +35,7 @@ export const login = (email, password) => (dispatch) => {
           type: LOGIN_SUCCESS,
           payload: {time, uid: json.userId},
         });
+        console.log('Login successful, fetching current User');
         dispatch( fetchUser(json.userId) );
       } else {
         dispatch({
@@ -99,6 +100,7 @@ export const register = (email, password) => (dispatch) => {
           type: REGISTER_SUCCESS,
           payload: {time},
         });
+        console.log('Account created, running login');
         dispatch(login(email,password));
       } else {
         response.json().then(response => {
