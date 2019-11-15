@@ -1,19 +1,15 @@
-// React imports
+// react
 import React, {useReducer, useMemo} from "react";
 
-// Bootstrap Imports
+// react-bootstrap
 import CardColumns from 'react-bootstrap/CardColumns';
 import Spinner from 'react-bootstrap/Spinner';
 
-// Custom Components
+// views
 import EditableCard from './EditableCard';
 
-// Presenter imports
-import { useUser, updateUser } from "../dummy-presenter/User";
-// import { useUser, updateUser } from "../presenter/User";
-
 export default function ProfilePage(props) {
-  const { user, isLoading } = useUser();
+  const { user, isLoading } = ['hi', false];
 
   return (
     <>
@@ -37,7 +33,7 @@ function PageBody(props) {
 
   const [user, editUser] = useReducer(reduceUser, initialUser);
 
-  const pushUpdate = () => updateUser(user);
+  const pushUpdate = () => ({});
 
   const resetForm = () => editUser(initialUser);
 
