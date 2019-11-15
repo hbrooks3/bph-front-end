@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LoadingCard from '../view/cards/LoadingCard.js';
+import FetchingCard from '../view/cards/FetchingCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
@@ -15,7 +15,7 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <LoadingCard />
+        <FetchingCard props={'type', 'id', 'fetch', 'dismissError'}/>
       </Provider>,
     div
   );

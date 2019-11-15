@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LoadingCard from '../view/cards/LoadingCard.js';
+import WorkoutCard from '../view/cards/WorkoutCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
+import { useHistory } from 'react-router-dom';
+
 
 
 const store = createStore(
@@ -15,7 +17,7 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <LoadingCard />
+        <WorkoutCard props={'id'} useHistory/>
       </Provider>,
     div
   );
