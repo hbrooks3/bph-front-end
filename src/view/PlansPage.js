@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from 'react-redux';
 // views
 import LoadingCard from './LoadingCard';
 
+// react-router
+import { useHistory } from 'react-router-dom';
+
 export default function PlansPage(props) {
   const user = useSelector(state=>state.users[state.auth.uid]);
   
@@ -27,6 +30,7 @@ export default function PlansPage(props) {
 
 function PlanCard({planId}) {
   const plan = useSelector(state=>state.plans[planId]);
+  const history = useHistory();
 
   if (!plan) {
     return <LoadingCard />;
@@ -34,7 +38,14 @@ function PlanCard({planId}) {
 
   return (
     <Card>
-      {plan.id}
+      <Card.Header>
+        {plan.id}
+      </Card.Header>
+      <Card.Footer>
+        <Button onClick={()=>history.push(`/plan/${planId}`)}>
+          View Workout
+        </Button>
+      </Card.Footer>
     </Card>
   );
 }
