@@ -7,22 +7,22 @@ import React from "react";
 import { useSelector } from 'react-redux';
 
 // views
-import WorkoutCard from './cards/WorkoutCard';
 import ExerciseCard from './cards/ExerciseCard';
+import SetCard from './cards/SetCard';
 
 // react-router
 import { useParams } from 'react-router-dom';
 
-export default function WorkoutPage(props) {
+export default function ExercisePage(props) {
   const { id } = useParams();
-  const workout = useSelector(state=>state.workouts[id]);
+  const exercise = useSelector(state=>state.exercises[id]);
 
-  const cards = (workout && workout.exercises &&
-    workout.exercises.map(plan => <ExerciseCard key={plan} id={plan} footer/>)
+  const cards = (exercise && exercise.exercises &&
+    exercise.sets.map(set => <SetCard key={set} id={set} footer/>)
   );
   return (
     <>
-      <WorkoutCard id={id}/>
+      <ExerciseCard id={id}/>
       {cards}
     </>
   );
