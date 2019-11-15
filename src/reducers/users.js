@@ -1,9 +1,11 @@
 import {
-  USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR, USERS_CLEAR_ALL
+  USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR,
+  USERS_CLEAR_ALL, USER_EDIT,
 } from '../actions/users';
 
 const user = (state = {}, action) => {
   switch (action.type) {
+    case USER_EDIT:
     case USER_FETCH_ATTEMPT:
       return {
         ...state,
@@ -49,6 +51,7 @@ const initialState = {};
 
 const users = (state = initialState, action) => {
   switch (action.type) {
+    case USER_EDIT:
     case USER_FETCH_ATTEMPT:
       return {
         ...state,

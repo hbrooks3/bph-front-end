@@ -44,16 +44,18 @@ export const fetchUser = (id) => (dispatch) => {
 const USER_EDIT = 'USER_EDIT';
 
 export const editUser = (user) => (dispatch) => {
+  const id = user.id;
+  
   dispatch({
     type: USER_EDIT,
-    payload: { id: user.id },
+    payload: { id },
   });
 
   return fetch(
     '/api/User/UpdateUser',
     {
       method: 'PUT',
-      body: JSON.stringify({ ...user, userId: user.id }),
+      body: JSON.stringify({ ...user, userId: id }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
