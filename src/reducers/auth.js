@@ -3,18 +3,18 @@ import {
   REGISTER_ATTEMPT, REGISTER_SUCCESS, REGISTER_FAILURE, REGISTER_DISSMISS_ERROR,
 } from '../actions/auth';
 
-// const initialState = {
-//   loggedIn: true,
-//   isFetching: false,
-//   isError: false,
-//   id: 123,
-// };
-
 const initialState = {
-  loggedIn: false,
+  loggedIn: true,
   isFetching: false,
   isError: false,
+  uid: '123',
 };
+
+// const initialState = {
+//   loggedIn: false,
+//   isFetching: false,
+//   isError: false,
+// };
 
 const auth = (state = initialState, action) => {
   switch (action.type) {

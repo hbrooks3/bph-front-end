@@ -2,21 +2,6 @@ import {
   USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR, USERS_CLEAR_ALL
 } from '../actions/users';
 
-const initialState = {
-  123: {
-    id: 123,
-    isFetching: false,
-    isError: false,
-    lastUpdated: 123456789,
-    email: "lifter1@gmail.com",
-    firstName: "Phil",
-    lastName: "Myez",
-    height: "6'4\"",
-    weight: "800lbs",
-    plans: [123, 456],
-  }
-};
-
 const user = (state = {}, action) => {
   switch (action.type) {
     case USER_FETCH_ATTEMPT:
@@ -44,6 +29,15 @@ const user = (state = {}, action) => {
     default:
       return state;
   };
+};
+
+const initialState = {
+  123: {
+    id: '123',
+    isLoading: false,
+    firstName: "Hunter",
+    plans: [123,456],
+  },
 };
 
 const users = (state = initialState, action) => {

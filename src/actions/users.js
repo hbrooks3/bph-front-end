@@ -30,13 +30,16 @@ export const fetchUser = (id) => (dispatch) => {
           const time = Date.now();
           dispatch({
             type: USER_FETCH_SUCCESS,
-            payload: { time, response },
+            payload: { id: id, time, response },
           });
         });
       } else {
         dispatch({
           type: USER_FETCH_FAILURE,
-          payload: response.statusText,
+          payload: {
+            id: id,
+            // statusText,
+          },
         });
       };
     },

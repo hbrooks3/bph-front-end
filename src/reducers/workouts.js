@@ -7,12 +7,24 @@ import {
 } from '../actions/workouts';
 
 const initialState = {
-  123: {
-    id: 123,
+  abc: {
+    id: 'abc',
     isFetching: false,
     isError: false,
     lastUpdated: 123456789,
-    test: 'Hello',
+  },
+  def: {
+    id: 'def',
+    isFetching: true,
+    isError: false,
+    lastUpdated: 123456789,
+  },
+  ghi: {
+    id: 'ghi',
+    isFetching: false,
+    isError: true,
+    errorMessage: "Didn't Load!",
+    lastUpdated: 123456789,
   }
 };
 
