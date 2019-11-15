@@ -24,28 +24,61 @@ export const fetchUser = (id) => (dispatch) => {
     credentials: 'include',
     }
   ).then(
-    response => {
+    response => response.json().then(json => {
       if (response.ok) {
-        response.json().then(response => {
-          const time = Date.now();
-          dispatch({
-            type: USER_FETCH_SUCCESS,
-            payload: { id: id, time, response },
-          });
+        const time = Date.now();
+        dispatch({
+          type: USER_FETCH_SUCCESS,
+          payload: {id, time, ...json}
         });
       } else {
         dispatch({
           type: USER_FETCH_FAILURE,
-          payload: {
-            id: id,
-            // statusText,
-          },
+          payload: {id, error: json.error}
         });
       };
-    },
-    error => console.log(error.message)
+    })
   );
 };
+
+const USER_EDIT = 'USER_EDIT';
+
+export const editUser = (user) => (dispatch) => {
+  const id = user.id;
+  
+  dispatch({
+    type: USER_EDIT,
+    payload: { id },
+  });
+
+  return fetch(
+    '/api/User/UpdateUser',
+    {
+      method: 'PUT',
+      body: JSON.stringify({ ...user, userId: id }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    },
+    credentials: 'include',
+    }
+  ).then(
+    response => response.json().then(json => {
+      if (response.ok) {
+        const time = Date.now();
+        dispatch({
+          type: USER_FETCH_SUCCESS,
+          payload: {id, time, ...json}
+        });
+      } else {
+        dispatch({
+          type: USER_FETCH_FAILURE,
+          payload: {id, error: json.error}
+        });
+      };
+    })
+  );
+}
 
 const USER_FETCH_DISMISS_ERROR = 'USER_FETCH_DISMISS_ERROR';
 
@@ -56,5 +89,6 @@ const USERS_CLEAR_ALL = 'USERS_CLEAR_ALL';
 export const clearUsers = () => ({type: USERS_CLEAR_ALL});
 
 export {
-  USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR, USERS_CLEAR_ALL
+  USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR, USERS_CLEAR_ALL,
+  USER_EDIT,
 };

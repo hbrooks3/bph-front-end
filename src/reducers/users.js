@@ -1,29 +1,36 @@
 import {
-  USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR, USERS_CLEAR_ALL
+  USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR,
+  USERS_CLEAR_ALL, USER_EDIT,
 } from '../actions/users';
 
 const user = (state = {}, action) => {
   switch (action.type) {
+    case USER_EDIT:
     case USER_FETCH_ATTEMPT:
       return {
-        id: action.payload.id,
+        ...state,
         isFetching: true,
         isError: false,
+        isLoaded: false,
+        ...action.payload,
       };
     case USER_FETCH_SUCCESS:
       return {
+        ...state,
         isFetching: false,
-        lastUpdated: action.payload.time,
-        ...action.payload.response,
+        isLoaded: true,
+        ...action.payload,
       };
     case USER_FETCH_FAILURE:
       return {
+        ...state,
         isFetching: false,
         isError: true,
-        errorMessage: action.payload.errorMessage,
+        errorMessage: action.payload.error,
       };
     case USER_FETCH_DISMISS_ERROR:
       return {
+        ...state,
         isError: false,
       };
     default:
@@ -31,17 +38,20 @@ const user = (state = {}, action) => {
   };
 };
 
-const initialState = {
-  123: {
-    id: '123',
-    isLoading: false,
-    firstName: "Hunter",
-    plans: [123,456],
-  },
-};
+// const initialState = {
+//   123: {
+//     id: '123',
+//     isLoading: false,
+//     firstName: "Hunter",
+//     plans: [123,456],
+//   },
+// };
+
+const initialState = {};
 
 const users = (state = initialState, action) => {
   switch (action.type) {
+    case USER_EDIT:
     case USER_FETCH_ATTEMPT:
       return {
         ...state,

@@ -3,7 +3,7 @@ import {
   EXERCISE_FETCH_SUCCESS,
   EXERCISE_FETCH_FAILURE,
   EXERCISE_FETCH_DISMISS_ERROR,
-  EXERCISE_CLEAR_ALL,
+  EXERCISES_CLEAR_ALL,
 } from '../actions/exercises';
 
 const initialState = {
@@ -86,7 +86,7 @@ const exercises = (state = initialState, action) => {
         ...state,
         [action.payload.id]: exercise(state[action.payload.id], action),
       };
-    case EXERCISE_CLEAR_ALL:
+    case EXERCISES_CLEAR_ALL:
       return {};
     default:
       return state;

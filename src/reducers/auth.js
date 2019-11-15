@@ -1,37 +1,39 @@
 import {
   LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR, LOGOUT,
   REGISTER_ATTEMPT, REGISTER_SUCCESS, REGISTER_FAILURE, REGISTER_DISSMISS_ERROR,
+  CHECK_SESSION, SESSION_VALID, SESSION_INVALID
 } from '../actions/auth';
 
-const initialState = {
-  loggedIn: true,
-  isFetching: false,
-  isError: false,
-  uid: '123',
-};
-
 // const initialState = {
-//   loggedIn: false,
+//   loggedIn: true,
 //   isFetching: false,
 //   isError: false,
+//   uid: '123',
 // };
+
+const initialState = {
+  loggedIn: false,
+  isFetching: false,
+  isError: false,
+};
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_ATTEMPT:
     case REGISTER_ATTEMPT:
+    case CHECK_SESSION:
       return {
         ...state,
         isFetching: true,
         isError: false,
       };
     case LOGIN_SUCCESS:
+    case SESSION_VALID:
       return {
         ...state,
         isFetching: false,
         loggedIn: true,
-        lastUpdated: action.payload.time,
-        id: action.payload.id,
+        uid: action.payload.uid,
       };
     case REGISTER_SUCCESS:
       return {
@@ -53,6 +55,7 @@ const auth = (state = initialState, action) => {
         isError: false,
       };
     case LOGOUT:
+    case SESSION_INVALID:
       return {
         loggedIn: false,
         isFetching: false,

@@ -1,5 +1,8 @@
 const intialPlans = {
   123: {
+    isFetching: false,
+    isError: false,
+    isLoaded: true,
     id: '123',
     trainee: '123',
     coach: '123',
