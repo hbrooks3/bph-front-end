@@ -1,10 +1,10 @@
-import fetch from 'cross-fetch'
+import fetch from 'cross-fetch';
 
-export const WORKOUT_FETCH_ATTEMPT = 'WORKOUT_FETCH_ATTEMPT';
-export const WORKOUT_FETCH_SUCCESS = 'WORKOUT_FETCH_SUCCESS';
-export const WORKOUT_FETCH_FAILURE = 'WORKOUT_FETCH_FAILURE';
+const WORKOUT_FETCH_ATTEMPT = 'WORKOUT_FETCH_ATTEMPT';
+const WORKOUT_FETCH_SUCCESS = 'WORKOUT_FETCH_SUCCESS';
+const WORKOUT_FETCH_FAILURE = 'WORKOUT_FETCH_FAILURE';
 
-export const fetchWorkout = (id) => (dispatch) => {
+export const fetchUser = (id) => (dispatch) => {
   // Update app state to loading
   dispatch({
     type: WORKOUT_FETCH_ATTEMPT,
@@ -13,9 +13,9 @@ export const fetchWorkout = (id) => (dispatch) => {
 
   // Make call to backend
   return fetch(
-    '/api/Trainee/getWorkout', //TODO: Make correct call
+    '/api/Coach/GetPlan',
     {
-      method: 'FETCH',
+      method: 'GET',
       body: JSON.stringify({ id }),
       headers: {
         'Content-Type': 'application/json',
@@ -40,19 +40,20 @@ export const fetchWorkout = (id) => (dispatch) => {
     }).catch(
       dispatch({
         type: WORKOUT_FETCH_FAILURE,
-        payload: {id, error: 'Failed to load workout'}
+        payload: {id, error: 'Failed to load plan'}
       })
     )
   );
 };
 
-export const WORKOUT_FETCH_DISMISS_ERROR = 'WORKOUT_FETCH_DISMISS_ERROR';
+const WORKOUT_FETCH_DISMISS_ERROR = 'WORKOUT_FETCH_DISMISS_ERROR';
 
-export const dismissWorkoutFetchError = (id) => ({
-  type: WORKOUT_FETCH_DISMISS_ERROR,
-  payload: {id}
-});
+export const dismissUserFetchError = () => ({type: WORKOUT_FETCH_DISMISS_ERROR});
 
-export const WORKOUT_CLEAR_ALL = 'WORKOUT_CLEAR_ALL';
+const WORKOUTS_CLEAR_ALL = 'WORKOUTS_CLEAR_ALL';
 
-export const logout = () => ({type: WORKOUT_CLEAR_ALL});
+export const clearUsers = () => ({type: WORKOUTS_CLEAR_ALL});
+
+export {
+  WORKOUT_FETCH_ATTEMPT, WORKOUT_FETCH_SUCCESS, WORKOUT_FETCH_FAILURE, WORKOUT_FETCH_DISMISS_ERROR, WORKOUTS_CLEAR_ALL
+};

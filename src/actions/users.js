@@ -24,26 +24,25 @@ export const fetchUser = (id) => (dispatch) => {
     credentials: 'include',
     }
   ).then(
-    response => {
+    response => response.json().then(json => {
       if (response.ok) {
-        response.json().then(response => {
-          const time = Date.now();
-          dispatch({
-            type: USER_FETCH_SUCCESS,
-            payload: { id: id, time, response },
-          });
+        const time = Date.now();
+        dispatch({
+          type: USER_FETCH_SUCCESS,
+          payload: {id, time, ...json}
         });
       } else {
         dispatch({
           type: USER_FETCH_FAILURE,
-          payload: {
-            id: id,
-            // statusText,
-          },
+          payload: {id, error: json.error}
         });
       };
-    },
-    error => console.log(error.message)
+    }).catch(
+      dispatch({
+        type: USER_FETCH_FAILURE,
+        payload: {id, error: 'Failed to load workout'}
+      })
+    )
   );
 };
 

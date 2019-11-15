@@ -33,9 +33,9 @@ export const login = (email, password) => (dispatch) => {
         const time = Date.now();
         dispatch({
           type: LOGIN_SUCCESS,
-          payload: {time},
+          payload: {time, uid: json.userId},
         });
-        dispatch( fetchUser(json.id) );
+        dispatch( fetchUser(json.userId) );
       } else {
         dispatch({
           type: LOGIN_FAILURE,
