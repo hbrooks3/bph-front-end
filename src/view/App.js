@@ -14,7 +14,7 @@ import Navbar from './Navbar';
 import ProfilePage from "./ProfilePage";
 import HomePage from "./HomePage";
 import PlansPage from "./PlansPage";
-import WorkoutPage from "./WorkoutPage"
+import WorkoutPage from "./WorkoutPage";
 // import CreatePlan from "./CreatePlan";
 
 // redux
@@ -54,7 +54,7 @@ export default function App() {
   );
 }
 
-function PrivateRoute({ children, ...rest }) {
+export function PrivateRoute({ children, ...rest }) {
   const sessionStatus = useSelector(state => state.auth.loggedIn);
 
   return (
