@@ -1,13 +1,13 @@
 import fetch from 'cross-fetch';
 
-const WORKOUT_FETCH_ATTEMPT = 'WORKOUT_FETCH_ATTEMPT';
-const WORKOUT_FETCH_SUCCESS = 'WORKOUT_FETCH_SUCCESS';
-const WORKOUT_FETCH_FAILURE = 'WORKOUT_FETCH_FAILURE';
+const PLAN_FETCH_ATTEMPT = 'PLAN_FETCH_ATTEMPT';
+const PLAN_FETCH_SUCCESS = 'PLAN_FETCH_SUCCESS';
+const PLAN_FETCH_FAILURE = 'PLAN_FETCH_FAILURE';
 
 export const fetchUser = (id) => (dispatch) => {
   // Update app state to loading
   dispatch({
-    type: WORKOUT_FETCH_ATTEMPT,
+    type: PLAN_FETCH_ATTEMPT,
     payload: { id },
   });
 
@@ -28,32 +28,32 @@ export const fetchUser = (id) => (dispatch) => {
       if (response.ok) {
         const time = Date.now();
         dispatch({
-          type: WORKOUT_FETCH_SUCCESS,
+          type: PLAN_FETCH_SUCCESS,
           payload: {id, time, ...json}
         });
       } else {
         dispatch({
-          type: WORKOUT_FETCH_FAILURE,
+          type: PLAN_FETCH_FAILURE,
           payload: {id, error: json.error}
         });
       };
     }).catch(
       dispatch({
-        type: WORKOUT_FETCH_FAILURE,
+        type: PLAN_FETCH_FAILURE,
         payload: {id, error: 'Failed to load plan'}
       })
     )
   );
 };
 
-const WORKOUT_FETCH_DISMISS_ERROR = 'WORKOUT_FETCH_DISMISS_ERROR';
+const PLAN_FETCH_DISMISS_ERROR = 'PLAN_FETCH_DISMISS_ERROR';
 
-export const dismissUserFetchError = () => ({type: WORKOUT_FETCH_DISMISS_ERROR});
+export const dismissUserFetchError = () => ({type: PLAN_FETCH_DISMISS_ERROR});
 
-const WORKOUTS_CLEAR_ALL = 'WORKOUTS_CLEAR_ALL';
+const PLANS_CLEAR_ALL = 'PLANS_CLEAR_ALL';
 
-export const clearUsers = () => ({type: WORKOUTS_CLEAR_ALL});
+export const clearUsers = () => ({type: PLANS_CLEAR_ALL});
 
 export {
-  WORKOUT_FETCH_ATTEMPT, WORKOUT_FETCH_SUCCESS, WORKOUT_FETCH_FAILURE, WORKOUT_FETCH_DISMISS_ERROR, WORKOUTS_CLEAR_ALL
+  PLAN_FETCH_ATTEMPT, PLAN_FETCH_SUCCESS, PLAN_FETCH_FAILURE, PLAN_FETCH_DISMISS_ERROR, PLANS_CLEAR_ALL
 };

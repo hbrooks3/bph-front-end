@@ -1,13 +1,13 @@
 import fetch from 'cross-fetch';
 
-const WORKOUT_FETCH_ATTEMPT = 'WORKOUT_FETCH_ATTEMPT';
-const WORKOUT_FETCH_SUCCESS = 'WORKOUT_FETCH_SUCCESS';
-const WORKOUT_FETCH_FAILURE = 'WORKOUT_FETCH_FAILURE';
+const EXERCISE_FETCH_ATTEMPT = 'EXERCISE_FETCH_ATTEMPT';
+const EXERCISE_FETCH_SUCCESS = 'EXERCISE_FETCH_SUCCESS';
+const EXERCISE_FETCH_FAILURE = 'EXERCISE_FETCH_FAILURE';
 
 export const fetchUser = (id) => (dispatch) => {
   // Update app state to loading
   dispatch({
-    type: WORKOUT_FETCH_ATTEMPT,
+    type: EXERCISE_FETCH_ATTEMPT,
     payload: { id },
   });
 
@@ -28,32 +28,32 @@ export const fetchUser = (id) => (dispatch) => {
       if (response.ok) {
         const time = Date.now();
         dispatch({
-          type: WORKOUT_FETCH_SUCCESS,
+          type: EXERCISE_FETCH_SUCCESS,
           payload: {id, time, ...json}
         });
       } else {
         dispatch({
-          type: WORKOUT_FETCH_FAILURE,
+          type: EXERCISE_FETCH_FAILURE,
           payload: {id, error: json.error}
         });
       };
     }).catch(
       dispatch({
-        type: WORKOUT_FETCH_FAILURE,
+        type: EXERCISE_FETCH_FAILURE,
         payload: {id, error: 'Failed to load plan'}
       })
     )
   );
 };
 
-const WORKOUT_FETCH_DISMISS_ERROR = 'WORKOUT_FETCH_DISMISS_ERROR';
+const EXERCISE_FETCH_DISMISS_ERROR = 'EXERCISE_FETCH_DISMISS_ERROR';
 
-export const dismissUserFetchError = () => ({type: WORKOUT_FETCH_DISMISS_ERROR});
+export const dismissUserFetchError = () => ({type: EXERCISE_FETCH_DISMISS_ERROR});
 
-const WORKOUTS_CLEAR_ALL = 'WORKOUTS_CLEAR_ALL';
+const EXERCISES_CLEAR_ALL = 'EXERCISES_CLEAR_ALL';
 
-export const clearUsers = () => ({type: WORKOUTS_CLEAR_ALL});
+export const clearUsers = () => ({type: EXERCISES_CLEAR_ALL});
 
 export {
-  WORKOUT_FETCH_ATTEMPT, WORKOUT_FETCH_SUCCESS, WORKOUT_FETCH_FAILURE, WORKOUT_FETCH_DISMISS_ERROR, WORKOUTS_CLEAR_ALL
+  EXERCISE_FETCH_ATTEMPT, EXERCISE_FETCH_SUCCESS, EXERCISE_FETCH_FAILURE, EXERCISE_FETCH_DISMISS_ERROR, EXERCISES_CLEAR_ALL
 };

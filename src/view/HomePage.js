@@ -10,10 +10,7 @@ import CardColumns from 'react-bootstrap/CardColumns';
 import { useHistory } from 'react-router-dom';
 
 // redux
-import { useDispatch, useSelector } from 'react-redux';
-
-// actions
-import { login } from '../actions/auth';
+import { useSelector } from 'react-redux';
 
 // views
 import LoginModal from './LoginModal';
@@ -53,12 +50,8 @@ function PrivatePage(props) {
 }
 
 function PublicPage(props) {
-  const dispatch = useDispatch();
-
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-
-  const handleLogin = (email, password) => dispatch(login(email,password));
 
   const handleRegister = (email, password) => {
     console.log(`Creating account for ${email} with password: ${password}`);
@@ -86,7 +79,6 @@ function PublicPage(props) {
     <LoginModal
       show={showLogin}
       onClose={()=>setShowLogin(false)}
-      onLogin={handleLogin}
       switchToRegister={switchToRegister}
     />
 

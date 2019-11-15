@@ -1,6 +1,6 @@
 import fetch from 'cross-fetch';
 
-import { clearUsers } from './users';
+import { fetchUser, clearUsers } from './users';
 
 const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -18,7 +18,9 @@ export const login = (email, password) => (dispatch) => {
     '/api/User/LoginUser',
     {
       method: 'POST',
-      body: JSON.stringify({Email: email, Password: password}),
+      body: JSON.stringify({
+        Email: email ? email : '', Password: password ? password : '',
+      }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -26,23 +28,24 @@ export const login = (email, password) => (dispatch) => {
       credentials: 'include',
     }
   ).then(
-    response => {
+    response => response.json().then(json => {
       if (response.ok) {
         const time = Date.now();
-          dispatch({
-            type: LOGIN_SUCCESS,
-            payload: {time},
-          });
-      } else {
-        response.json().then(response => {
-          dispatch({
-            type: LOGIN_FAILURE,
-            payload: response.error,
-          });
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: {time, uid: json.userId},
         });
-      };
-    },
-    error => console.log(error.message)
+        dispatch( fetchUser(json.userId) );
+      } else {
+        dispatch({
+          type: LOGIN_FAILURE,
+          payload: json.error,
+        });
+      }
+    }).catch(dispatch({
+      type: LOGIN_FAILURE,
+      payload: 'Unable to login',
+    }))
   );
 };
 
@@ -70,6 +73,57 @@ export const logout = () => (dispatch) => {
   );
 }
 
+const REGISTER_ATTEMPT = 'REGISTER_ATTEMPT';
+const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+const REGISTER_FAILURE = 'REGISTER_FAILURE';
+
+export const register = (email, password) => (dispatch) => {
+  dispatch({
+    type: REGISTER_ATTEMPT,
+    payload: {email, password},
+  });
+
+  return fetch(
+    '/api/User/CreateUser',
+    {
+      method: 'POST',
+      body: JSON.stringify({Email: email, Password: password}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    }
+  ).then(
+    response => {
+      if (response.ok) {
+        const time = Date.now();
+        dispatch({
+          type: REGISTER_SUCCESS,
+          payload: {time},
+        });
+        dispatch(login(email,password));
+      } else {
+        response.json().then(response => {
+          dispatch({
+            type: REGISTER_FAILURE,
+            payload: response.error,
+          });
+        });
+      };
+    }
+  );
+};
+
+const REGISTER_DISSMISS_ERROR = 'REGISTER_DISSMISS_ERROR';
+
+export const dissmissRegisterError = () => ({type: REGISTER_DISSMISS_ERROR});
+
+// const STATUS_ = 'CHECK_STATUS';
+
+
 export {
-  LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR, LOGOUT,
+  LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR,
+  LOGOUT,
+  REGISTER_ATTEMPT, REGISTER_SUCCESS, REGISTER_FAILURE, REGISTER_DISSMISS_ERROR,
 }

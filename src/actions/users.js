@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch'
+import fetch from 'cross-fetch';
 
 const USER_FETCH_ATTEMPT = 'USER_FETCH_ATTEMPT';
 const USER_FETCH_SUCCESS = 'USER_FETCH_SUCCESS';
@@ -13,10 +13,10 @@ export const fetchUser = (id) => (dispatch) => {
 
   // Make call to backend
   return fetch(
-    '/api/getUser', //TODO: Make correct call
+    '/api/User/GetCurrentUser',
     {
-      method: 'FETCH',
-      body: JSON.stringify({ id }),
+      method: 'GET',
+      // body: JSON.stringify({ id }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -24,23 +24,25 @@ export const fetchUser = (id) => (dispatch) => {
     credentials: 'include',
     }
   ).then(
-    response => {
+    response => response.json().then(json => {
       if (response.ok) {
-        response.json().then(response => {
-          const time = Date.now();
-          dispatch({
-            type: USER_FETCH_SUCCESS,
-            payload: { time, response },
-          });
+        const time = Date.now();
+        dispatch({
+          type: USER_FETCH_SUCCESS,
+          payload: {id, time, ...json}
         });
       } else {
         dispatch({
           type: USER_FETCH_FAILURE,
-          payload: response.statusText,
+          payload: {id, error: json.error}
         });
       };
-    },
-    error => console.log(error.message)
+    }).catch(
+      dispatch({
+        type: USER_FETCH_FAILURE,
+        payload: {id, error: 'Failed to load workout'}
+      })
+    )
   );
 };
 

@@ -14,8 +14,9 @@ import Navbar from './Navbar';
 import ProfilePage from "./ProfilePage";
 import HomePage from "./HomePage";
 import PlansPage from "./PlansPage";
+import PlanPage from "./PlanPage";
 import WorkoutPage from "./WorkoutPage";
-// import CreatePlan from "./CreatePlan";
+import ExercisePage from './ExercisePage'
 
 // redux
 import { useSelector } from 'react-redux';
@@ -37,13 +38,13 @@ export default function App() {
             <ProfilePage />
           </PrivateRoute>
           <PrivateRoute path="/plan/:id">
-            <WorkoutPage />
+            <PlanPage />
           </PrivateRoute>
           <PrivateRoute path="/workout/:id">
             <WorkoutPage />
           </PrivateRoute>
           <PrivateRoute path="/exercise/:id">
-            <WorkoutPage />
+            <ExercisePage />
           </PrivateRoute>
           <Route path="*">
             <Redirect to="/"/>
