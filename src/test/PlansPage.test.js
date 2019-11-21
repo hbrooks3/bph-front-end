@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PlansPage from '../view/PlansPage';
+import { createStore, applyMiddleware } from 'redux';
+import {MemoryRouter} from 'react-router-dom';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
 
