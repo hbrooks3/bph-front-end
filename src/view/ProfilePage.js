@@ -1,7 +1,7 @@
 // react
 import React, {useState} from "react";
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // react-bootstrap
 import CardColumns from 'react-bootstrap/CardColumns';
@@ -11,54 +11,57 @@ import Form from 'react-bootstrap/Form';
 
 // views
 
+// actions
+import { editUser } from '../actions/users'
+
 export default function ProfilePage(props) {
 
-const initialUser = useSelector(state=>state.users[state.auth.uid]);
+  const initialUser = useSelector(state=>state.users[state.auth.uid]);
 
-return (
-  <div>
-    <CardColumns>
-      <ContactCard uid={initialUser.id}/>
-      <GeneralCard uid={initialUser.id}/>
-    </CardColumns>
-  </div>
-  );
+  return (
+    <div>
+      <CardColumns>
+        <ContactCard uid={initialUser.id}/>
+        <GeneralCard uid={initialUser.id}/>
+      </CardColumns>
+    </div>
+    );
 }
 
 
 function ContactCard({uid}) {
 
   const user = useSelector(state=>state.users[uid]);
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState(user.email);
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
 
-  const resetForm = () => ({
-    ...user,
-    email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName
-  });
+  const resetForm = () => {
+    setEmail(user.email);
+    setFirstName(user.firstName);
+    setLastName(user.lastName);
+  
+  };
 
-  const pushUpdate = () => ({});
-
-  // const pushUpdate = () => ({
-  //   editUser({
-  //     email: email,
-  //     firstName: firstName,
-  //     lastName: lastName,
-  //     ...user
-  //   });
-  // });
-
+  const pushUpdate = () => {
+    dispatch(
+      editUser({
+        ...user,
+        email,
+        firstName,
+        lastName,
+      })
+    );
+  };
 
   const contactInfoCard = {
     title: `Contact Information`,
     fields: [
-      {label: `First Name`, value: firstName, update: setFirstName},
-      {label: `Last Name`, value: lastName, update: setLastName},
-      {label: `Email`, value: email, update: setEmail},
+      {label: `First Name`, value: firstName || "", update: setFirstName},
+      {label: `Last Name`, value: lastName || '', update: setLastName},
+      {label: `Email`, value: email || '', update: setEmail},
     ],
     submit: pushUpdate,
     reset: resetForm,
@@ -71,23 +74,29 @@ function ContactCard({uid}) {
 
 function GeneralCard({uid}) {
   const user = useSelector(state=>state.users[uid]);
+  const dispatch = useDispatch();
 
   const [height, setHeight] = useState(user.height);
   const [weight, setWeight] = useState(user.weight);
 
-  const resetForm = () => ({
-    ...user,
-    height: user.height,
-    weight: user.weight
-  });
+  const resetForm = () => {
+    setHeight(user.height);
+    setWeight(user.weight);
+  };
 
-  const pushUpdate = () => ({});
+  const pushUpdate = () => dispatch(
+    editUser({
+      ...user,
+      height,
+      weight,
+    })
+  );
 
   const generalInfoCard = {
     title: `General Information`,
     fields: [
-      {label: `height`, value: height, update: (value) => setHeight(value)},
-      {label: `weight`, value: weight, update: setWeight},
+      {label: `height`, value: height || '', update: (value) => setHeight(value)},
+      {label: `weight`, value: weight  || '', update: setWeight},
     ],
     submit: pushUpdate,
     reset: resetForm,

@@ -1,78 +1,105 @@
-import {
-  USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR,
-  USERS_CLEAR_ALL, USER_EDIT,
-} from '../actions/users';
+// actions constants
+import { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISSMISS_ERROR, USERS_CLEAR } from '../actions/users';
+
+// flag constants
+import { FAILURE, SUCCESS } from '../actions/users';
 
 const user = (state = {}, action) => {
   switch (action.type) {
+    case USER_GET:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            loaded: true,
+            ...action.payload,
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            loaded: false,
+            errorMessage: action.payload
+          }
+        default:
+          return {
+            ...state,
+            id: action.id,
+            loading: true,
+            error: false,
+            loaded: false,
+          }
+      }
     case USER_EDIT:
-    case USER_FETCH_ATTEMPT:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            ...action.payload,
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            errorMessage: action.payload
+          }
+        default:
+          return {
+            ...state,
+            loading: true,
+            error: false,
+          }
+      }
+    case USER_ADD_PLAN:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            plans: [...state.plans, action.payload]
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            errorMessage: action.payload
+          }
+        default:
+          return {
+            ...state,
+            loading: true,
+            error: false,
+          }
+      }
+    case USER_DISSMISS_ERROR:
       return {
         ...state,
-        isFetching: true,
-        isError: false,
-        isLoaded: false,
-        ...action.payload,
-      };
-    case USER_FETCH_SUCCESS:
-      return {
-        ...state,
-        isFetching: false,
-        isLoaded: true,
-        ...action.payload,
-      };
-    case USER_FETCH_FAILURE:
-      return {
-        ...state,
-        isFetching: false,
-        isError: true,
-        errorMessage: action.payload.error,
-      };
-    case USER_FETCH_DISMISS_ERROR:
-      return {
-        ...state,
-        isError: false,
-      };
+        error: false,
+      }
     default:
       return state;
   };
 };
 
-// const initialState = {
-//   123: {
-//     id: '123',
-//     isLoading: false,
-//     firstName: "Hunter",
-//     plans: [123,456],
-//   },
-// };
-
-const initialState = {};
-
-const users = (state = initialState, action) => {
+const users = (state = {}, action) => {
   switch (action.type) {
     case USER_EDIT:
-    case USER_FETCH_ATTEMPT:
+    case USER_GET:
+    case USER_ADD_PLAN:
+    case USER_DISSMISS_ERROR:
       return {
         ...state,
-        [action.payload.id]: user(state[action.payload.id], action),
+        [action.id]: user(state[action.id], action),
       };
-    case USER_FETCH_SUCCESS:
-      return {
-        ...state,
-        [action.payload.id]: user(state[action.payload.id], action),
-      };
-    case USER_FETCH_FAILURE:
-      return {
-        ...state,
-        [action.payload.id]: user(state[action.payload.id], action),
-      };
-    case USER_FETCH_DISMISS_ERROR:
-      return {
-        ...state,
-        [action.payload.id]: user(state[action.payload.id], action),
-      };
-    case USERS_CLEAR_ALL:
+    case USERS_CLEAR:
       return {};
     default:
       return state;

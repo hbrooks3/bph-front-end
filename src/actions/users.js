@@ -1,18 +1,25 @@
-import fetch from 'cross-fetch';
+import { callApi } from './api';
 
-const USER_FETCH_ATTEMPT = 'USER_FETCH_ATTEMPT';
-const USER_FETCH_SUCCESS = 'USER_FETCH_SUCCESS';
-const USER_FETCH_FAILURE = 'USER_FETCH_FAILURE';
+// actions constants
+const USER_GET = 'USER_GET';
+const USER_EDIT = 'USER_EDIT';
+const USER_ADD_PLAN = 'USER_ADD_PLAN';
+const USER_DISSMISS_ERROR = 'USER_DISSMISS_ERROR';
+const USERS_CLEAR = 'USERS_CLEAR';
+export { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISSMISS_ERROR, USERS_CLEAR }
 
-export const fetchUser = (id) => (dispatch) => {
-  // Update app state to loading
+// flag constants
+const FAILURE = 'FAILURE';
+const SUCCESS = 'SUCCESS';
+export { FAILURE, SUCCESS };
+
+export const getUser = (id) => (dispatch) => {
   dispatch({
-    type: USER_FETCH_ATTEMPT,
-    payload: { id },
+    type: USER_GET,
+    id: id,
   });
 
-  // Make call to backend
-  return fetch(
+  return callApi(
     '/api/User/GetCurrentUser',
     {
       method: 'GET',
@@ -20,75 +27,69 @@ export const fetchUser = (id) => (dispatch) => {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-    }
-  ).then(
-    response => response.json().then(json => {
-      if (response.ok) {
-        const time = Date.now();
+    response => {
+      if (response.error) {
         dispatch({
-          type: USER_FETCH_SUCCESS,
-          payload: {id, time, ...json}
+          type: USER_GET,
+          flag: FAILURE,
+          id: id,
+          payload: response.error,
         });
       } else {
         dispatch({
-          type: USER_FETCH_FAILURE,
-          payload: {id, error: json.error}
+          type: USER_GET,
+          flag: SUCCESS,
+          id: id,
+          payload: response,
         });
-      };
-    })
-  );
-};
-
-const USER_EDIT = 'USER_EDIT';
-
-export const editUser = (user) => (dispatch) => {
-  const id = user.id;
-  
-  dispatch({
-    type: USER_EDIT,
-    payload: { id },
-  });
-
-  return fetch(
-    '/api/User/UpdateUser',
-    {
-      method: 'PUT',
-      body: JSON.stringify({ ...user, userId: id }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    },
-    credentials: 'include',
+      }
     }
-  ).then(
-    response => response.json().then(json => {
-      if (response.ok) {
-        const time = Date.now();
-        dispatch({
-          type: USER_FETCH_SUCCESS,
-          payload: {id, time, ...json}
-        });
-      } else {
-        dispatch({
-          type: USER_FETCH_FAILURE,
-          payload: {id, error: json.error}
-        });
-      };
-    })
   );
 }
 
-const USER_FETCH_DISMISS_ERROR = 'USER_FETCH_DISMISS_ERROR';
+export const editUser = (user) => (dispatch) => {
+  dispatch({
+    type: USER_EDIT,
+    id: user.id,
+  });
 
-export const dismissUserFetchError = () => ({type: USER_FETCH_DISMISS_ERROR});
+  return callApi(
+    '/api/User/UpdateUser',
+    {
+      method: 'PUT',
+      body: JSON.stringify({ ...user }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: USER_EDIT,
+          flag: FAILURE,
+          id: user.id,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: USER_EDIT,
+          flag: SUCCESS,
+          id: user.id,
+          payload: response,
+        });
+      }
+    }
+  );
+}
 
-const USERS_CLEAR_ALL = 'USERS_CLEAR_ALL';
+export const dissmissUserError = (id) => ({
+  type: USER_DISSMISS_ERROR,
+  id
+});
 
-export const clearUsers = () => ({type: USERS_CLEAR_ALL});
-
-export {
-  USER_FETCH_ATTEMPT, USER_FETCH_SUCCESS, USER_FETCH_FAILURE, USER_FETCH_DISMISS_ERROR, USERS_CLEAR_ALL,
-  USER_EDIT,
-};
+export const clearUsers = () => ({type: USERS_CLEAR});
