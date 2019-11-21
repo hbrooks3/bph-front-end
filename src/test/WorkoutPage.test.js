@@ -4,6 +4,7 @@ import WorkoutPage from '../view/WorkoutPage';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
+import {MemoryRouter} from 'react-router-dom';
 
 
 const store = createStore(
@@ -15,7 +16,9 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
+      <MemoryRouter initialEntries={["/workout/2"]}>
         <WorkoutPage id={'testID'} dispatch={'true'}/>
+      </MemoryRouter>
     </Provider>,
     div
   );

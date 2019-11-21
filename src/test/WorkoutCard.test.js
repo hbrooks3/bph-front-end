@@ -5,6 +5,8 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
 import { useHistory } from 'react-router-dom';
+import {MemoryRouter} from 'react-router-dom';
+
 
 
 
@@ -17,7 +19,9 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
+      <MemoryRouter initialEntries={["/workout/2"]}>
         <WorkoutCard />
+      </MemoryRouter>
       </Provider>,
     div
   );
