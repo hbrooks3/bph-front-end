@@ -1,65 +1,89 @@
+// action constants
 import {
-  LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR, LOGOUT,
-  REGISTER_ATTEMPT, REGISTER_SUCCESS, REGISTER_FAILURE, REGISTER_DISSMISS_ERROR,
-  CHECK_SESSION, SESSION_VALID, SESSION_INVALID
+  LOGOUT,
+  CHECK_SESSION, SESSION_VALID, SESSION_INVALID,
+  LOGIN, REGISTER, DISSMISS_AUTH_ERROR
 } from '../actions/auth';
 
-// const initialState = {
-//   loggedIn: true,
-//   isFetching: false,
-//   isError: false,
-//   uid: '123',
-// };
+// flag constants
+import { FAILURE, SUCCESS } from '../actions/auth';
 
 const initialState = {
   loggedIn: false,
-  isFetching: false,
-  isError: false,
+  loading: false,
+  error: false,
 };
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN_ATTEMPT:
-    case REGISTER_ATTEMPT:
+    case LOGIN:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            loggedIn: true,
+            uid: action.payload.uid,
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            errorMessage: action.payload,
+          };
+        default:
+          return {
+            ...state,
+            loading: true,
+            error: false,
+          };
+      }
+    case REGISTER:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            errorMessage: action.payload,
+          };
+        default:
+          return {
+            ...state,
+            loading: true,
+            error: false,
+          };
+      }
     case CHECK_SESSION:
       return {
         ...state,
-        isFetching: true,
-        isError: false,
+        loading: true,
+        error: false,
       };
-    case LOGIN_SUCCESS:
     case SESSION_VALID:
       return {
         ...state,
-        isFetching: false,
+        loading: false,
         loggedIn: true,
         uid: action.payload.uid,
       };
-    case REGISTER_SUCCESS:
+    case DISSMISS_AUTH_ERROR:
       return {
         ...state,
-        isFetching: false,
-      };
-    case LOGIN_FAILURE:
-    case REGISTER_FAILURE:
-      return {
-        ...state,
-        isFetching: false,
-        isError: true,
-        errorMessage: action.payload,
-      };
-    case LOGIN_DISMISS_ERROR:
-    case REGISTER_DISSMISS_ERROR:
-      return {
-        ...state,
-        isError: false,
+        error: false,
       };
     case LOGOUT:
     case SESSION_INVALID:
       return {
         loggedIn: false,
-        isFetching: false,
-        isError: false,
+        loading: false,
+        error: false,
       };
     default:
       return state;

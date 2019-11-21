@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ErrorAlert from './ErrorAlert';
 
 // actions
-import { dismissLoginError, login } from '../actions/auth';
+import { login, dissmissAuthError } from '../actions/auth';
 
 const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
   const [password, setPassword] = useState('');
@@ -25,8 +25,8 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
   const dispatch = useDispatch();
 
   const close = () => {
-    if (auth.isError) {
-      dispatch(dismissLoginError());
+    if (auth.error) {
+      dispatch(dissmissAuthError());
     };
     if (auth.isFetching) {
       return;
@@ -81,11 +81,11 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
         }
         
         {
-          auth.isError &&
+          auth.error &&
           <ErrorAlert 
             heading='Login Error!'
             message={auth.errorMessage}
-            callback={() => dispatch(dismissLoginError())}
+            callback={() => dispatch(dissmissAuthError())}
           />
         }
       </Modal.Body>

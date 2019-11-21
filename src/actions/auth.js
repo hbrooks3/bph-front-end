@@ -1,20 +1,34 @@
-import fetch from 'cross-fetch';
+import { getUser, clearUsers } from './users';
 
-import { fetchUser, clearUsers } from './users';
+import { callApi } from './api';
 
-const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT';
-const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-const LOGIN_FAILURE = 'LOGIN_FAILURE';
+// action constants
+const LOGIN = 'LOGIN';
+const REGISTER = 'REGISTER';
+const LOGOUT = 'LOGOUT';
+const DISSMISS_AUTH_ERROR = 'DISSMISS_AUTH_ERROR';
+const CHECK_SESSION = 'CHECK_SESSION';
+const SESSION_VALID = 'SESSION_VALID';
+const SESSION_INVALID= 'SESSION_INVALID';
+export {
+  LOGOUT,
+  CHECK_SESSION, SESSION_VALID, SESSION_INVALID,
+  LOGIN, REGISTER, DISSMISS_AUTH_ERROR
+}
+
+// flag constants
+const FAILURE = 'FAILURE';
+const SUCCESS = 'SUCCESS';
+export { FAILURE, SUCCESS };
 
 export const login = (email, password) => (dispatch) => {
   // Update app state to loading
   dispatch({
-    type: LOGIN_ATTEMPT,
+    type: LOGIN,
     payload: {email, password},
   });
 
-  // Make call to backend
-  return fetch(
+  return callApi(
     '/api/User/LoginUser',
     {
       method: 'POST',
@@ -26,39 +40,33 @@ export const login = (email, password) => (dispatch) => {
         'Accept': 'application/json'
       },
       credentials: 'include',
-    }
-  ).then(
-    response => response.json().then(json => {
-      if (response.ok) {
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: LOGIN,
+          flag: FAILURE,
+          payload: response.error,
+        });
+      } else if (response.userId) {
         const time = Date.now();
         dispatch({
-          type: LOGIN_SUCCESS,
-          payload: {time, uid: json.userId},
+          type: LOGIN,
+          flag: SUCCESS,
+          payload: {time, uid: response.userId},
         });
-        console.log('Login successful, fetching current User');
-        dispatch( fetchUser(json.userId) );
-      } else {
-        dispatch({
-          type: LOGIN_FAILURE,
-          payload: json.error,
-        });
+        dispatch( getUser(response.userId) );
       }
-    })
+    }
   );
 };
-
-const LOGIN_DISMISS_ERROR = 'LOGIN_DISMISS_ERROR';
-
-export const dismissLoginError = () => ({type: LOGIN_DISMISS_ERROR});
-
-const LOGOUT = 'LOGOUT';
 
 export const logout = () => (dispatch) => {
   // Update app state to loading
   dispatch({type: LOGOUT,});
   dispatch(clearUsers());
 
-  return fetch(
+  return callApi(
     '/api/User/LogoutUser',
     {
       method: 'POST',
@@ -68,101 +76,72 @@ export const logout = () => (dispatch) => {
       },
       credentials: 'include',
     },
+    error => console.log(error.error)
   );
 }
 
-const REGISTER_ATTEMPT = 'REGISTER_ATTEMPT';
-const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-const REGISTER_FAILURE = 'REGISTER_FAILURE';
-
 export const register = (email, password) => (dispatch) => {
   dispatch({
-    type: REGISTER_ATTEMPT,
+    type: REGISTER,
     payload: {email, password},
   });
 
-  return fetch(
+  return callApi(
     '/api/User/CreateUser',
     {
       method: 'POST',
-      body: JSON.stringify({Email: email, Password: password}),
+      body: JSON.stringify({Email: email || '', Password: password || ''}),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       credentials: 'include',
-    }
-  ).then(
+    },
     response => {
-      if (response.ok) {
+      if (response.error) {
+        dispatch({
+          type: REGISTER,
+          flag: FAILURE,
+          payload: response.error || "Failed to create account",
+        });
+      } else if (response.userId) {
         const time = Date.now();
         dispatch({
-          type: REGISTER_SUCCESS,
+          type: REGISTER,
+          flag: SUCCESS,
           payload: {time},
         });
         console.log('Account created, running login');
         dispatch(login(email,password));
-      } else {
-        response.json().then(response => {
-          dispatch({
-            type: REGISTER_FAILURE,
-            payload: response.error,
-          });
-        });
-      };
+      }
     }
   );
 };
 
-const REGISTER_DISSMISS_ERROR = 'REGISTER_DISSMISS_ERROR';
-
-export const dissmissRegisterError = () => ({type: REGISTER_DISSMISS_ERROR});
-
-const CHECK_SESSION = 'CHECK_SESSION';
-const SESSION_VALID = 'SESSION_VALID';
-const SESSION_INVALID= 'SESSION_INVALID';
-
-export const status = () => (dispatch) => {
+export const checkSession = () => (dispatch) => {
   dispatch({type: CHECK_SESSION});
 
-  return fetch(
+  return callApi(
     '/api/User/CheckSessionStatus',
     {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       credentials: 'include',
-    }
-  ).then(
-    response => response.json().then(json => {
-      if (response.ok) {
-        if (json.validSession) {
-          dispatch({
-            type: SESSION_VALID,
-            payload: {uid: json.userId},
-          });
-          dispatch( fetchUser(json.userId) );
-        } else {
-          dispatch({
-            type: SESSION_INVALID,
-            payload: {error: json.error},
-          })
-        }
-      } else {
+    },
+    response => {
+      if (response.validSession) {
         dispatch({
-          type: SESSION_INVALID,
-          payload: {error: json.error},
+          type: SESSION_VALID,
+          payload: {uid: response.userId},
         });
+        dispatch( getUser(response.userId) );
+      } else {
+        dispatch({type: SESSION_INVALID})
       }
-    })
+    }
   );
 }
 
-export {
-  LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_DISMISS_ERROR,
-  LOGOUT,
-  REGISTER_ATTEMPT, REGISTER_SUCCESS, REGISTER_FAILURE, REGISTER_DISSMISS_ERROR,
-  CHECK_SESSION, SESSION_VALID, SESSION_INVALID
-}
+export const dissmissAuthError = () => ({type: DISSMISS_AUTH_ERROR});

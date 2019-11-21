@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 
 // actions
-import { dissmissRegisterError, register } from '../actions/auth';
+import { dissmissAuthError, register } from '../actions/auth';
 
 
 const RegisterModal = ({show, onClose, onRegister}) => {
@@ -25,8 +25,8 @@ const RegisterModal = ({show, onClose, onRegister}) => {
   const dispatch = useDispatch();
 
   const close = () => {
-    if (auth.isError) {
-      dispatch(dissmissRegisterError());
+    if (auth.error) {
+      dispatch(dissmissAuthError());
     };
     onClose();
   };
@@ -68,8 +68,8 @@ const RegisterModal = ({show, onClose, onRegister}) => {
         }
 
         {
-          auth.isError &&
-          <Alert variant="danger" onClose={() => dispatch(dissmissRegisterError())} dismissible>
+          auth.error &&
+          <Alert variant="danger" onClose={() => dispatch(dissmissAuthError())} dismissible>
           <Alert.Heading>Register Error!</Alert.Heading>
           <p>{auth.errorMessage}</p>
         </Alert>
