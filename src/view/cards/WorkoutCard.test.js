@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PlanCard from '../view/cards/PlanCard.js';
+import WorkoutCard from './WorkoutCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from '../reducers/index.js';
+import reducer from '../../reducers/index.js';
+import { useHistory } from 'react-router-dom';
 import {MemoryRouter} from 'react-router-dom';
+
 
 
 
@@ -17,11 +19,13 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-      <MemoryRouter initialEntries={["/users/2"]}>
-        <PlanCard props={'type', 'id', 'fetch', 'dismissError'}/>
+      <MemoryRouter initialEntries={["/workout/2"]}>
+        <WorkoutCard />
       </MemoryRouter>
-    </Provider>,
+      </Provider>,
     div
   );
   ReactDOM.unmountComponentAtNode(div);
 });
+
+

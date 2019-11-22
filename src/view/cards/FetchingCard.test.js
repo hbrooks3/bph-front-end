@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SetCard from '../view/cards/SetCard.js';
+import FetchingCard from './FetchingCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from '../reducers/index.js';
+import reducer from '../../reducers/index.js';
 import {MemoryRouter} from 'react-router-dom';
 
 
+()=>{}
 
 const store = createStore(
   reducer,
@@ -18,7 +19,7 @@ xit('renders without crashing', () => {
   ReactDOM.render(
     <Provider store={store}>
       <MemoryRouter initialEntries={["/users/2"]}>
-        <SetCard/>
+        <FetchingCard props={'users', 'id', ()=>{}, 'dismissError'}/>
       </MemoryRouter>
       </Provider>,
     div

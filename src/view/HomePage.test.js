@@ -1,21 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ProfilePage from '../view/ProfilePage';
+import HomePage from './HomePage';
 import { createStore, applyMiddleware } from 'redux';
-import {MemoryRouter} from 'react-router-dom';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
 
 
-const store = createStore(reducer);
+const store = createStore(
+  reducer,
+//  applyMiddleware(thunkMiddleware,logger),
+);
 
-xit('renders without crashing', () => {
+it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-    <MemoryRouter initialEntries={["/profile/2"]}>
-      <ProfilePage/>
-    </MemoryRouter>
-    </Provider>, div);
+        <HomePage />
+      </Provider>,
+    div
+  );
   ReactDOM.unmountComponentAtNode(div);
 });
