@@ -1,12 +1,12 @@
 // actions constants
-import { EXERCISE_GET, EXERCISE_EDIT, EXERCISE_ADD_SET, EXERCISE_DISSMISS_ERROR, EXERCISES_CLEAR } from '../actions/exercises';
+import { SET_GET, SET_EDIT, SET_DISSMISS_ERROR, SETS_CLEAR } from '../actions/sets';
 
 // flag constants
-import { FAILURE, SUCCESS } from '../actions/exercises';
+import { FAILURE, SUCCESS } from '../actions/sets';
 
-const exercise = (state = {}, action) => {
+const set = (state = {}, action) => {
   switch (action.type) {
-    case EXERCISE_GET:
+    case SET_GET:
       switch (action.flag) {
         case SUCCESS:
           return {
@@ -15,7 +15,6 @@ const exercise = (state = {}, action) => {
             error: false,
             loaded: true,
             ...action.payload,
-            sets: action.payload.setIds,
           }
         case FAILURE:
           return {
@@ -34,7 +33,7 @@ const exercise = (state = {}, action) => {
             loaded: false,
           }
       }
-    case EXERCISE_EDIT:
+    case SET_EDIT:
       switch (action.flag) {
         case SUCCESS:
           return {
@@ -57,30 +56,7 @@ const exercise = (state = {}, action) => {
             error: false,
           }
       }
-    case EXERCISE_ADD_SET:
-      switch (action.flag) {
-        case SUCCESS:
-          return {
-            ...state,
-            loading: false,
-            error: false,
-            sets: [...state.sets, action.payload.setId]
-          }
-        case FAILURE:
-          return {
-            ...state,
-            loading: false,
-            error: true,
-            errorMessage: action.payload
-          }
-        default:
-          return {
-            ...state,
-            loading: true,
-            error: false,
-          }
-      }
-    case EXERCISE_DISSMISS_ERROR:
+    case SET_DISSMISS_ERROR:
       return {
         ...state,
         error: false,
@@ -90,21 +66,20 @@ const exercise = (state = {}, action) => {
   };
 };
 
-const exercises = (state = {}, action) => {
+const sets = (state = {}, action) => {
   switch (action.type) {
-    case EXERCISE_EDIT:
-    case EXERCISE_GET:
-    case EXERCISE_ADD_SET:
-    case EXERCISE_DISSMISS_ERROR:
+    case SET_EDIT:
+    case SET_GET:
+    case SET_DISSMISS_ERROR:
       return {
         ...state,
-        [action.id]: exercise(state[action.id], action),
+        [action.id]: set(state[action.id], action),
       };
-    case EXERCISES_CLEAR:
+    case SETS_CLEAR:
       return {};
     default:
       return state;
   };
 };
 
-export default exercises;
+export default sets;

@@ -1,92 +1,106 @@
-import {
-  WORKOUT_FETCH_ATTEMPT,
-  WORKOUT_FETCH_SUCCESS,
-  WORKOUT_FETCH_FAILURE,
-  WORKOUT_FETCH_DISMISS_ERROR,
-  WORKOUTS_CLEAR_ALL,
-} from '../actions/workouts';
+// actions constants
+import { WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISSMISS_ERROR, WORKOUTS_CLEAR } from '../actions/workouts';
 
-const initialState = {
-  abc: {
-    id: 'abc',
-    isFetching: false,
-    isError: false,
-    isLoaded: true,
-    lastUpdated: 123456789,
-    exercises: ['cat', 'dog']
-  },
-  def: {
-    id: 'def',
-    isFetching: true,
-    isError: false,
-    lastUpdated: 123456789,
-  },
-  ghi: {
-    id: 'ghi',
-    isFetching: false,
-    isError: true,
-    errorMessage: "Didn't Load!",
-    lastUpdated: 123456789,
-  }
-};
+// flag constants
+import { FAILURE, SUCCESS } from '../actions/workouts';
 
 const workout = (state = {}, action) => {
   switch (action.type) {
-    case WORKOUT_FETCH_ATTEMPT:
+    case WORKOUT_GET:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            loaded: true,
+            ...action.payload,
+            exercises: action.payload.exerciseIds,
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            loaded: false,
+            errorMessage: action.payload
+          }
+        default:
+          return {
+            ...state,
+            id: action.id,
+            loading: true,
+            error: false,
+            loaded: false,
+          }
+      }
+    case WORKOUT_EDIT:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            ...action.payload,
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            errorMessage: action.payload
+          }
+        default:
+          return {
+            ...state,
+            loading: true,
+            error: false,
+          }
+      }
+    case WORKOUT_ADD_EXERCISE:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            exercises: [...state.exercises, action.payload.exerciseId]
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            errorMessage: action.payload
+          }
+        default:
+          return {
+            ...state,
+            loading: true,
+            error: false,
+          }
+      }
+    case WORKOUT_DISSMISS_ERROR:
       return {
         ...state,
-        id: action.payload.id,
-        isFetching: true,
-        isError: false,
-        isLoaded: false,
-      };
-    case WORKOUT_FETCH_SUCCESS:
-      return {
-        ...state,
-        isFetching: false,
-        lastUpdated: action.payload.time,
-        isLoaded: true,
-      };
-    case WORKOUT_FETCH_FAILURE:
-      return {
-        ...state,
-        isFetching: false,
-        isError: true,
-        errorMessage: action.payload.error,
-      };
-    case WORKOUT_FETCH_DISMISS_ERROR:
-      return {
-        ...state,
-        isError: false,
-      };
+        error: false,
+      }
     default:
       return state;
   };
 };
 
-const workouts = (state = initialState, action) => {
+const workouts = (state = {}, action) => {
   switch (action.type) {
-    case WORKOUT_FETCH_ATTEMPT:
+    case WORKOUT_EDIT:
+    case WORKOUT_GET:
+    case WORKOUT_ADD_EXERCISE:
+    case WORKOUT_DISSMISS_ERROR:
       return {
         ...state,
-        [action.payload.id]: workout(state[action.payload.id], action),
+        [action.id]: workout(state[action.id], action),
       };
-    case WORKOUT_FETCH_SUCCESS:
-      return {
-        ...state,
-        [action.payload.id]: workout(state[action.payload.id], action),
-      };
-    case WORKOUT_FETCH_FAILURE:
-      return {
-        ...state,
-        [action.payload.id]: workout(state[action.payload.id], action),
-      };
-    case WORKOUT_FETCH_DISMISS_ERROR:
-      return {
-        ...state,
-        [action.payload.id]: workout(state[action.payload.id], action),
-      };
-    case WORKOUTS_CLEAR_ALL:
+    case WORKOUTS_CLEAR:
       return {};
     default:
       return state;

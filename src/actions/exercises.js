@@ -1,59 +1,167 @@
-import fetch from 'cross-fetch';
+import { callApi } from './api';
 
-const EXERCISE_FETCH_ATTEMPT = 'EXERCISE_FETCH_ATTEMPT';
-const EXERCISE_FETCH_SUCCESS = 'EXERCISE_FETCH_SUCCESS';
-const EXERCISE_FETCH_FAILURE = 'EXERCISE_FETCH_FAILURE';
+// // actions constants
+import { WORKOUT_ADD_EXERCISE } from './workouts'
 
-export const fetchUser = (id) => (dispatch) => {
-  // Update app state to loading
-  dispatch({
-    type: EXERCISE_FETCH_ATTEMPT,
-    payload: { id },
-  });
+// actions constants
+const EXERCISE_GET = 'EXERCISE_GET';
+const EXERCISE_EDIT = 'EXERCISE_EDIT';
+const EXERCISE_ADD_SET = 'EXERCISE_ADD_SET';
+const EXERCISE_DISSMISS_ERROR = 'EXERCISE_DISSMISS_ERROR';
+const EXERCISES_CLEAR = 'EXERCISES_CLEAR';
+export { EXERCISE_GET, EXERCISE_EDIT, EXERCISE_ADD_SET, EXERCISE_DISSMISS_ERROR, EXERCISES_CLEAR }
 
-  // Make call to backend
-  return fetch(
-    '/api/Coach/GetPlan',
+// flag constants
+const FAILURE = 'FAILURE';
+const SUCCESS = 'SUCCESS';
+export { FAILURE, SUCCESS };
+
+export const loadExercises = (workoutId) => (dispatch) => {
+  return callApi(
+    '/api/Coach/GetExercises?workoutId=' + workoutId,
     {
       method: 'GET',
-      body: JSON.stringify({ id }),
+      headers: {
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        console.log("Failed to load exercises", response.error);
+      } else {
+        response.forEach(workout => {
+          dispatch({
+            type: WORKOUT_ADD_EXERCISE,
+            flag: SUCCESS,
+            id: workoutId,
+            payload: { workoutId: workout.workoutId },
+          });
+          dispatch({
+            type: EXERCISE_GET,
+            flag: SUCCESS,
+            id: workout.workoutId,
+            payload: workout,
+          });
+        });
+      }
+    }
+  );
+}
+
+export const getExercise = (exerciseId) => (dispatch) => {
+  dispatch({
+    type: EXERCISE_GET,
+    id: exerciseId,
+  });
+
+  return callApi(
+    '/api/Coach/GetExercise?exerciseId=' + exerciseId,
+    {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-    }
-  ).then(
-    response => response.json().then(json => {
-      if (response.ok) {
-        const time = Date.now();
+    response => {
+      if (response.error) {
         dispatch({
-          type: EXERCISE_FETCH_SUCCESS,
-          payload: {id, time, ...json}
+          type: EXERCISE_GET,
+          flag: FAILURE,
+          id: exerciseId,
+          payload: response.error,
         });
       } else {
         dispatch({
-          type: EXERCISE_FETCH_FAILURE,
-          payload: {id, error: json.error}
+          type: EXERCISE_GET,
+          flag: SUCCESS,
+          id: exerciseId,
+          payload: response,
         });
-      };
-    }).catch(
-      dispatch({
-        type: EXERCISE_FETCH_FAILURE,
-        payload: {id, error: 'Failed to load plan'}
-      })
-    )
+      }
+    }
   );
-};
+}
 
-const EXERCISE_FETCH_DISMISS_ERROR = 'EXERCISE_FETCH_DISMISS_ERROR';
+export const editExercise = (exercise) => (dispatch) => {
+  dispatch({
+    type: EXERCISE_EDIT,
+    id: exercise.id,
+  });
 
-export const dismissUserFetchError = () => ({type: EXERCISE_FETCH_DISMISS_ERROR});
+  return callApi(
+    '/api/Coach/UpdateExercise',
+    {
+      method: 'PUT',
+      body: JSON.stringify({ ...exercise }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: EXERCISE_EDIT,
+          flag: FAILURE,
+          id: exercise.id,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: EXERCISE_EDIT,
+          flag: SUCCESS,
+          id: exercise.id,
+          payload: response,
+        });
+      }
+    }
+  );
+}
 
-const EXERCISES_CLEAR_ALL = 'EXERCISES_CLEAR_ALL';
+export const addSet = (exerciseId) => (dispatch) => {
+  dispatch({
+    type: EXERCISE_ADD_SET,
+    id: exerciseId
+  });
 
-export const clearUsers = () => ({type: EXERCISES_CLEAR_ALL});
+  return callApi(
+    '/api/Coach/CreateSet',
+    {
+      method: 'POST',
+      body: JSON.stringify({exerciseId, set: {}}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: EXERCISE_ADD_SET,
+          flag: FAILURE,
+          id: exerciseId,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: EXERCISE_ADD_SET,
+          flag: SUCCESS,
+          id: exerciseId,
+          payload: response,
+        });
+      }
+    }
+  );
+}
 
-export {
-  EXERCISE_FETCH_ATTEMPT, EXERCISE_FETCH_SUCCESS, EXERCISE_FETCH_FAILURE, EXERCISE_FETCH_DISMISS_ERROR, EXERCISES_CLEAR_ALL
-};
+export const dissmissExerciseError = (exerciseId) => ({
+  type: EXERCISE_DISSMISS_ERROR,
+  id: exerciseId,
+});
+
+export const clearExercises = () => ({type: EXERCISES_CLEAR});
