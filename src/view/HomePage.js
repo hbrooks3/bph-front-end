@@ -6,8 +6,6 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import CardColumns from 'react-bootstrap/CardColumns';
 
-// react-router
-import { useHistory } from 'react-router-dom';
 
 // redux
 import { useSelector } from 'react-redux';
@@ -18,7 +16,6 @@ import RegisterModal from './RegisterModal';
 import LoadingCard from './cards/LoadingCard';
 
 function PrivatePage(props) {
-  const history = useHistory();
 
   return (
     <CardColumns>
@@ -43,7 +40,6 @@ function PrivatePage(props) {
           <Card.Text>* Workout shown here *</Card.Text>
           <Card.Text>*</Card.Text>
           <Card.Text>*</Card.Text>
-          <Button onClick={()=>history.push("plan/123")} variant="primary">View Workout</Button>
         </Card.Body>    
       </Card>
       </CardColumns>
