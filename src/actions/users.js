@@ -87,6 +87,43 @@ export const editUser = (user) => (dispatch) => {
   );
 }
 
+export const addPlan = (id) => (dispatch) => {
+  dispatch({
+    type: USER_ADD_PLAN,
+    id
+  });
+
+  return callApi(
+    '/api/Coach/CreatePlan',
+    {
+      method: 'POST',
+      body: JSON.stringify({}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: USER_ADD_PLAN,
+          flag: FAILURE,
+          id: id,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: USER_ADD_PLAN,
+          flag: SUCCESS,
+          id: id,
+          payload: response,
+        });
+      }
+    }
+  );
+}
+
 export const dissmissUserError = (id) => ({
   type: USER_DISSMISS_ERROR,
   id
