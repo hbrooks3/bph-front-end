@@ -43,7 +43,7 @@ function PrivatePage(props) {
           <Card.Text>* Workout shown here *</Card.Text>
           <Card.Text>*</Card.Text>
           <Card.Text>*</Card.Text>
-          <Button onClick={()=>history.push("workout/123")} variant="primary">View Workout</Button>
+          <Button onClick={()=>history.push("plan/123")} variant="primary">View Workout</Button>
         </Card.Body>    
       </Card>
       </CardColumns>
