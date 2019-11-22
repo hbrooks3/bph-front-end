@@ -56,13 +56,17 @@ export default function App() {
 }
 
 export function PrivateRoute({ children, ...rest }) {
-  const sessionStatus = useSelector(state => state.auth.loggedIn);
+  const auth = useSelector(state => state.auth);
+
+  if (auth.loading) {
+    return <></>;
+  }
 
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        sessionStatus ? (
+      auth.loggedIn ? (
           children
         ) : (
           <Redirect
