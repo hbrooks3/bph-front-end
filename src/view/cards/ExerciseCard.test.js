@@ -8,7 +8,6 @@ import {MemoryRouter} from 'react-router-dom';
 import {USER_GET, SUCCESS, FAILURE} from '../../actions/users';
 
 const store = createStore(reducer);
-// store.dispatch({type:USER_GET})
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
