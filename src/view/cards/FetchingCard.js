@@ -16,12 +16,12 @@ export default function FetchingCardBody ({type, id, fetch, dismissError}) {
   const item = useSelector(state=>state[type][id]);
 
   useEffect(()=>{
-    if (item == null || (!item.isFetching && !item.isError && !item.isLoaded)) {
-      fetch(id);
+    if (item == null || !(item.loading || item.error || item.loaded)) {
+      fetch();
     }
   });
 
-  if (item && item.isError) {
+  if (item && item.error) {
     return (
         <Card.Body>
           <ErrorAlert
