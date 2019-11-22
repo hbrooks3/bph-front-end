@@ -1,5 +1,3 @@
-import fetch from 'cross-fetch';
-
 import { getUser, clearUsers } from './users';
 import { loadPlans } from './plans'
 
@@ -70,7 +68,7 @@ export const logout = () => (dispatch) => {
   dispatch({type: LOGOUT,});
   dispatch(clearUsers());
 
-  return fetch(
+  return callApi(
     '/api/User/LogoutUser',
     {
       method: 'POST',
@@ -79,7 +77,8 @@ export const logout = () => (dispatch) => {
         'Accept': 'application/json'
       },
       credentials: 'include',
-    }
+    },
+    ()=>{}
   );
 }
 
