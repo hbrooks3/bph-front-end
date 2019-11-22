@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SetCard from '../view/cards/SetCard.js';
+import LoadingCard from './LoadingCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from '../reducers/index.js';
+import reducer from '../../reducers/index.js';
 
 
 const store = createStore(
@@ -15,7 +15,7 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <SetCard set={'id'}/>
+        <LoadingCard />
       </Provider>,
     div
   );

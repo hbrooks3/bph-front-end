@@ -1,23 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ErrorAlert from '../view/ErrorAlert.js';
+import ProfilePage from './ProfilePage';
 import { createStore, applyMiddleware } from 'redux';
+import {MemoryRouter} from 'react-router-dom';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
 
 
-const store = createStore(
-  reducer,
-//  applyMiddleware(thunkMiddleware,logger),
-);
+const store = createStore(reducer);
 
-it('renders without crashing', () => {
+xit('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <ErrorAlert />
-      </Provider>,
-    div
-  );
+    <MemoryRouter initialEntries={["/profile/2"]}>
+      <ProfilePage/>
+    </MemoryRouter>
+    </Provider>, div);
   ReactDOM.unmountComponentAtNode(div);
 });

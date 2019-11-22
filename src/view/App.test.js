@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App, {PrivateRoute} from '../view/App';
-import Navbar from '../view/Navbar';
-import ProfilePage from "../view/ProfilePage";
-import HomePage from "../view/HomePage";
-import PlansPage from "../view/PlansPage";
-import WorkoutPage from "../view/WorkoutPage";
+import App, {PrivateRoute} from './App';
+import Navbar from './Navbar';
+import ProfilePage from "./ProfilePage";
+import HomePage from "./HomePage";
+import PlansPage from "./PlansPage";
+import WorkoutPage from "./WorkoutPage";
 import {
   BrowserRouter as Router,
   Switch,

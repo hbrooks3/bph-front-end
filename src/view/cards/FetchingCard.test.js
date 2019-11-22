@@ -1,21 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ExercisePage from '../view/ExercisePage.js';
+import FetchingCard from './FetchingCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from '../reducers/index.js';
+import reducer from '../../reducers/index.js';
+import {MemoryRouter} from 'react-router-dom';
 
+
+()=>{}
 
 const store = createStore(
   reducer,
 //  applyMiddleware(thunkMiddleware,logger),
 );
 
-it('renders without crashing', () => {
+xit('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <ExercisePage props={'id'}/>
+      <MemoryRouter initialEntries={["/users/2"]}>
+        <FetchingCard props={'users', 'id', ()=>{}, 'dismissError'}/>
+      </MemoryRouter>
       </Provider>,
     div
   );

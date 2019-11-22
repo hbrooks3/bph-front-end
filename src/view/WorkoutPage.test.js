@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LoadingCard from '../view/cards/LoadingCard.js';
+import WorkoutPage from './WorkoutPage';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers/index.js';
+import {MemoryRouter} from 'react-router-dom';
 
 
 const store = createStore(
@@ -15,8 +16,10 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
-        <LoadingCard />
-      </Provider>,
+      <MemoryRouter initialEntries={["/workout/2"]}>
+        <WorkoutPage id={'testID'} dispatch={'true'}/>
+      </MemoryRouter>
+    </Provider>,
     div
   );
   ReactDOM.unmountComponentAtNode(div);
