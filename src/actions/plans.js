@@ -1,59 +1,168 @@
-import fetch from 'cross-fetch';
+import { callApi } from './api';
 
-const PLAN_FETCH_ATTEMPT = 'PLAN_FETCH_ATTEMPT';
-const PLAN_FETCH_SUCCESS = 'PLAN_FETCH_SUCCESS';
-const PLAN_FETCH_FAILURE = 'PLAN_FETCH_FAILURE';
+// actions constants
+import { USER_ADD_PLAN } from './users'
 
-export const fetchUser = (id) => (dispatch) => {
-  // Update app state to loading
-  dispatch({
-    type: PLAN_FETCH_ATTEMPT,
-    payload: { id },
-  });
+// actions constants
+const PLAN_GET = 'PLAN_GET';
+const PLAN_EDIT = 'PLAN_EDIT';
+const PLAN_ADD_WORKOUT = 'PLAN_ADD_WORKOUT';
+const PLAN_DISSMISS_ERROR = 'PLAN_DISSMISS_ERROR';
+const PLANS_CLEAR = 'PLANS_CLEAR';
+export { PLAN_GET, PLAN_EDIT, PLAN_ADD_WORKOUT, PLAN_DISSMISS_ERROR, PLANS_CLEAR }
 
-  // Make call to backend
-  return fetch(
-    '/api/Coach/GetPlan',
+// flag constants
+const FAILURE = 'FAILURE';
+const SUCCESS = 'SUCCESS';
+export { FAILURE, SUCCESS };
+
+export const loadPlans = (id) => (dispatch) => {
+  return callApi(
+    '/api/Coach/GetPlans',
     {
       method: 'GET',
-      body: JSON.stringify({ id }),
+      headers: {
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        console.log("Failed to load plans", response.error);
+      } else {
+        response.forEach(plan => {
+          dispatch({
+            type: USER_ADD_PLAN,
+            flag: SUCCESS,
+            id: id,
+            payload: { planId: plan.planId },
+          });
+          dispatch({
+            type: PLAN_GET,
+            flag: SUCCESS,
+            id: plan.planId,
+            payload: plan,
+          });
+        });
+      }
+    }
+  );
+}
+
+export const getPlan = (id) => (dispatch) => {
+  dispatch({
+    type: PLAN_GET,
+    id: id,
+  });
+
+  return callApi(
+    '/api/Coach/GetPlan' + id,
+    {
+      method: 'GET',
+      // body: JSON.stringify({ planId: id }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-    }
-  ).then(
-    response => response.json().then(json => {
-      if (response.ok) {
-        const time = Date.now();
+    response => {
+      if (response.error) {
         dispatch({
-          type: PLAN_FETCH_SUCCESS,
-          payload: {id, time, ...json}
+          type: PLAN_GET,
+          flag: FAILURE,
+          id: id,
+          payload: response.error,
         });
       } else {
         dispatch({
-          type: PLAN_FETCH_FAILURE,
-          payload: {id, error: json.error}
+          type: PLAN_GET,
+          flag: SUCCESS,
+          id: id,
+          payload: response,
         });
-      };
-    }).catch(
-      dispatch({
-        type: PLAN_FETCH_FAILURE,
-        payload: {id, error: 'Failed to load plan'}
-      })
-    )
+      }
+    }
   );
-};
+}
 
-const PLAN_FETCH_DISMISS_ERROR = 'PLAN_FETCH_DISMISS_ERROR';
+export const editPlan = (plan) => (dispatch) => {
+  dispatch({
+    type: PLAN_EDIT,
+    id: plan.id,
+  });
 
-export const dismissUserFetchError = () => ({type: PLAN_FETCH_DISMISS_ERROR});
+  return callApi(
+    '/api/Coach/UpdatePlan',
+    {
+      method: 'PUT',
+      body: JSON.stringify({ ...plan }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: PLAN_EDIT,
+          flag: FAILURE,
+          id: plan.id,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: PLAN_EDIT,
+          flag: SUCCESS,
+          id: plan.id,
+          payload: response,
+        });
+      }
+    }
+  );
+}
 
-const PLANS_CLEAR_ALL = 'PLANS_CLEAR_ALL';
+export const addPlan = (id) => (dispatch) => {
+  dispatch({
+    type: PLAN_ADD_WORKOUT,
+    id
+  });
 
-export const clearUsers = () => ({type: PLANS_CLEAR_ALL});
+  return callApi(
+    '/api/Coach/CreateWorkout',
+    {
+      method: 'POST',
+      body: JSON.stringify({planId: id}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: PLAN_ADD_WORKOUT,
+          flag: FAILURE,
+          id: id,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: PLAN_ADD_WORKOUT,
+          flag: SUCCESS,
+          id: id,
+          payload: response,
+        });
+      }
+    }
+  );
+}
 
-export {
-  PLAN_FETCH_ATTEMPT, PLAN_FETCH_SUCCESS, PLAN_FETCH_FAILURE, PLAN_FETCH_DISMISS_ERROR, PLANS_CLEAR_ALL
-};
+export const dissmissPlanError = (id) => ({
+  type: PLAN_DISSMISS_ERROR,
+  id
+});
+
+export const clearPlans = () => ({type: PLANS_CLEAR});
