@@ -1,59 +1,167 @@
-import fetch from 'cross-fetch';
+import { callApi } from './api';
 
-const WORKOUT_FETCH_ATTEMPT = 'WORKOUT_FETCH_ATTEMPT';
-const WORKOUT_FETCH_SUCCESS = 'WORKOUT_FETCH_SUCCESS';
-const WORKOUT_FETCH_FAILURE = 'WORKOUT_FETCH_FAILURE';
+// // actions constants
+import { PLAN_ADD_WORKOUT } from './plans'
 
-export const fetchUser = (id) => (dispatch) => {
-  // Update app state to loading
-  dispatch({
-    type: WORKOUT_FETCH_ATTEMPT,
-    payload: { id },
-  });
+// actions constants
+const WORKOUT_GET = 'WORKOUT_GET';
+const WORKOUT_EDIT = 'WORKOUT_EDIT';
+const WORKOUT_ADD_EXERCISE = 'WORKOUT_ADD_EXERCISE';
+const WORKOUT_DISSMISS_ERROR = 'WORKOUT_DISSMISS_ERROR';
+const WORKOUTS_CLEAR = 'WORKOUTS_CLEAR';
+export { WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISSMISS_ERROR, WORKOUTS_CLEAR }
 
-  // Make call to backend
-  return fetch(
-    '/api/Coach/GetPlan',
+// flag constants
+const FAILURE = 'FAILURE';
+const SUCCESS = 'SUCCESS';
+export { FAILURE, SUCCESS };
+
+export const loadWorkouts = (planId) => (dispatch) => {
+  return callApi(
+    '/api/Coach/GetWorkouts?planId=' + planId,
     {
       method: 'GET',
-      body: JSON.stringify({ id }),
+      headers: {
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        console.log("Failed to load workouts", response.error);
+      } else {
+        response.forEach(plan => {
+          dispatch({
+            type: PLAN_ADD_WORKOUT,
+            flag: SUCCESS,
+            id: planId,
+            payload: { planId: plan.planId },
+          });
+          dispatch({
+            type: WORKOUT_GET,
+            flag: SUCCESS,
+            id: plan.planId,
+            payload: plan,
+          });
+        });
+      }
+    }
+  );
+}
+
+export const getWorkout = (workoutId) => (dispatch) => {
+  dispatch({
+    type: WORKOUT_GET,
+    id: workoutId,
+  });
+
+  return callApi(
+    '/api/Coach/GetWorkout?workoutId=' + workoutId,
+    {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-    }
-  ).then(
-    response => response.json().then(json => {
-      if (response.ok) {
-        const time = Date.now();
+    response => {
+      if (response.error) {
         dispatch({
-          type: WORKOUT_FETCH_SUCCESS,
-          payload: {id, time, ...json}
+          type: WORKOUT_GET,
+          flag: FAILURE,
+          id: workoutId,
+          payload: response.error,
         });
       } else {
         dispatch({
-          type: WORKOUT_FETCH_FAILURE,
-          payload: {id, error: json.error}
+          type: WORKOUT_GET,
+          flag: SUCCESS,
+          id: workoutId,
+          payload: response,
         });
-      };
-    }).catch(
-      dispatch({
-        type: WORKOUT_FETCH_FAILURE,
-        payload: {id, error: 'Failed to load plan'}
-      })
-    )
+      }
+    }
   );
-};
+}
 
-const WORKOUT_FETCH_DISMISS_ERROR = 'WORKOUT_FETCH_DISMISS_ERROR';
+export const editWorkout = (workout) => (dispatch) => {
+  dispatch({
+    type: WORKOUT_EDIT,
+    id: workout.id,
+  });
 
-export const dismissUserFetchError = () => ({type: WORKOUT_FETCH_DISMISS_ERROR});
+  return callApi(
+    '/api/Coach/UpdateWorkout',
+    {
+      method: 'PUT',
+      body: JSON.stringify({ ...workout }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: WORKOUT_EDIT,
+          flag: FAILURE,
+          id: workout.id,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: WORKOUT_EDIT,
+          flag: SUCCESS,
+          id: workout.id,
+          payload: response,
+        });
+      }
+    }
+  );
+}
 
-const WORKOUTS_CLEAR_ALL = 'WORKOUTS_CLEAR_ALL';
+export const addExercise = (workoutId) => (dispatch) => {
+  dispatch({
+    type: WORKOUT_ADD_EXERCISE,
+    id: workoutId
+  });
 
-export const clearUsers = () => ({type: WORKOUTS_CLEAR_ALL});
+  return callApi(
+    '/api/Coach/CreateExercise',
+    {
+      method: 'POST',
+      body: JSON.stringify({workoutId, exercise: {}}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: WORKOUT_ADD_EXERCISE,
+          flag: FAILURE,
+          id: workoutId,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: WORKOUT_ADD_EXERCISE,
+          flag: SUCCESS,
+          id: workoutId,
+          payload: response,
+        });
+      }
+    }
+  );
+}
 
-export {
-  WORKOUT_FETCH_ATTEMPT, WORKOUT_FETCH_SUCCESS, WORKOUT_FETCH_FAILURE, WORKOUT_FETCH_DISMISS_ERROR, WORKOUTS_CLEAR_ALL
-};
+export const dissmissWorkoutError = (workoutId) => ({
+  type: WORKOUT_DISSMISS_ERROR,
+  id: workoutId,
+});
+
+export const clearWorkouts = () => ({type: WORKOUTS_CLEAR});

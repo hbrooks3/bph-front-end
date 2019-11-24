@@ -1,58 +1,129 @@
-import fetch from 'cross-fetch'
+import { callApi } from './api';
 
-export const SET_FETCH_ATTEMPT = 'SET_FETCH_ATTEMPT';
-export const SET_FETCH_SUCCESS = 'SET_FETCH_SUCCESS';
-export const SET_FETCH_FAILURE = 'SET_FETCH_FAILURE';
+// // actions constants
+import { EXERCISE_ADD_SET } from './exercises'
 
-export const fetchWorkout = (id) => (dispatch) => {
-  // Update app state to loading
+// actions constants
+const SET_GET = 'SET_GET';
+const SET_EDIT = 'SET_EDIT';
+const SET_DISSMISS_ERROR = 'SET_DISSMISS_ERROR';
+const SETS_CLEAR = 'SETS_CLEAR';
+export { SET_GET, SET_EDIT, SET_DISSMISS_ERROR, SETS_CLEAR }
+
+// flag constants
+const FAILURE = 'FAILURE';
+const SUCCESS = 'SUCCESS';
+export { FAILURE, SUCCESS };
+
+export const loadSets = (exerciseId) => (dispatch) => {
+  return callApi(
+    '/api/Coach/GetSets?exerciseId=' + exerciseId,
+    {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        console.log("Failed to load sets", response.error);
+      } else {
+        response.forEach(exercise => {
+          dispatch({
+            type: EXERCISE_ADD_SET,
+            flag: SUCCESS,
+            id: exerciseId,
+            payload: { exerciseId: exercise.exerciseId },
+          });
+          dispatch({
+            type: SET_GET,
+            flag: SUCCESS,
+            id: exercise.exerciseId,
+            payload: exercise,
+          });
+        });
+      }
+    }
+  );
+}
+
+export const getSet = (setId) => (dispatch) => {
   dispatch({
-    type: SET_FETCH_ATTEMPT,
-    payload: { id },
+    type: SET_GET,
+    id: setId,
   });
 
-  // Make call to backend
-  return fetch(
-    '/api/Trainee/getWorkout', //TODO: Make correct call
+  return callApi(
+    '/api/Coach/GetSet?setId=' + setId,
     {
-      method: 'FETCH',
-      body: JSON.stringify({ id }),
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-    }
-  ).then(
-    response => response.json().then(json => {
-      if (response.ok) {
-        const time = Date.now();
+    response => {
+      if (response.error) {
         dispatch({
-          type: SET_FETCH_SUCCESS,
-          payload: {id, time, ...json}
+          type: SET_GET,
+          flag: FAILURE,
+          id: setId,
+          payload: response.error,
         });
       } else {
         dispatch({
-          type: SET_FETCH_FAILURE,
-          payload: {id, error: json.error}
+          type: SET_GET,
+          flag: SUCCESS,
+          id: setId,
+          payload: response,
         });
-      };
-    }).catch(
-      dispatch({
-        type: SET_FETCH_FAILURE,
-        payload: {id, error: 'Failed to load workout'}
-      })
-    )
+      }
+    }
   );
-};
+}
 
-export const SET_FETCH_DISMISS_ERROR = 'SET_FETCH_DISMISS_ERROR';
+export const editSet = (set) => (dispatch) => {
+  dispatch({
+    type: SET_EDIT,
+    id: set.id,
+  });
 
-export const dismissWorkoutFetchError = (id) => ({
-  type: SET_FETCH_DISMISS_ERROR,
-  payload: {id}
+  return callApi(
+    '/api/Coach/UpdateSet',
+    {
+      method: 'PUT',
+      body: JSON.stringify({ ...set }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: SET_EDIT,
+          flag: FAILURE,
+          id: set.id,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: SET_EDIT,
+          flag: SUCCESS,
+          id: set.id,
+          payload: response,
+        });
+      }
+    }
+  );
+}
+
+export const dissmissSetError = (setId) => ({
+  type: SET_DISSMISS_ERROR,
+  id: setId,
 });
 
-export const SET_CLEAR_ALL = 'SET_CLEAR_ALL';
-
-export const logout = () => ({type: SET_CLEAR_ALL});
+export const clearSets = () => ({type: SETS_CLEAR});

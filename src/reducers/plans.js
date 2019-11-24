@@ -4,7 +4,7 @@ import { PLAN_GET, PLAN_EDIT, PLAN_ADD_WORKOUT, PLAN_DISSMISS_ERROR, PLANS_CLEAR
 // flag constants
 import { FAILURE, SUCCESS } from '../actions/plans';
 
-const user = (state = {}, action) => {
+const plan = (state = {}, action) => {
   switch (action.type) {
     case PLAN_GET:
       switch (action.flag) {
@@ -14,8 +14,8 @@ const user = (state = {}, action) => {
             loading: false,
             error: false,
             loaded: true,
-            workouts: [],
             ...action.payload,
+            workouts: action.payload.workoutIds,
           }
         case FAILURE:
           return {
@@ -90,7 +90,7 @@ const user = (state = {}, action) => {
   };
 };
 
-const users = (state = {}, action) => {
+const plans = (state = {}, action) => {
   switch (action.type) {
     case PLAN_EDIT:
     case PLAN_GET:
@@ -98,7 +98,7 @@ const users = (state = {}, action) => {
     case PLAN_DISSMISS_ERROR:
       return {
         ...state,
-        [action.id]: user(state[action.id], action),
+        [action.id]: plan(state[action.id], action),
       };
     case PLANS_CLEAR:
       return {};
@@ -107,4 +107,4 @@ const users = (state = {}, action) => {
   };
 };
 
-export default users;
+export default plans;

@@ -56,10 +56,9 @@ export const getPlan = (id) => (dispatch) => {
   });
 
   return callApi(
-    '/api/Coach/GetPlan' + id,
+    '/api/Coach/GetPlan?planId=' + id,
     {
       method: 'GET',
-      // body: JSON.stringify({ planId: id }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -123,7 +122,7 @@ export const editPlan = (plan) => (dispatch) => {
   );
 }
 
-export const addPlan = (id) => (dispatch) => {
+export const addWorkout = (id) => (dispatch) => {
   dispatch({
     type: PLAN_ADD_WORKOUT,
     id
@@ -133,7 +132,7 @@ export const addPlan = (id) => (dispatch) => {
     '/api/Coach/CreateWorkout',
     {
       method: 'POST',
-      body: JSON.stringify({planId: id}),
+      body: JSON.stringify({planId: id, workout: {}}),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
