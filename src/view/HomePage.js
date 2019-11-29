@@ -4,8 +4,9 @@ import React, {useState} from "react";
 // react-bootstrap
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import CardColumns from 'react-bootstrap/CardColumns';
 
+// react-router
+import { Redirect } from "react-router-dom";
 
 // redux
 import { useSelector } from 'react-redux';
@@ -14,37 +15,6 @@ import { useSelector } from 'react-redux';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import LoadingCard from './cards/LoadingCard';
-
-function PrivatePage(props) {
-
-  return (
-    <CardColumns>
-    <Card className="text-center">
-        <Card.Header>
-          Notifications
-        </Card.Header>
-        <Card.Body>
-          <Card.Text>Notification 1</Card.Text>
-          <Card.Text>Notification 2</Card.Text>
-          <Card.Text>Notification 3</Card.Text>
-          <Card.Text>Notification 4</Card.Text>
-        </Card.Body>
-      </Card>
-      <Card className="text-center">
-        <Card.Header>
-          Today's Training
-        </Card.Header>
-        <Card.Body>
-          <Card.Text>*</Card.Text>
-          <Card.Text>*</Card.Text>
-          <Card.Text>* Workout shown here *</Card.Text>
-          <Card.Text>*</Card.Text>
-          <Card.Text>*</Card.Text>
-        </Card.Body>    
-      </Card>
-      </CardColumns>
-  );
-}
 
 function PublicPage(props) {
   const [showLogin, setShowLogin] = useState(false);
@@ -98,5 +68,5 @@ function PublicPage(props) {
 export default function HomePage(props) {
   const sessionStatus = useSelector(state => state.auth.loggedIn);
 
-  return sessionStatus ? <PrivatePage /> : <PublicPage />;
+  return sessionStatus ? <Redirect to='/plans'/> : <PublicPage />;
 }
