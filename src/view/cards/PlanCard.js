@@ -2,8 +2,6 @@ import React from "react";
 
 // react-bootstrap
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -14,7 +12,7 @@ import FetchingCard from './FetchingCard'
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getPlan, dissmissPlanError } from '../../actions/plans'
+import { getPlan, dissmissPlanError } from '../../actions/plans';
 
 export default function PlanCard({id, footer=false, editable=false}) {
   const plan = useSelector(state=>state.plans[id]);
@@ -22,8 +20,8 @@ export default function PlanCard({id, footer=false, editable=false}) {
   const history = useHistory();
 
   return (
-    <Card>
-      <Card.Header>Plan</Card.Header>
+    <Card onClick={footer ? ()=>history.push(`/plan/${id}`) : null}>
+
       {(!plan || !plan.loaded) &&
         <FetchingCard
           id={id}
@@ -35,26 +33,31 @@ export default function PlanCard({id, footer=false, editable=false}) {
       {plan && plan.loaded &&
         <>
         <CardBody plan={plan}/>
-        
-        {footer &&
-          <Card.Footer>
-            <Button onClick={()=>history.push(`/plan/${id}`)}>
-              View Plan
-            </Button>
-          </Card.Footer>
-        }
         </>
       }      
     </Card>
   );
 }
 
+const getName = uid => state => state.users[uid] ? `${state.users[uid].firstName} ` : 'Not Assigned'
+
+// function Name({uid}) {
+//   if (!uid) {
+
+//   }
+
+//   return '';
+// }
+
 function CardBody({plan}) {
+  const coach = useSelector(getName(plan.coachId));
+  const trainee = useSelector(getName(plan.traineeId));
+
   return (
     <Card.Body>
-      {
-        `Coach: ${plan.coachId}\nTrainee: ${plan.traineeId}`
-      }
+      <Card.Title>Plan</Card.Title>
+      <Card.Text>Coach: {coach}</Card.Text>
+      <Card.Text>Trainee: {trainee}</Card.Text>
     </Card.Body>
   );
 }
