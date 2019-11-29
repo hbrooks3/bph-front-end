@@ -66,8 +66,8 @@ export default function PlansPage(props) {
 
   return (
     <>
-      <Card bg="primary" text="white" className="text-center" onClick={()=>dispatch(addPlan(user.id))}>
-        <Button>
+      <Card border='white' className="text-center" onClick={()=>dispatch(addPlan(user.id))}>
+        <Button variant="outline-primary" size="lg">
           Create Plan
           +
         </Button>
