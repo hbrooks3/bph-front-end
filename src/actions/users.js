@@ -4,9 +4,9 @@ import { callApi } from './api';
 const USER_GET = 'USER_GET';
 const USER_EDIT = 'USER_EDIT';
 const USER_ADD_PLAN = 'USER_ADD_PLAN';
-const USER_DISSMISS_ERROR = 'USER_DISSMISS_ERROR';
+const USER_DISMISS_ERROR = 'USER_DISMISS_ERROR';
 const USERS_CLEAR = 'USERS_CLEAR';
-export { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISSMISS_ERROR, USERS_CLEAR }
+export { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISMISS_ERROR, USERS_CLEAR }
 
 // flag constants
 const FAILURE = 'FAILURE';
@@ -124,8 +124,8 @@ export const addPlan = (id) => (dispatch) => {
   );
 }
 
-export const dissmissUserError = (id) => ({
-  type: USER_DISSMISS_ERROR,
+export const dismissUserError = (id) => ({
+  type: USER_DISMISS_ERROR,
   id
 });
 
