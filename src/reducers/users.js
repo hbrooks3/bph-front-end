@@ -64,7 +64,7 @@ const user = (state = {}, action) => {
             ...state,
             loading: false,
             error: false,
-            plans: [...state.plans, action.payload.planId]
+            plans: [action.payload.planId, ...state.plans]
           }
         case FAILURE:
           return {
