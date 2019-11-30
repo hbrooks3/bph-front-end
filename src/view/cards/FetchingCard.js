@@ -23,6 +23,7 @@ export default function FetchingCardBody ({type, id, fetch, dismissError}) {
 
   if (item && item.error) {
     return (
+      <Card>
         <Card.Body>
           <ErrorAlert
             heading='Loading Error'
@@ -30,12 +31,17 @@ export default function FetchingCardBody ({type, id, fetch, dismissError}) {
             callback={dismissError}
           />
         </Card.Body>
+      </Card>
     )
   }
 
-  return <Card.Body>
-    <div className="text-center">
-      <Spinner animation="border" />
-    </div>
-  </Card.Body>;
+  return (
+    <Card>
+      <Card.Body>
+        <div className="text-center">
+          <Spinner animation="border" />
+        </div>
+      </Card.Body>;
+    </Card>
+  )
 }
