@@ -2,7 +2,6 @@ import React from "react";
 
 // react-bootstrap
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 
 // redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -21,32 +20,23 @@ export default function WorkoutCard({id, footer=false}) {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  if (!(workout && workout.loaded)) {
+    return (
+      <FetchingCard
+        id={id}
+        type='workouts'
+        fetch={()=>dispatch(getWorkout(id))}
+        dismissError={()=>dispatch(dissmissWorkoutError(id))}
+      />
+    );
+  }
+
   return (
-    <Card>
-      <Card.Header>Workout</Card.Header>
-      {(!workout || !workout.loaded) &&
-        <FetchingCard
-          id={id}
-          type='workouts'
-          fetch={()=>dispatch(getWorkout(id))}
-          dismissError={()=>dispatch(dissmissWorkoutError(id))}
-        />
-      }
-      {workout && workout.loaded &&
-        <>
-        <Card.Body>
-          Workout Loaded
-        </Card.Body>
-        
-        {footer &&
-          <Card.Footer>
-            <Button onClick={()=>history.push(`/workout/${id}`)}>
-              View Workout
-            </Button>
-          </Card.Footer>
-        }
-        </>
-      }      
+    <Card onClick={footer ? ()=>history.push(`/workout/${id}`) : null}>
+      <Card.Body>
+        <Card.Title>{workout.title || 'Untitled'}</Card.Title>
+        <Card.Text>Date: {workout.date || 'Not assigned'}</Card.Text>
+      </Card.Body> 
     </Card>
   );
 }
