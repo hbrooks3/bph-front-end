@@ -61,18 +61,29 @@ export default function PlansPage(props) {
   }
 
   const cards = (user && user.plans &&
-    user.plans.map(plan => <PlanCard key={plan} id={plan} footer />)
+    user.plans.length === 0 ? <NoPlans accountType={user.accountType} /> :
+    user.plans.map(plan => <PlanCard key={plan} id={plan} preview />)
   );
 
   return (
     <>
-      <Card border='white' className="text-center" onClick={()=>dispatch(addPlan(user.id))}>
+    {user.accountType === 1 &&
+      <Card border='white' onClick={()=>dispatch(addPlan(user.id))}>
         <Button variant="outline-primary" size="lg">
           Create Plan
           +
         </Button>
       </Card>
-      {cards}
+    }
+    {cards}
     </>
   );
+}
+
+function NoPlans({accountType}) {
+  return (
+    <Card className="text-center">
+      <Card.Body>{accountType ? 'Click Create Plan to make your first plan!' : 'You don\'t have any assigned plans'}</Card.Body>
+    </Card>
+  )
 }
