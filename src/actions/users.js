@@ -1,3 +1,5 @@
+// other actions
+import { loadPlans } from './plans';
 import { callApi } from './api';
 
 // actions constants
@@ -13,17 +15,42 @@ const FAILURE = 'FAILURE';
 const SUCCESS = 'SUCCESS';
 export { FAILURE, SUCCESS };
 
-export const getUser = (id) => (dispatch) => {
+// user constants
+const TRAINEE = 0;
+const COACH = 1;
+export { TRAINEE, COACH }
+
+export const getUser = (id) => (dispatch, getState) => {
   dispatch({
     type: USER_GET,
     id: id,
   });
 
+  const currUserId = getState().auth.uid;
+
+  let callPath;
+
+  if (id === currUserId) {
+    callPath = '/api/User/GetCurrentUser';
+  } else {
+    const type = getState().users[currUserId].accountType;
+    switch (type) {
+      case TRAINEE:
+        callPath = '/api/Trainee/GetCoach?coachId=' + id;
+        break;
+      case COACH:
+        callPath = '/api/Coach/GetTrainee?traineeId=' + id;
+        break;
+      default:
+        callPath = '/api/User/GetCurrentUser';
+        break;
+    }
+  }
+
   return callApi(
-    '/api/User/GetCurrentUser',
+    callPath,
     {
       method: 'GET',
-      // body: JSON.stringify({ id }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -45,6 +72,9 @@ export const getUser = (id) => (dispatch) => {
           id: id,
           payload: response,
         });
+        if (id === currUserId) {
+          dispatch(loadPlans(id));
+        }
       }
     }
   );
