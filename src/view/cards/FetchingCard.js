@@ -21,6 +21,10 @@ export default function FetchingCardBody ({type, id, fetch, dismissError}) {
     }
   });
 
+  if (item && item.loaded) {
+    return;
+  }
+
   if (item && item.error) {
     return (
       <Card>

@@ -35,8 +35,8 @@ export default function PlanCard({id, preview=false, editable=false}) {
     );
   }
 
-  const coach = Name({uid: plan.coachId});
-  const trainee = Name({uid: plan.traineeId});
+  const coach = <Name uid={plan.coachId} />;
+  const trainee = <Name uid={plan.traineeId} />;
 
   if (preview) {
     return (
@@ -52,7 +52,7 @@ export default function PlanCard({id, preview=false, editable=false}) {
 
   if (editable) {
     return (
-      <EditablePlanCard coach={coach} trainee={trainee}/>
+      <EditablePlanCard coachId={plan.coachId} traineeId={plan.traineeId}/>
     );
   }
 
@@ -85,8 +85,11 @@ function Name({uid}) {
   return name;
 }
 
-function EditablePlanCard({coach, trainee}) {
+function EditablePlanCard({coachId, traineeId}) {
   const [lock, setLock] = useState(true);
+
+  const coach = Name({uid: coachId});
+  const trainee = Name({uid: traineeId});
 
   if (lock) {
     return (
