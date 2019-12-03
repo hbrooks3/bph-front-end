@@ -23,12 +23,12 @@ export default function WorkoutPage(props) {
   const dispatch = useDispatch();
 
   const cards = (workout && workout.exercises &&
-    workout.exercises.map(plan => <ExerciseCard key={plan} id={plan} footer/>)
+    workout.exercises.map(plan => <ExerciseCard key={plan} id={plan} preview/>)
   );
   
   return (
     <>
-      <WorkoutCard id={id}/>
+      <WorkoutCard id={id} editable/>
       {cards}
       <Card className="text-center" onClick={()=>dispatch(addExercise(id))}>
         <Card.Body>

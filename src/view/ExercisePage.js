@@ -23,11 +23,12 @@ export default function ExercisePage(props) {
   const dispatch = useDispatch();
 
   const cards = (exercise && exercise.sets &&
-    exercise.sets.map(set => <SetCard key={set} id={set} footer/>)
+    exercise.sets.map(set => <SetCard key={set} id={set}/>)
   );
+
   return (
     <>
-      <ExerciseCard id={id}/>
+      <ExerciseCard id={id} editable/>
       {cards}
       <Card className="text-center" onClick={()=>dispatch(addSet(id))}>
         <Card.Body>

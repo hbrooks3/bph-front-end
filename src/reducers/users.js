@@ -1,5 +1,5 @@
 // actions constants
-import { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISSMISS_ERROR, USERS_CLEAR } from '../actions/users';
+import { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISMISS_ERROR, USERS_CLEAR } from '../actions/users';
 
 // flag constants
 import { FAILURE, SUCCESS } from '../actions/users';
@@ -80,7 +80,7 @@ const user = (state = {}, action) => {
             error: false,
           }
       }
-    case USER_DISSMISS_ERROR:
+    case USER_DISMISS_ERROR:
       return {
         ...state,
         error: false,
@@ -95,7 +95,7 @@ const users = (state = {}, action) => {
     case USER_EDIT:
     case USER_GET:
     case USER_ADD_PLAN:
-    case USER_DISSMISS_ERROR:
+    case USER_DISMISS_ERROR:
       return {
         ...state,
         [action.id]: user(state[action.id], action),

@@ -1,60 +1,135 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // react-bootstrap
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 
 // views
-import FetchingCard from './FetchingCard'
+import FetchingCard from './FetchingCard';
 
 // react-router
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getPlan, dissmissPlanError } from '../../actions/plans'
+import { getPlan, dissmissPlanError } from '../../actions/plans';
+import { getUser } from '../../actions/users';
 
-export default function PlanCard({id, footer=false, editable=false}) {
+export default function PlanCard({id, preview=false, editable=false}) {
   const plan = useSelector(state=>state.plans[id]);
   const dispatch = useDispatch();
   const history = useHistory();
 
+  if (!(plan && plan.loaded)) {
+    return (
+      <FetchingCard
+        id={id}
+        type='plans'
+        fetch={()=>dispatch(getPlan(id))}
+        dismissError={()=>dispatch(dissmissPlanError(id))}
+      />
+    );
+  }
+
+  const coach = <Name uid={plan.coachId} />;
+  const trainee = <Name uid={plan.traineeId} />;
+
+  if (preview) {
+    return (
+      <Card onClick={()=>history.push(`/plan/${id}`)}>
+        <Card.Body>
+          <Card.Title>Plan</Card.Title>
+          <Card.Text>Coach: {coach}</Card.Text>
+          <Card.Text>Trainee: {trainee}</Card.Text>
+        </Card.Body>
+      </Card>
+    );
+  }
+
+  if (editable) {
+    return (
+      <EditablePlanCard coachId={plan.coachId} traineeId={plan.traineeId}/>
+    );
+  }
+
   return (
     <Card>
-      <Card.Header>Plan</Card.Header>
-      {(!plan || !plan.loaded) &&
-        <FetchingCard
-          id={id}
-          type='plans'
-          fetch={()=>dispatch(getPlan(id))}
-          dismissError={()=>dispatch(dissmissPlanError(id))}
-        />
-      }
-      {plan && plan.loaded &&
-        <>
-        <CardBody plan={plan}/>
-        
-        {footer &&
-          <Card.Footer>
-            <Button onClick={()=>history.push(`/plan/${id}`)}>
-              View Plan
-            </Button>
-          </Card.Footer>
-        }
-        </>
-      }      
+      <Card.Body>
+        <Card.Title>Plan</Card.Title>
+        <Card.Text>Coach: {coach}</Card.Text>
+        <Card.Text>Trainee: {trainee}</Card.Text>
+      </Card.Body>
     </Card>
   );
 }
 
-function CardBody({plan}) {
+function Name({uid}) {
+  const user = useSelector(state => state.users[uid]);
+  const [name, setName] = useState('Loading...');
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!uid) {
+      setName('Not Assigned');
+    } else if (user && user.loaded) {
+      setName(`${user.firstName} ${user.lastName}`);
+    } else if (!user || !user.loading) {
+      dispatch(getUser(uid));
+    }
+  }, [uid, user, dispatch]);
+
+  return name;
+}
+
+function EditablePlanCard({coachId, traineeId}) {
+  const [lock, setLock] = useState(true);
+
+  const coach = Name({uid: coachId});
+  const trainee = Name({uid: traineeId});
+
+  if (lock) {
+    return (
+      <Card>
+        <Card.Body>
+          <Card.Title>Plan</Card.Title>
+          <Card.Text>Coach: {coach}</Card.Text>
+          <Card.Text>Trainee: {trainee}</Card.Text>
+        </Card.Body>
+        <Card.Body>
+          <Button onClick={()=>setLock(false)}>Edit</Button>
+        </Card.Body>
+      </Card>
+    )
+  }
+
   return (
-    <Card.Body>
-      {
-        `Coach: ${plan.coachId}\nTrainee: ${plan.traineeId}`
-      }
-    </Card.Body>
+    <Card>
+      <Card.Body>
+        <Card.Title>Plan</Card.Title>
+        <Card.Text>Coach: {coach}</Card.Text>
+        <Form inline>
+          <Form.Row>
+            <Col>
+              <Form.Label as='card-text'>Trainee: </Form.Label>
+            </Col>
+
+            <Col>
+              <Form.Control as='select'>
+                <option>{trainee}</option>
+                <option>Other trainee</option>
+                <option>This needs to be done</option>
+              </Form.Control>
+            </Col>
+          </Form.Row>
+        </Form>
+      </Card.Body>
+      <Card.Body>
+        <Button onClick={()=>setLock(true)}>Cancel</Button>
+      </Card.Body>
+    </Card>
   );
 }

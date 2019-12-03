@@ -27,10 +27,8 @@ export default function NavBar() {
     {sessionStatus &&
     <>
       <Nav className="mr-auto">
-        <Link className="nav-link" to="/">Home</Link>
         <Link className="nav-link" to="/plans">Plans</Link>
         <Link className="nav-link" to="/profile">Profile</Link>
-        <Link className="nav-link" to="/create-plan">Create Plan</Link>
       </Nav>
       <Button
         variant="outline-light" onClick={() => dispatch( logout() )}>Logout</Button>

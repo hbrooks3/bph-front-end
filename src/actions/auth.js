@@ -1,5 +1,4 @@
 import { getUser, clearUsers } from './users';
-import { loadPlans } from './plans'
 
 import { callApi } from './api';
 
@@ -57,7 +56,6 @@ export const login = (email, password) => (dispatch) => {
           payload: {time, uid: response.userId},
         });
         dispatch( getUser(response.userId) );
-        dispatch( loadPlans(response.userId) );
       }
     }
   );
@@ -139,7 +137,6 @@ export const checkSession = () => (dispatch) => {
           payload: {uid: response.userId},
         });
         dispatch( getUser(response.userId) );
-        dispatch( loadPlans(response.userId) );
       } else {
         dispatch({type: SESSION_INVALID})
       }

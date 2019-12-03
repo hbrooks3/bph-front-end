@@ -7,18 +7,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Spinner from 'react-bootstrap/Spinner'
+import Spinner from 'react-bootstrap/Spinner';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 // views
 import ErrorAlert from './ErrorAlert';
 
 // actions
-import { editUser, dissmissUserError, getUser } from '../actions/users'
+import { editUser, dismissUserError, getUser } from '../actions/users'
 
 export default function ProfilePage(props) {
-
   const user = useSelector(state=>state.users[state.auth.uid]);
   const dispatch = useDispatch();
+
+  // const user = {
+  //   loaded: false,
+  //   error: true,
+  //   errorMessage: "NOOOO",
+  // };
 
   if (!user) {
     return <></>
@@ -48,7 +54,7 @@ export default function ProfilePage(props) {
         </Card.Body>
         <Card.Body>
           <Button variant="outline-light" onClick={()=>{
-            dispatch(dissmissUserError(user.id));
+            dispatch(dismissUserError(user.id));
             dispatch(getUser(user.id));
           }}>
             Refresh
@@ -96,36 +102,7 @@ function ContactCard({user}) {
         lastName,
       })
     );
-    setLock(true);
   };
-
-  const buttonBar = (
-    <>
-    
-    {user.loading &&
-      <Spinner animation="border" />
-    }
-
-    {user.error &&
-      <ErrorAlert
-        heading='Unable to update user'
-        message={user.errorMessage}
-        callback={()=>dispatch(dissmissUserError(user.id))}  
-      />
-    }
-
-    {!user.loading && !user.error && locked &&
-      <Button onClick={() => setLock(false)}>Edit</Button>
-    }
-
-    {!user.loading && !user.error && !locked &&
-      <>
-        <Button onClick={pushUpdate}>Submit</Button>
-        <Button onClick={resetForm}>Cancel</Button>
-      </>
-    }
-    </>
-  );
 
   return (
     <Card>
@@ -150,7 +127,8 @@ function ContactCard({user}) {
           </Form.Group>
           <Form.Group>
             <Form.Label>Email</Form.Label>
-            <Form.Control 
+            <Form.Control
+              type='email'
               readOnly={locked}
               value={email}
               onChange={event => setEmail(event.target.value)}
@@ -158,22 +136,40 @@ function ContactCard({user}) {
           </Form.Group> 
         </Form>
       </Card.Body>
-      <Card.Body>{buttonBar}</Card.Body>
+      <Card.Body>
+        <ButtonBar
+          user={user}
+          locked={locked}
+          dismissError={()=>{
+            dispatch(dismissUserError(user.id));
+            setLock(true);
+          }}
+          onSubmit={pushUpdate}
+          onEdit={()=>setLock(false)}
+          onCancel={resetForm}
+        />
+      </Card.Body>
     </Card>
   );
 }
 
+const heightToFeet = (height) => height ? Math.floor(height) : 0;
+const heightToInches = (height) => height ? Math.round(12 * (height - heightToFeet(height))) : 0;
+const backToHeight = (feet, inches) => Number(feet) + Number(inches / 12);
+
 function GeneralCard({user}) {
   const dispatch = useDispatch();
 
-  const [height, setHeight] = useState(user.height || '');
-  const [weight, setWeight] = useState(user.weight || '');
+  const [feet, setFeet] = useState(heightToFeet(user.height));
+  const [inches, setInches] = useState(heightToInches(user.height));
+  const [weight, setWeight] = useState(user.weight || 0);
 
   const [locked, setLock] = useState(true);
 
   const resetForm = () => {
-    setHeight(user.height || '');
-    setWeight(user.weight || '');
+    setFeet(heightToFeet(user.height));
+    setInches(heightToInches(user.height));
+    setWeight(user.weight || 0);
     setLock(true);
   };
 
@@ -181,42 +177,11 @@ function GeneralCard({user}) {
     dispatch(
       editUser({
         ...user,
-        height,
+        height: backToHeight(feet, inches),
         weight,
       })
     );
   }
-
-  const buttonBar = (
-    <>
-    
-    {user.loading && !locked &&
-      <Spinner animation="border" />
-    }
-
-    {user.error && !locked &&
-      <ErrorAlert
-        heading='Unable to update user'
-        message={user.errorMessage}
-        callback={() => {
-          dispatch(dissmissUserError(user.id));
-          setLock(true);
-        }}  
-      />
-    }
-
-    {locked &&
-      <Button onClick={() => setLock(false)}>Edit</Button>
-    }
-
-    {!user.loading && !user.error && !locked &&
-      <>
-        <Button onClick={pushUpdate}>Submit</Button>
-        <Button onClick={resetForm}>Cancel</Button>
-      </>
-    }
-    </>
-  );
 
   return (
     <Card>
@@ -225,23 +190,95 @@ function GeneralCard({user}) {
         <Form>
           <Form.Group>
             <Form.Label>Weight</Form.Label>
-            <Form.Control 
-              readOnly={locked}
-              value={weight}
-              onChange={event => setWeight(event.target.value)}
-            />
+            <InputGroup>
+              <Form.Control
+                readOnly={locked}
+                value={weight}
+                type='number'
+                onChange={event => setWeight(event.target.value)}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text>lbs</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
           </Form.Group>
           <Form.Group>
             <Form.Label>Height</Form.Label>
-            <Form.Control 
-              readOnly={locked}
-              value={height}
-              onChange={event => setHeight(event.target.value)}
-            />
+            <InputGroup>
+              <Form.Control 
+                type='number'
+                readOnly={locked}
+                value={feet}
+                onChange={event => setFeet(event.target.value)}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text>ft</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group>
+            <InputGroup>
+              <Form.Control 
+                type='number'
+                readOnly={locked}
+                value={inches}
+                onChange={event => setInches(event.target.value)}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text>inches</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
           </Form.Group>
         </Form>
       </Card.Body>
-      <Card.Body>{buttonBar}</Card.Body>
+      <Card.Body>
+        <ButtonBar
+          user={user}
+          locked={locked}
+          dismissError={()=>{
+            dispatch(dismissUserError(user.id));
+            setLock(true);
+          }}
+          onSubmit={pushUpdate}
+          onEdit={()=>setLock(false)}
+          onCancel={resetForm}
+        />
+      </Card.Body>
     </Card>
+  );
+}
+
+function ButtonBar({user, locked, dismissError, onSubmit, onEdit, onCancel}) {
+  if (locked) {
+    return (
+      <Button 
+        disabled={user.loading || user.error}
+        onClick={onEdit}>Edit
+      </Button>
+    );
+  }
+
+  return (
+    <>
+    
+    {user.loading &&
+      <Spinner animation="border" />
+    }
+
+    {user.error &&
+      <ErrorAlert
+        heading='Unable to update user'
+        message={user.errorMessage}
+        callback={dismissError}  
+      />
+    }
+
+    {!user.loading && !user.error &&
+      <>
+        <Button onClick={onSubmit}>Submit</Button>
+        <Button onClick={onCancel}>Cancel</Button>
+      </>
+    }
+    </>
   );
 }

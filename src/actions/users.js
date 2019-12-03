@@ -1,29 +1,56 @@
+// other actions
+import { loadPlans } from './plans';
 import { callApi } from './api';
 
 // actions constants
 const USER_GET = 'USER_GET';
 const USER_EDIT = 'USER_EDIT';
 const USER_ADD_PLAN = 'USER_ADD_PLAN';
-const USER_DISSMISS_ERROR = 'USER_DISSMISS_ERROR';
+const USER_DISMISS_ERROR = 'USER_DISMISS_ERROR';
 const USERS_CLEAR = 'USERS_CLEAR';
-export { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISSMISS_ERROR, USERS_CLEAR }
+export { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISMISS_ERROR, USERS_CLEAR }
 
 // flag constants
 const FAILURE = 'FAILURE';
 const SUCCESS = 'SUCCESS';
 export { FAILURE, SUCCESS };
 
-export const getUser = (id) => (dispatch) => {
+// user constants
+const TRAINEE = 0;
+const COACH = 1;
+export { TRAINEE, COACH }
+
+export const getUser = (id) => (dispatch, getState) => {
   dispatch({
     type: USER_GET,
     id: id,
   });
 
+  const currUserId = getState().auth.uid;
+
+  let callPath;
+
+  if (id === currUserId) {
+    callPath = '/api/User/GetCurrentUser';
+  } else {
+    const type = getState().users[currUserId].accountType;
+    switch (type) {
+      case TRAINEE:
+        callPath = '/api/Trainee/GetCoach?coachId=' + id;
+        break;
+      case COACH:
+        callPath = '/api/Coach/GetTrainee?traineeId=' + id;
+        break;
+      default:
+        callPath = '/api/User/GetCurrentUser';
+        break;
+    }
+  }
+
   return callApi(
-    '/api/User/GetCurrentUser',
+    callPath,
     {
       method: 'GET',
-      // body: JSON.stringify({ id }),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -45,6 +72,9 @@ export const getUser = (id) => (dispatch) => {
           id: id,
           payload: response,
         });
+        if (id === currUserId) {
+          dispatch(loadPlans(id));
+        }
       }
     }
   );
@@ -124,8 +154,8 @@ export const addPlan = (id) => (dispatch) => {
   );
 }
 
-export const dissmissUserError = (id) => ({
-  type: USER_DISSMISS_ERROR,
+export const dismissUserError = (id) => ({
+  type: USER_DISMISS_ERROR,
   id
 });
 
