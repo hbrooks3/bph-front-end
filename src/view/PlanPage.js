@@ -66,7 +66,7 @@ export default function PlanPage(props) {
 
   const cards = (plan && plan.workouts && plan.workouts.length === 0 ?
     <NoWorkouts accountType={accountType} /> :
-    plan.workouts.map(plan => <WorkoutCard key={plan} id={plan} footer/>)
+    plan.workouts.map(plan => <WorkoutCard key={plan} id={plan} preview/>)
   );
 
   return (
