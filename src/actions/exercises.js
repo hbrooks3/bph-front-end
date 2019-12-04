@@ -1,4 +1,5 @@
 import { callApi } from './api';
+import { getAccountType } from './users';
 
 // // actions constants
 import { WORKOUT_ADD_EXERCISE } from './workouts'
@@ -16,9 +17,15 @@ const FAILURE = 'FAILURE';
 const SUCCESS = 'SUCCESS';
 export { FAILURE, SUCCESS };
 
-export const loadExercises = (workoutId) => (dispatch) => {
+export const loadExercises = (workoutId) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+
   return callApi(
-    '/api/Coach/GetExercises?workoutId=' + workoutId,
+    `/api/${accountType}/GetExercises?workoutId=${workoutId}`,
     {
       method: 'GET',
       headers: {
@@ -49,14 +56,20 @@ export const loadExercises = (workoutId) => (dispatch) => {
   );
 }
 
-export const getExercise = (exerciseId) => (dispatch) => {
+export const getExercise = (exerciseId) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+
   dispatch({
     type: EXERCISE_GET,
     id: exerciseId,
   });
 
   return callApi(
-    '/api/Coach/GetExercise?exerciseId=' + exerciseId,
+    `/api/${accountType}/GetExercise?exerciseId=${exerciseId}`,
     {
       method: 'GET',
       headers: {

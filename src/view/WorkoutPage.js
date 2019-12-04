@@ -31,7 +31,7 @@ export default function WorkoutPage(props) {
   
   return (
     <>
-      <WorkoutCard id={id} editable/>
+      <WorkoutCard id={id} editable={user.accountType}/>
       {workout && workout.exercises &&
         workout.exercises.map(plan => <ExerciseCard key={plan} id={plan} preview/>)
       }

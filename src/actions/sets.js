@@ -1,4 +1,5 @@
 import { callApi } from './api';
+import { getAccountType } from './users';
 
 // // actions constants
 import { EXERCISE_ADD_SET } from './exercises'
@@ -15,9 +16,15 @@ const FAILURE = 'FAILURE';
 const SUCCESS = 'SUCCESS';
 export { FAILURE, SUCCESS };
 
-export const loadSets = (exerciseId) => (dispatch) => {
+export const loadSets = (exerciseId) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+
   return callApi(
-    '/api/Coach/GetSets?exerciseId=' + exerciseId,
+    `/api/${accountType}/GetSets?exerciseId=${exerciseId}`,
     {
       method: 'GET',
       headers: {
@@ -48,14 +55,20 @@ export const loadSets = (exerciseId) => (dispatch) => {
   );
 }
 
-export const getSet = (setId) => (dispatch) => {
+export const getSet = (setId) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+
   dispatch({
     type: SET_GET,
     id: setId,
   });
 
   return callApi(
-    '/api/Coach/GetSet?setId=' + setId,
+    `/api/${accountType}/GetSet?setId=${setId}`,
     {
       method: 'GET',
       headers: {
