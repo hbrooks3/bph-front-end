@@ -1,8 +1,8 @@
+// react
 import React from "react";
 
 // react-bootstrap
 import Card from "react-bootstrap/Card";
-import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
 
 // redux
@@ -10,60 +10,18 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // views
 import PlanCard from './cards/PlanCard';
+import LoadingUserCard from './cards/LoadingUserCard';
 
 // actions
-import { addPlan, dismissUserError, getUser } from '../actions/users'
+import { addPlan } from '../actions/users'
 
 export default function PlansPage(props) {
   const user = useSelector(state=>state.users[state.auth.uid]);
   const dispatch = useDispatch();
 
-  if (!user) {
-    return <></>
+  if (!user || !user.loaded) {
+    return <LoadingUserCard />;
   }
-
-  if (!user.loaded && user.loading) {
-    return (
-      <Card className="text-center">
-        <Card.Body>
-          <h3>Loading User Data</h3>
-        </Card.Body>
-        <Card.Body>
-          <Spinner animation="border" />
-        </Card.Body>
-      </Card>
-    );
-  }
-
-  if (!user.loaded && user.error) {
-    return (
-      <Card bg='primary' text='white' className="text-center">
-        <Card.Body>
-          <h3>Unable to load user data</h3>
-        </Card.Body>
-        <Card.Body>
-          {user.errorMessage}
-        </Card.Body>
-        <Card.Body>
-          <Button variant="outline-light" onClick={()=>{
-            dispatch(dismissUserError(user.id));
-            dispatch(getUser(user.id));
-          }}>
-            Refresh
-          </Button>
-        </Card.Body>
-      </Card>
-    );
-  }
-
-  if (!user.loaded) {
-    return <></>
-  }
-
-  const cards = (user && user.plans &&
-    user.plans.length === 0 ? <NoPlans accountType={user.accountType} /> :
-    user.plans.map(plan => <PlanCard key={plan} id={plan} preview />)
-  );
 
   return (
     <>
@@ -75,15 +33,23 @@ export default function PlansPage(props) {
         </Button>
       </Card>
     }
-    {cards}
+
+    {user.plans &&
+      user.plans.map(plan => <PlanCard key={plan} id={plan} preview />)
+    }
+
+    {user.plans && !user.plans.length &&
+      <Card className="text-center">
+        <Card.Body>
+          {
+            user.accountType ?
+            'Click Create Plan to make your first plan!' :
+            'You don\'t have any assigned plans.'
+          }
+        </Card.Body>
+      </Card>
+    }
+
     </>
   );
-}
-
-function NoPlans({accountType}) {
-  return (
-    <Card className="text-center">
-      <Card.Body>{accountType ? 'Click Create Plan to make your first plan!' : 'You don\'t have any assigned plans'}</Card.Body>
-    </Card>
-  )
 }
