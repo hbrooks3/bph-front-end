@@ -1,7 +1,8 @@
 import { callApi } from './api';
+import { getAccountType } from './users';
 
 // actions constants
-import { USER_ADD_PLAN, COACH } from './users'
+import { USER_ADD_PLAN } from './users'
 
 // actions constants
 const PLAN_GET = 'PLAN_GET';
@@ -17,11 +18,14 @@ const SUCCESS = 'SUCCESS';
 export { FAILURE, SUCCESS };
 
 export const loadPlans = (id) => (dispatch, getState) => {
-  const user = getState().users[id];
-  const callPath = user && user.accountType === COACH ? '/api/Coach/GetPlans' : '/api/Trainee/GetPlans';
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
 
   return callApi(
-    callPath,
+    `/api/${accountType}/GetPlans`,
     {
       method: 'GET',
       headers: {
@@ -52,14 +56,20 @@ export const loadPlans = (id) => (dispatch, getState) => {
   );
 }
 
-export const getPlan = (id) => (dispatch) => {
+export const getPlan = (id) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+  
   dispatch({
     type: PLAN_GET,
     id: id,
   });
 
   return callApi(
-    '/api/Coach/GetPlan?planId=' + id,
+    `/api/${accountType}/GetPlan?planId=${id}`,
     {
       method: 'GET',
       headers: {

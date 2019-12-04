@@ -20,6 +20,30 @@ const TRAINEE = 0;
 const COACH = 1;
 export { TRAINEE, COACH }
 
+export const getAccountType = (state) => {
+  const uid = state.auth.uid;
+
+  if (!uid) {
+    return null;
+  }
+
+  const user = state.users[uid];
+
+  if (!(user && user.loaded)) {
+    return null;
+  }
+
+  if (user.accountType === TRAINEE) {
+    return 'Trainee';
+  }
+
+  if (user.accountType === COACH) {
+    return 'Coach';
+  }
+
+  return null;
+}
+
 export const getUser = (id) => (dispatch, getState) => {
   dispatch({
     type: USER_GET,
