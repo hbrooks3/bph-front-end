@@ -34,7 +34,7 @@ export default function ExercisePage(props) {
       <ExerciseCard id={id} editable/>
 
       {exercise && exercise.sets &&
-        exercise.sets.map(set => <SetCard key={set} id={set}/>)
+        exercise.sets.map(set => <SetCard key={set} id={set} editable={user.accountType}/>)
       }
 
       {exercise && exercise.sets && exercise.sets.length === 0 &&
