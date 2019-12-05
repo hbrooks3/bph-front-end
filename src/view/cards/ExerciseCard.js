@@ -87,6 +87,7 @@ function EditableCard({exercise}) {
           <Form.Row>
             <Form.Control
               className='card-title'
+              size="lg"
               value={name}
               onChange={event=>setName(event.target.value)}
             />
