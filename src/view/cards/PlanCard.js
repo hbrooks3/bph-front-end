@@ -55,6 +55,7 @@ export default function PlanCard({id, preview=false, editable=false}) {
           <Card.Title>Plan</Card.Title>
           <Card.Text>Coach: {coach}</Card.Text>
           <Card.Text>Trainee: {trainee}</Card.Text>
+          <Card.Text>Status: {<Status statusCode={plan.status}/>}</Card.Text>
         </Card.Body>
       </Card>
     );
@@ -72,6 +73,7 @@ export default function PlanCard({id, preview=false, editable=false}) {
         <Card.Title>Plan</Card.Title>
         <Card.Text>Coach: {coach}</Card.Text>
         <Card.Text>Trainee: {trainee}</Card.Text>
+        <Card.Text>Status: {<Status statusCode={plan.status}/>}</Card.Text>
       </Card.Body>
     </Card>
   );
@@ -95,6 +97,18 @@ function Name({uid}) {
   return name;
 }
 
+function Status({statusCode}) {
+  if (statusCode === 0) {
+    return 'Draft';
+  }
+
+  if (statusCode === 1) {
+    return 'Published';
+  }
+
+  return 'Unknown Status';
+}
+
 function EditablePlanCard({plan}) {
   const [lock, setLock] = useState(true);
   const coach = useSelector(state => state.users[plan.coachId]);
@@ -109,6 +123,15 @@ function EditablePlanCard({plan}) {
     );
   }
 
+  const setStatus = (statusCode) => {
+    dispatch(
+      editPlan({
+        ...plan,
+        status: statusCode,
+      })
+    );
+  }
+
   if (lock) {
     return (
       <Card>
@@ -116,6 +139,7 @@ function EditablePlanCard({plan}) {
           <Card.Title>Plan</Card.Title>
           <Card.Text>Coach: {<Name uid={plan.coachId} />}</Card.Text>
           <Card.Text>Trainee: {<Name uid={plan.traineeId} />}</Card.Text>
+          <Card.Text>Status: {<Status statusCode={plan.status}/>}</Card.Text>
         </Card.Body>
         <Card.Body>
           <Button onClick={()=>setLock(false)}>Edit</Button>
@@ -149,6 +173,30 @@ function EditablePlanCard({plan}) {
                     )
                   }
                   <Dropdown.Item eventKey={null} key='reset'>Unassign</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+          </Form.Row>
+        </Form>
+        <Form inline>
+          <Form.Row>
+            <Col>
+              <Form.Label as='card-text'>Status: </Form.Label>
+            </Col>
+
+            <Col>
+              <Dropdown onSelect={setStatus}>
+                <Dropdown.Toggle variant='outline-dark'>
+                  <Status statusCode={plan.status}/>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {
+                    [0,1].map(statusCode => 
+                      <Dropdown.Item eventKey={statusCode} key={statusCode}>
+                        <Status statusCode={statusCode}/>
+                      </Dropdown.Item>
+                    )
+                  }
                 </Dropdown.Menu>
               </Dropdown>
             </Col>
