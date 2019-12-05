@@ -1,5 +1,5 @@
 // actions constants
-import { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISMISS_ERROR, USERS_CLEAR } from '../actions/users';
+import { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISMISS_ERROR, USERS_CLEAR, USER_ADD_TRAINEE } from '../actions/users';
 
 // flag constants
 import { FAILURE, SUCCESS } from '../actions/users';
@@ -15,6 +15,7 @@ const user = (state = {}, action) => {
             error: false,
             loaded: true,
             plans: [],
+            trainees: [],
             ...action.payload,
           }
         case FAILURE:
@@ -85,6 +86,11 @@ const user = (state = {}, action) => {
         ...state,
         error: false,
       }
+    case USER_ADD_TRAINEE:
+      return {
+        ...state,
+        trainees: [...state.trainees, action.payload.traineeId]
+      }
     default:
       return state;
   };
@@ -96,6 +102,7 @@ const users = (state = {}, action) => {
     case USER_GET:
     case USER_ADD_PLAN:
     case USER_DISMISS_ERROR:
+    case USER_ADD_TRAINEE:
       return {
         ...state,
         [action.id]: user(state[action.id], action),
