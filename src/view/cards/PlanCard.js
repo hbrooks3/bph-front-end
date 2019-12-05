@@ -106,6 +106,14 @@ function Status({statusCode}) {
     return 'Published';
   }
 
+  if (statusCode === 2) {
+    return 'In-progress';
+  }
+
+  if (statusCode === 3) {
+    return 'Completed';
+  }
+
   return 'Unknown Status';
 }
 
