@@ -8,7 +8,8 @@ const USER_EDIT = 'USER_EDIT';
 const USER_ADD_PLAN = 'USER_ADD_PLAN';
 const USER_DISMISS_ERROR = 'USER_DISMISS_ERROR';
 const USERS_CLEAR = 'USERS_CLEAR';
-export { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISMISS_ERROR, USERS_CLEAR }
+const USER_ADD_TRAINEE = 'USER_ADD_TRAINEE';
+export { USER_GET, USER_EDIT, USER_ADD_PLAN, USER_DISMISS_ERROR, USERS_CLEAR, USER_ADD_TRAINEE }
 
 // flag constants
 const FAILURE = 'FAILURE';
@@ -98,6 +99,7 @@ export const getUser = (id) => (dispatch, getState) => {
         });
         if (id === currUserId) {
           dispatch(loadPlans(id));
+          dispatch(loadTrainees(id));
         }
       }
     }
@@ -172,6 +174,44 @@ export const addPlan = (id) => (dispatch) => {
           flag: SUCCESS,
           id: id,
           payload: response,
+        });
+      }
+    }
+  );
+}
+
+export const loadTrainees = (id) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (accountType !== 'Coach') {
+    return;
+  }
+
+  return callApi(
+    `/api/Coach/GetTrainees`,
+    {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        console.log("Failed to load trainees", response.error);
+      } else {
+        response.forEach(trainee => {
+          dispatch({
+            type: USER_ADD_TRAINEE,
+            id: id,
+            payload: { traineeId: trainee.userId },
+          });
+          dispatch({
+            type: USER_GET,
+            flag: SUCCESS,
+            id: trainee.userId,
+            payload: trainee,
+          });
         });
       }
     }

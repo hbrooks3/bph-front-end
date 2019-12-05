@@ -5,18 +5,22 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+// import Row from 'react-bootstrap/Row';
+// import Container from 'react-bootstrap/Container';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 
 // views
 import FetchingCard from './FetchingCard';
+import LoadingCard from './LoadingCard';
 
 // react-router
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getPlan, dissmissPlanError } from '../../actions/plans';
+import { getPlan, dissmissPlanError, editPlan } from '../../actions/plans';
 import { getUser } from '../../actions/users';
 
 export default function PlanCard({id, preview=false, editable=false}) {
@@ -35,6 +39,12 @@ export default function PlanCard({id, preview=false, editable=false}) {
     );
   }
 
+  if (plan.loading) {
+    return (
+      <LoadingCard />
+    );
+  }
+
   const coach = <Name uid={plan.coachId} />;
   const trainee = <Name uid={plan.traineeId} />;
 
@@ -45,6 +55,7 @@ export default function PlanCard({id, preview=false, editable=false}) {
           <Card.Title>Plan</Card.Title>
           <Card.Text>Coach: {coach}</Card.Text>
           <Card.Text>Trainee: {trainee}</Card.Text>
+          <Card.Text>Status: {<Status statusCode={plan.status}/>}</Card.Text>
         </Card.Body>
       </Card>
     );
@@ -52,7 +63,7 @@ export default function PlanCard({id, preview=false, editable=false}) {
 
   if (editable) {
     return (
-      <EditablePlanCard coachId={plan.coachId} traineeId={plan.traineeId}/>
+      <EditablePlanCard plan={plan}/>
     );
   }
 
@@ -62,6 +73,7 @@ export default function PlanCard({id, preview=false, editable=false}) {
         <Card.Title>Plan</Card.Title>
         <Card.Text>Coach: {coach}</Card.Text>
         <Card.Text>Trainee: {trainee}</Card.Text>
+        <Card.Text>Status: {<Status statusCode={plan.status}/>}</Card.Text>
       </Card.Body>
     </Card>
   );
@@ -77,7 +89,7 @@ function Name({uid}) {
       setName('Not Assigned');
     } else if (user && user.loaded) {
       setName(`${user.firstName} ${user.lastName}`);
-    } else if (!user || !user.loading) {
+    } else if (!user || !(user.loading || user.error)) {
       dispatch(getUser(uid));
     }
   }, [uid, user, dispatch]);
@@ -85,19 +97,57 @@ function Name({uid}) {
   return name;
 }
 
-function EditablePlanCard({coachId, traineeId}) {
-  const [lock, setLock] = useState(true);
+function Status({statusCode}) {
+  if (statusCode === 0) {
+    return 'Draft';
+  }
 
-  const coach = Name({uid: coachId});
-  const trainee = Name({uid: traineeId});
+  if (statusCode === 1) {
+    return 'Published';
+  }
+
+  if (statusCode === 2) {
+    return 'In-progress';
+  }
+
+  if (statusCode === 3) {
+    return 'Completed';
+  }
+
+  return 'Unknown Status';
+}
+
+function EditablePlanCard({plan}) {
+  const [lock, setLock] = useState(true);
+  const coach = useSelector(state => state.users[plan.coachId]);
+  const dispatch = useDispatch();
+
+  const setTrainee = (id) => {
+    dispatch(
+      editPlan({
+        ...plan,
+        traineeId: id,
+      })
+    );
+  }
+
+  const setStatus = (statusCode) => {
+    dispatch(
+      editPlan({
+        ...plan,
+        status: statusCode,
+      })
+    );
+  }
 
   if (lock) {
     return (
       <Card>
         <Card.Body>
           <Card.Title>Plan</Card.Title>
-          <Card.Text>Coach: {coach}</Card.Text>
-          <Card.Text>Trainee: {trainee}</Card.Text>
+          <Card.Text>Coach: {<Name uid={plan.coachId} />}</Card.Text>
+          <Card.Text>Trainee: {<Name uid={plan.traineeId} />}</Card.Text>
+          <Card.Text>Status: {<Status statusCode={plan.status}/>}</Card.Text>
         </Card.Body>
         <Card.Body>
           <Button onClick={()=>setLock(false)}>Edit</Button>
@@ -110,7 +160,7 @@ function EditablePlanCard({coachId, traineeId}) {
     <Card>
       <Card.Body>
         <Card.Title>Plan</Card.Title>
-        <Card.Text>Coach: {coach}</Card.Text>
+        <Card.Text>Coach: {<Name uid={plan.coachId} />}</Card.Text>
         <Form inline>
           <Form.Row>
             <Col>
@@ -118,14 +168,48 @@ function EditablePlanCard({coachId, traineeId}) {
             </Col>
 
             <Col>
-              <Form.Control as='select'>
-                <option>{trainee}</option>
-                <option>Other trainee</option>
-                <option>This needs to be done</option>
-              </Form.Control>
+              <Dropdown onSelect={setTrainee}>
+                <Dropdown.Toggle variant='outline-dark'>
+                  <Name uid={plan.traineeId} />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {
+                    coach.trainees.map(id => 
+                      <Dropdown.Item eventKey={id} key={id}>
+                        <Name uid={id} />
+                      </Dropdown.Item>
+                    )
+                  }
+                  <Dropdown.Item eventKey={null} key='reset'>Unassign</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </Col>
           </Form.Row>
         </Form>
+        <Form inline>
+          <Form.Row>
+            <Col>
+              <Form.Label as='card-text'>Status: </Form.Label>
+            </Col>
+
+            <Col>
+              <Dropdown onSelect={setStatus}>
+                <Dropdown.Toggle variant='outline-dark'>
+                  <Status statusCode={plan.status}/>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {
+                    [0,1].map(statusCode => 
+                      <Dropdown.Item eventKey={statusCode} key={statusCode}>
+                        <Status statusCode={statusCode}/>
+                      </Dropdown.Item>
+                    )
+                  }
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+          </Form.Row>
+        </Form>        
       </Card.Body>
       <Card.Body>
         <Button onClick={()=>setLock(true)}>Cancel</Button>
