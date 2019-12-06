@@ -15,12 +15,15 @@ import { useSelector, useDispatch } from 'react-redux';
 // views
 import FetchingCard from './FetchingCard';
 import LoadingCard from './LoadingCard';
+import CommentGroup from '../CommentGroup';
 
 // react-router
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getPlan, dissmissPlanError, editPlan } from '../../actions/plans';
+import {
+  getPlan, dissmissPlanError, editPlan, addComment, deleteComment
+} from '../../actions/plans';
 import { getUser } from '../../actions/users';
 
 export default function PlanCard({id, preview=false, editable=false}) {
@@ -75,6 +78,12 @@ export default function PlanCard({id, preview=false, editable=false}) {
         <Card.Text>Trainee: {trainee}</Card.Text>
         <Card.Text>Status: {<Status statusCode={plan.status}/>}</Card.Text>
       </Card.Body>
+      <CommentGroup
+        comments={plan.comments}
+        ownerId={plan.id}
+        add={addComment}
+        remove={deleteComment}
+      />
     </Card>
   );
 }
@@ -152,6 +161,12 @@ function EditablePlanCard({plan}) {
         <Card.Body>
           <Button onClick={()=>setLock(false)}>Edit</Button>
         </Card.Body>
+        <CommentGroup
+        comments={plan.comments}
+        ownerId={plan.id}
+        add={addComment}
+        remove={deleteComment}
+      />
       </Card>
     )
   }
@@ -214,6 +229,12 @@ function EditablePlanCard({plan}) {
       <Card.Body>
         <Button onClick={()=>setLock(true)}>Cancel</Button>
       </Card.Body>
+      <CommentGroup
+        comments={plan.comments}
+        ownerId={plan.id}
+        add={addComment}
+        remove={deleteComment}
+      />
     </Card>
   );
 }
