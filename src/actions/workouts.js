@@ -8,9 +8,9 @@ import { PLAN_ADD_WORKOUT } from './plans'
 const WORKOUT_GET = 'WORKOUT_GET';
 const WORKOUT_EDIT = 'WORKOUT_EDIT';
 const WORKOUT_ADD_EXERCISE = 'WORKOUT_ADD_EXERCISE';
-const WORKOUT_DISSMISS_ERROR = 'WORKOUT_DISSMISS_ERROR';
+const WORKOUT_DISMISS_ERROR = 'WORKOUT_DISMISS_ERROR';
 const WORKOUTS_CLEAR = 'WORKOUTS_CLEAR';
-export { WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISSMISS_ERROR, WORKOUTS_CLEAR }
+export { WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISMISS_ERROR, WORKOUTS_CLEAR }
 
 // flag constants
 const FAILURE = 'FAILURE';
@@ -172,8 +172,8 @@ export const addExercise = (workoutId) => (dispatch) => {
   );
 }
 
-export const dissmissWorkoutError = (workoutId) => ({
-  type: WORKOUT_DISSMISS_ERROR,
+export const dismissWorkoutError = (workoutId) => ({
+  type: WORKOUT_DISMISS_ERROR,
   id: workoutId,
 });
 

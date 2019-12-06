@@ -6,16 +6,17 @@ import fetchMock from 'fetch-mock'
 import expect from 'expect' // You can use any testing library
 import * as workoutActions from './workouts';
 
-xit('dissmisses user fetch error', () =>{
+it('dismisses workout error', () =>{
     const expectedAction = {
-        type: workoutActions.WORKOUT_FETCH_DISMISS_ERROR
+        type: workoutActions.WORKOUT_DISMISS_ERROR,
+        id: 'workoutId'
     }
-    expect(workoutActions.dismissUserFetchError()).toEqual(expectedAction);
+    expect(workoutActions.dismissWorkoutError('workoutId')).toEqual(expectedAction);
 })
 
-xit('clears users', () =>{
+it('clears workouts', () =>{
     const expectedAction = {
-        type: workoutActions.WORKOUTS_CLEAR_ALL
+        type: workoutActions.WORKOUTS_CLEAR
     }
-    expect(workoutActions.clearUsers()).toEqual(expectedAction);
+    expect(workoutActions.clearWorkouts()).toEqual(expectedAction);
 })
