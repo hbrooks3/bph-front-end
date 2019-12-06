@@ -21,7 +21,7 @@ import LoadingCard from './LoadingCard';
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getWorkout, dissmissWorkoutError, editWorkout } from '../../actions/workouts';
+import { getWorkout, dismissWorkoutError, editWorkout } from '../../actions/workouts';
 
 export default function WorkoutCard({id, preview=false, editable=false}) {
   const workout = useSelector(state=>state.workouts[id]);
@@ -34,7 +34,7 @@ export default function WorkoutCard({id, preview=false, editable=false}) {
         id={id}
         type='workouts'
         fetch={()=>dispatch(getWorkout(id))}
-        dismissError={()=>dispatch(dissmissWorkoutError(id))}
+        dismissError={()=>dispatch(dismissWorkoutError(id))}
       />
     );
   }

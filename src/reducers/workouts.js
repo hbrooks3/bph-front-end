@@ -1,5 +1,5 @@
 // actions constants
-import { WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISSMISS_ERROR, WORKOUTS_CLEAR } from '../actions/workouts';
+import { WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISMISS_ERROR, WORKOUTS_CLEAR } from '../actions/workouts';
 
 // flag constants
 import { FAILURE, SUCCESS } from '../actions/workouts';
@@ -80,7 +80,7 @@ const workout = (state = {}, action) => {
             error: false,
           }
       }
-    case WORKOUT_DISSMISS_ERROR:
+    case WORKOUT_DISMISS_ERROR:
       return {
         ...state,
         error: false,
@@ -95,7 +95,7 @@ const workouts = (state = {}, action) => {
     case WORKOUT_EDIT:
     case WORKOUT_GET:
     case WORKOUT_ADD_EXERCISE:
-    case WORKOUT_DISSMISS_ERROR:
+    case WORKOUT_DISMISS_ERROR:
       return {
         ...state,
         [action.id]: workout(state[action.id], action),

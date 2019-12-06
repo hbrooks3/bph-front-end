@@ -1,5 +1,5 @@
 // actions constants
-import { SET_GET, SET_EDIT, SET_DISSMISS_ERROR, SETS_CLEAR } from '../actions/sets';
+import { SET_GET, SET_EDIT, SET_DISMISS_ERROR, SETS_CLEAR } from '../actions/sets';
 
 // flag constants
 import { FAILURE, SUCCESS } from '../actions/sets';
@@ -56,7 +56,7 @@ const set = (state = {}, action) => {
             error: false,
           }
       }
-    case SET_DISSMISS_ERROR:
+    case SET_DISMISS_ERROR:
       return {
         ...state,
         error: false,
@@ -70,7 +70,7 @@ const sets = (state = {}, action) => {
   switch (action.type) {
     case SET_EDIT:
     case SET_GET:
-    case SET_DISSMISS_ERROR:
+    case SET_DISMISS_ERROR:
       return {
         ...state,
         [action.id]: set(state[action.id], action),

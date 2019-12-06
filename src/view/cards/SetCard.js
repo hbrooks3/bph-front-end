@@ -14,7 +14,7 @@ import FetchingCard from './FetchingCard';
 import LoadingCard from './LoadingCard';
 
 // actions
-import { getSet, dissmissSetError, editSet } from '../../actions/sets';
+import { getSet, dismissSetError, editSet } from '../../actions/sets';
 
 export default function SetCard({id, editable=false}) {
   const set = useSelector(state=>state.sets[id]);
@@ -50,7 +50,7 @@ export default function SetCard({id, editable=false}) {
         id={id}
         type='sets'
         fetch={()=>dispatch(getSet(id))}
-        dismissError={()=>dispatch(dissmissSetError(id))}
+        dismissError={()=>dispatch(dismissSetError(id))}
       />
     );
   }
