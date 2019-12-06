@@ -31,7 +31,7 @@ export default function WorkoutPage(props) {
   
   return (
     <>
-      <WorkoutCard id={id} editable={user.accountType}/>
+      <WorkoutCard id={id} editable={user.accountType === 1}/>
       {workout && workout.exercises &&
         workout.exercises.map(plan => <ExerciseCard key={plan} id={plan} preview/>)
       }
@@ -39,14 +39,14 @@ export default function WorkoutPage(props) {
         <Card className="text-center">
           <Card.Body>
             {
-              user.accountType ?
+              user.accountType === 1?
               'Click Add Exercise to add a Exercise' :
               'You don\'t have any assigned exercises in this workout'
             }
           </Card.Body>
         </Card>
       }
-      {user.accountType &&
+      {user.accountType === 1 &&
         <Card border='white' onClick={()=>dispatch(addExercise(id))}>
           <Button variant="outline-primary" size="lg">
             Add Exercise

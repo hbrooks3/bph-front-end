@@ -45,7 +45,7 @@ export default function FetchingCardBody ({type, id, fetch, dismissError}) {
         <div className="text-center">
           <Spinner animation="border" />
         </div>
-      </Card.Body>;
+      </Card.Body>
     </Card>
   )
 }

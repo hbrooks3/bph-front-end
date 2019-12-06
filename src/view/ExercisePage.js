@@ -31,7 +31,7 @@ export default function ExercisePage(props) {
 
   return (
     <>
-      <ExerciseCard id={id} editable={user.accountType}/>
+      <ExerciseCard id={id} editable={user.accountType === 1}/>
 
       {exercise && exercise.sets &&
         exercise.sets.map(set => <SetCard key={set} id={set} editable={user.accountType}/>)
@@ -41,7 +41,7 @@ export default function ExercisePage(props) {
         <Card className="text-center">
           <Card.Body>
             {
-              user.accountType ?
+              user.accountType === 1 ?
               'Click Add Set to add a set' :
               'You don\'t have any assigned sets for this exercise'
             }
@@ -49,7 +49,7 @@ export default function ExercisePage(props) {
         </Card>
       }
 
-      {user.accountType &&
+      {user.accountType  === 1 &&
         <Card border='white' onClick={()=>dispatch(addSet(id))}>
           <Button variant="outline-primary" size="lg">
             Add Set
