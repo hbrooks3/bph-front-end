@@ -120,7 +120,7 @@ function Comment({commentId, remove}) {
           {text}
           <br/>
           <small className="text-muted">
-            Posted by you.
+            Posted by you
           </small>
         </div>
         <DropdownButton variant='outline-secondary' size='sm' drop='left' title=''>

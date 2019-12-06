@@ -16,12 +16,15 @@ import { useSelector, useDispatch } from 'react-redux';
 // views
 import FetchingCard from './FetchingCard';
 import LoadingCard from './LoadingCard';
+import CommentGroup from '../CommentGroup';
 
 // react-router
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getWorkout, dismissWorkoutError, editWorkout } from '../../actions/workouts';
+import {
+  getWorkout, dismissWorkoutError, editWorkout, addComment, deleteComment
+} from '../../actions/workouts';
 
 export default function WorkoutCard({id, preview=false, editable=false}) {
   const workout = useSelector(state=>state.workouts[id]);
@@ -67,7 +70,13 @@ export default function WorkoutCard({id, preview=false, editable=false}) {
       <Card.Body>
         <Card.Title>{workout.title || 'Untitled'}</Card.Title>
         <Card.Text>Date: {moment(workout.date).format('dddd, MMMM Do YYYY')}</Card.Text>
-      </Card.Body> 
+      </Card.Body>
+      <CommentGroup
+        comments={workout.comments}
+        ownerId={workout.id}
+        add={addComment}
+        remove={deleteComment}
+      />
     </Card>
   );
 }
@@ -100,6 +109,12 @@ function EditableCard({workout}) {
         <Card.Body>
           <Button onClick={()=>setLock(false)}>Edit</Button>
         </Card.Body>
+        <CommentGroup
+          comments={workout.comments}
+          ownerId={workout.id}
+          add={addComment}
+          remove={deleteComment}
+        />
       </Card>
     )
   }
@@ -137,6 +152,13 @@ function EditableCard({workout}) {
         <Button onClick={()=>setLock(true)} className='mr-2'>Cancel</Button>
         <Button onClick={submit}>Submit</Button>
       </Card.Body>
+
+      <CommentGroup
+        comments={workout.comments}
+        ownerId={workout.id}
+        add={addComment}
+        remove={deleteComment}
+      />
     </Card>
   );
 }

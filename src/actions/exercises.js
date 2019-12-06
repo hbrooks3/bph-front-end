@@ -1,6 +1,6 @@
 import { callApi } from './api';
 import { getAccountType } from './users';
-import { getComment } from './comments'
+import { getComment } from './comments';
 
 // // actions constants
 import { WORKOUT_ADD_EXERCISE } from './workouts'
@@ -10,8 +10,8 @@ const EXERCISE_GET = 'EXERCISE_GET';
 const EXERCISE_EDIT = 'EXERCISE_EDIT';
 const EXERCISE_ADD_SET = 'EXERCISE_ADD_SET';
 const EXERCISE_ADD_COMMENT = 'EXERCISE_ADD_COMMENT';
-const EXERCISE_DISSMISS_ERROR = 'EXERCISE_DISSMISS_ERROR';
 const EXERCISE_DELETE_COMMENT = 'EXERCISE_DELETE_COMMENT';
+const EXERCISE_DISSMISS_ERROR = 'EXERCISE_DISSMISS_ERROR';
 const EXERCISES_CLEAR = 'EXERCISES_CLEAR';
 export { 
   EXERCISE_GET, EXERCISE_EDIT, EXERCISE_ADD_SET, EXERCISE_ADD_COMMENT,
