@@ -12,12 +12,15 @@ import { useSelector, useDispatch } from 'react-redux';
 // views
 import FetchingCard from './FetchingCard';
 import LoadingCard from './LoadingCard';
+import CommentGroup from '../CommentGroup';
 
 // react-router
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getExercise, dissmissExerciseError, editExercise } from '../../actions/exercises'
+import {
+  getExercise, dissmissExerciseError, editExercise, addComment, deleteComment
+} from '../../actions/exercises'
 
 export default function ExerciseCard({id, preview=false, editable=false}) {
   const exercise = useSelector(state=>state.exercises[id]);
@@ -63,7 +66,13 @@ export default function ExerciseCard({id, preview=false, editable=false}) {
       <Card.Body>
         <Card.Title>{exercise.name || 'Unnamed'}</Card.Title>
         <Card.Text>Number of Sets: {exercise.sets.length}</Card.Text>
-      </Card.Body> 
+      </Card.Body>
+      <CommentGroup
+        comments={exercise.comments}
+        ownerId={exercise.id}
+        add={addComment}
+        remove={deleteComment}
+      />
     </Card>
   );
 }
@@ -88,10 +97,16 @@ function EditableCard({exercise}) {
         <Card.Body>
           <Card.Title>{name}</Card.Title>
           <Card.Text>Number of Sets: {exercise.sets.length}</Card.Text>
-        </Card.Body>  
+        </Card.Body>
         <Card.Body>
           <Button onClick={()=>setLock(false)}>Edit</Button>
         </Card.Body>
+        <CommentGroup
+          comments={exercise.comments}
+          ownerId={exercise.id}
+          add={addComment}
+          remove={deleteComment}
+        />
       </Card>
     )
   }
@@ -116,9 +131,15 @@ function EditableCard({exercise}) {
       </Card.Body>
 
       <Card.Body>
-        <Button onClick={()=>setLock(true)}>Cancel</Button>
+        <Button onClick={()=>setLock(true)} className='mr-2'>Cancel</Button>
         <Button onClick={submit}>Submit</Button>
       </Card.Body>
+      <CommentGroup
+        comments={exercise.comments}
+        ownerId={exercise.id}
+        add={addComment}
+        remove={deleteComment}
+      />
     </Card>
   );
 }
