@@ -97,14 +97,20 @@ export const getSet = (setId) => (dispatch, getState) => {
   );
 }
 
-export const editSet = (set) => (dispatch) => {
+export const editSet = (set) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+
   dispatch({
     type: SET_EDIT,
     id: set.id,
   });
 
   return callApi(
-    '/api/Coach/UpdateSet',
+    `/api/${accountType}/UpdateSet`,
     {
       method: 'PUT',
       body: JSON.stringify({ ...set }),

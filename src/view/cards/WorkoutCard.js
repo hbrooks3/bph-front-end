@@ -7,17 +7,21 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
+// moment
+import * as moment from 'moment';
+
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 
 // views
-import FetchingCard from './FetchingCard'
+import FetchingCard from './FetchingCard';
+import LoadingCard from './LoadingCard';
 
 // react-router
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getWorkout, dissmissWorkoutError } from '../../actions/workouts'
+import { getWorkout, dissmissWorkoutError, editWorkout } from '../../actions/workouts';
 
 export default function WorkoutCard({id, preview=false, editable=false}) {
   const workout = useSelector(state=>state.workouts[id]);
@@ -35,12 +39,18 @@ export default function WorkoutCard({id, preview=false, editable=false}) {
     );
   }
 
+  if (workout.loading) {
+    return (
+      <LoadingCard />
+    );
+  }
+
   if (preview) {
     return (
       <Card onClick={()=>history.push(`/workout/${id}`)}>
         <Card.Body>
           <Card.Title>{workout.title || 'Untitled'}</Card.Title>
-          <Card.Text>Date: {workout.date || 'Not assigned'}</Card.Text>
+          <Card.Text>Date: {moment(workout.date).format('dddd, MMMM Do YYYY')}</Card.Text>
         </Card.Body> 
       </Card>
     );
@@ -56,7 +66,7 @@ export default function WorkoutCard({id, preview=false, editable=false}) {
     <Card>
       <Card.Body>
         <Card.Title>{workout.title || 'Untitled'}</Card.Title>
-        <Card.Text>Date: {workout.date || 'Not assigned'}</Card.Text>
+        <Card.Text>Date: {moment(workout.date).format('dddd, MMMM Do YYYY')}</Card.Text>
       </Card.Body> 
     </Card>
   );
@@ -64,16 +74,28 @@ export default function WorkoutCard({id, preview=false, editable=false}) {
 
 function EditableCard({workout}) {
   const [lock, setLock] = useState(true);
+  const dispatch = useDispatch();
 
   const [title, setTitle] = useState(workout.title || 'Untitled');
-  const [date, setDate] = useState(workout.date || 'Not assigned');
+  // const [date, setDate] = useState(workout.date || 'Not assigned');
+  const [date, setDate] = useState(moment(workout.date).format('YYYY-MM-DD') || 'Not assigned');
+
+  const submit = () => {
+    dispatch(
+      editWorkout({
+        ...workout,
+        title: title,
+        date: date,
+      })
+    );
+  }
 
   if (lock) {
     return (
       <Card>
         <Card.Body>
           <Card.Title>{title}</Card.Title>
-          <Card.Text>Date: {date}</Card.Text>
+          <Card.Text>Date: {moment(workout.date).format('dddd, MMMM Do YYYY')}</Card.Text>
         </Card.Body> 
         <Card.Body>
           <Button onClick={()=>setLock(false)}>Edit</Button>
@@ -85,7 +107,7 @@ function EditableCard({workout}) {
   return (
     <Card>
       <Card.Body>
-        <Form>
+        <Form onSubmit={submit}>
           <Form.Row>
             <Form.Control
               className='card-title'
@@ -103,6 +125,7 @@ function EditableCard({workout}) {
             <Col>
               <Form.Control
                 value={date}
+                type='date'
                 onChange={event=>setDate(event.target.value)}
               />
             </Col>
@@ -112,6 +135,7 @@ function EditableCard({workout}) {
 
       <Card.Body>
         <Button onClick={()=>setLock(true)}>Cancel</Button>
+        <Button onClick={submit}>Submit</Button>
       </Card.Body>
     </Card>
   );
