@@ -7,6 +7,9 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
+// moment
+import * as moment from 'moment';
+
 // redux
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -47,7 +50,7 @@ export default function WorkoutCard({id, preview=false, editable=false}) {
       <Card onClick={()=>history.push(`/workout/${id}`)}>
         <Card.Body>
           <Card.Title>{workout.title || 'Untitled'}</Card.Title>
-          <Card.Text>Date: {workout.date || 'Not assigned'}</Card.Text>
+          <Card.Text>Date: {moment(workout.date).format('dddd, MMMM Do YYYY')}</Card.Text>
         </Card.Body> 
       </Card>
     );
@@ -63,7 +66,7 @@ export default function WorkoutCard({id, preview=false, editable=false}) {
     <Card>
       <Card.Body>
         <Card.Title>{workout.title || 'Untitled'}</Card.Title>
-        <Card.Text>Date: {workout.date || 'Not assigned'}</Card.Text>
+        <Card.Text>Date: {moment(workout.date).format('dddd, MMMM Do YYYY')}</Card.Text>
       </Card.Body> 
     </Card>
   );
@@ -74,7 +77,8 @@ function EditableCard({workout}) {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState(workout.title || 'Untitled');
-  const [date, setDate] = useState(workout.date || 'Not assigned');
+  // const [date, setDate] = useState(workout.date || 'Not assigned');
+  const [date, setDate] = useState(moment(workout.date).format('YYYY-MM-DD') || 'Not assigned');
 
   const submit = () => {
     dispatch(
@@ -91,7 +95,7 @@ function EditableCard({workout}) {
       <Card>
         <Card.Body>
           <Card.Title>{title}</Card.Title>
-          <Card.Text>Date: {date}</Card.Text>
+          <Card.Text>Date: {moment(workout.date).format('dddd, MMMM Do YYYY')}</Card.Text>
         </Card.Body> 
         <Card.Body>
           <Button onClick={()=>setLock(false)}>Edit</Button>
@@ -121,6 +125,7 @@ function EditableCard({workout}) {
             <Col>
               <Form.Control
                 value={date}
+                type='date'
                 onChange={event=>setDate(event.target.value)}
               />
             </Col>
