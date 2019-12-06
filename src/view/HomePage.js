@@ -43,7 +43,7 @@ function PublicPage(props) {
         <h1>You need to login to access Badger Powerlifting Hub</h1>
       </Card.Body>
       <Card.Body>
-        <Button onClick={()=>setShowLogin(true)}>Login</Button>
+        <Button onClick={()=>setShowLogin(true)} className='mr-2'>Login</Button>
         <Button onClick={()=>setShowRegister(true)}>Register</Button>
       </Card.Body>
     </Card>

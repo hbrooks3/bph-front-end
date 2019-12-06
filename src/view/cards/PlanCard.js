@@ -161,7 +161,7 @@ function EditablePlanCard({plan}) {
       <Card.Body>
         <Card.Title>Plan</Card.Title>
         <Card.Text>Coach: {<Name uid={plan.coachId} />}</Card.Text>
-        <Form inline>
+        <Form inline className='mb-2'>
           <Form.Row>
             <Col>
               <Form.Label as='card-text'>Trainee: </Form.Label>

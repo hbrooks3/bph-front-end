@@ -231,7 +231,7 @@ function ButtonBar({user, locked, dismissError, onSubmit, onEdit, onCancel}) {
 
     {!user.loading && !user.error &&
       <>
-        <Button onClick={onSubmit}>Submit</Button>
+        <Button onClick={onSubmit} className='mr-2'>Submit</Button>
         <Button onClick={onCancel}>Cancel</Button>
       </>
     }

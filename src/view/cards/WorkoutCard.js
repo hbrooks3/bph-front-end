@@ -134,7 +134,7 @@ function EditableCard({workout}) {
       </Card.Body>
 
       <Card.Body>
-        <Button onClick={()=>setLock(true)}>Cancel</Button>
+        <Button onClick={()=>setLock(true)} className='mr-2'>Cancel</Button>
         <Button onClick={submit}>Submit</Button>
       </Card.Body>
     </Card>
