@@ -15,7 +15,7 @@ describe('async actions', () => {
         fetchMock.restore();
     })
 
-    xit('gets user', () => {
+    it('gets user', () => {
         fetchMock.getOnce(
             '/GetCurrentUser',
             {
@@ -36,13 +36,40 @@ describe('async actions', () => {
         })
     })
 })
+describe('account type', () => {
+
+    it('gets account type Trainee', () =>{
+        const account = {auth: { uid: 123}, users: {123: {accountType: 0, loaded: true} }}
+        expect(userActions.getAccountType(account)).toEqual('Trainee')
+    })
+
+    it('gets account type Coach', () =>{
+        const account = {auth: { uid: 123}, users: {123: {accountType: 1, loaded: true} }}
+        expect(userActions.getAccountType(account)).toEqual('Coach')
+    })
+
+    it('fails to have uid', () =>{
+        const account = {auth: {users: {123: {accountType: 0, loaded: true}} }}
+        expect(userActions.getAccountType(account)).toEqual(null)
+    })
+
+    it('fails to have user loaded', () =>{
+        const account = {auth: { uid: 123}, users: {123: {accountType: 1, loaded: false} }}
+        expect(userActions.getAccountType(account)).toEqual(null)
+    })
+
+    it('invalid account type', () =>{
+        const account = {auth: { uid: 123}, users: {123: {accountType: 7, loaded: true} }}
+        expect(userActions.getAccountType(account)).toEqual(null)
+    })
+})
 
 it('dissmisses user error', () =>{
     const expectedAction = {
-        type: userActions.USER_DISSMISS_ERROR,
+        type: userActions.USER_DISMISS_ERROR,
         id: 'id'
     }
-    expect(userActions.dissmissUserError('id')).toEqual(expectedAction);
+    expect(userActions.dismissUserError('id')).toEqual(expectedAction);
 })
 
 it('clears users', () =>{
