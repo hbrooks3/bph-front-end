@@ -1,5 +1,8 @@
 // actions constants
-import { EXERCISE_GET, EXERCISE_EDIT, EXERCISE_ADD_SET, EXERCISE_DISSMISS_ERROR, EXERCISES_CLEAR } from '../actions/exercises';
+import {
+  EXERCISE_GET, EXERCISE_EDIT, EXERCISE_ADD_SET, EXERCISE_ADD_COMMENT, EXERCISE_DISSMISS_ERROR, 
+  EXERCISES_CLEAR, EXERCISE_DELETE_COMMENT
+} from '../actions/exercises';
 
 // flag constants
 import { FAILURE, SUCCESS } from '../actions/exercises';
@@ -16,6 +19,7 @@ const exercise = (state = {}, action) => {
             loaded: true,
             ...action.payload,
             sets: action.payload.setIds,
+            comments: action.payload.commentIds,
           }
         case FAILURE:
           return {
@@ -80,6 +84,52 @@ const exercise = (state = {}, action) => {
             error: false,
           }
       }
+    case EXERCISE_ADD_COMMENT:
+        switch (action.flag) {
+          case SUCCESS:
+            return {
+              ...state,
+              loading: false,
+              error: false,
+              comments: [...state.comments, action.payload.commentId]
+            }
+          case FAILURE:
+            return {
+              ...state,
+              loading: false,
+              error: true,
+              errorMessage: action.payload
+            }
+          default:
+            return {
+              ...state,
+              loading: true,
+              error: false,
+            }
+        }
+    case EXERCISE_DELETE_COMMENT:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            comments: state.comments.filter(id => id !== action.payload)
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            errorMessage: action.payload
+          }
+        default:
+          return {
+            ...state,
+            loading: true,
+            error: false,
+          }
+      }
     case EXERCISE_DISSMISS_ERROR:
       return {
         ...state,
@@ -95,7 +145,9 @@ const exercises = (state = {}, action) => {
     case EXERCISE_EDIT:
     case EXERCISE_GET:
     case EXERCISE_ADD_SET:
+    case EXERCISE_ADD_COMMENT:
     case EXERCISE_DISSMISS_ERROR:
+    case EXERCISE_DELETE_COMMENT:
       return {
         ...state,
         [action.id]: exercise(state[action.id], action),
