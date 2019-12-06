@@ -1,5 +1,6 @@
 import { callApi } from './api';
 import { getAccountType } from './users';
+import { getComment } from './comments';
 
 // // actions constants
 import { PLAN_ADD_WORKOUT } from './plans'
@@ -9,8 +10,13 @@ const WORKOUT_GET = 'WORKOUT_GET';
 const WORKOUT_EDIT = 'WORKOUT_EDIT';
 const WORKOUT_ADD_EXERCISE = 'WORKOUT_ADD_EXERCISE';
 const WORKOUT_DISMISS_ERROR = 'WORKOUT_DISMISS_ERROR';
+const WORKOUT_ADD_COMMENT = 'WORKOUT_ADD_COMMENT';
+const WORKOUT_DELETE_COMMENT = 'WORKOUT_DELETE_COMMENT';
 const WORKOUTS_CLEAR = 'WORKOUTS_CLEAR';
-export { WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISMISS_ERROR, WORKOUTS_CLEAR }
+export {
+  WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISMISS_ERROR, WORKOUTS_CLEAR,
+  WORKOUT_ADD_COMMENT, WORKOUT_DELETE_COMMENT,
+}
 
 // flag constants
 const FAILURE = 'FAILURE';
@@ -166,6 +172,95 @@ export const addExercise = (workoutId) => (dispatch) => {
           flag: SUCCESS,
           id: workoutId,
           payload: response,
+        });
+      }
+    }
+  );
+}
+
+export const addComment = (workoutId, text) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+
+  dispatch({
+    type: WORKOUT_ADD_COMMENT,
+    id: workoutId
+  });
+
+  return callApi(
+    `/api/${accountType}/CreateComment`,
+    {
+      method: 'POST',
+      body: JSON.stringify({comment: {description: text}, ownerId: workoutId}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error) {
+        dispatch({
+          type: WORKOUT_ADD_COMMENT,
+          flag: FAILURE,
+          id: workoutId,
+          payload: response.error,
+        });
+      } else {
+        dispatch({
+          type: WORKOUT_ADD_COMMENT,
+          flag: SUCCESS,
+          id: workoutId,
+          payload: response,
+        });
+        dispatch(
+          getComment(response.commentId)
+        );
+      }
+    }
+  );
+}
+
+export const deleteComment = (workoutId) => (commentId) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+
+  dispatch({
+    type: WORKOUT_DELETE_COMMENT,
+    id: workoutId
+  });
+
+  return callApi(
+    `/api/${accountType}/DeleteComment`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({commentId}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include',
+    },
+    response => {
+      if (response.error || !response.deleted) {
+        dispatch({
+          type: WORKOUT_DELETE_COMMENT,
+          flag: FAILURE,
+          id: workoutId,
+          payload: response.error || 'Failed to delete comment',
+        });
+      } else {
+        dispatch({
+          type: WORKOUT_DELETE_COMMENT,
+          flag: SUCCESS,
+          id: workoutId,
+          payload: commentId,
         });
       }
     }
