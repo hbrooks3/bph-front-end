@@ -9,7 +9,7 @@ import {USER_GET, SUCCESS, FAILURE} from '../../actions/users';
 
 const store = createStore(reducer);
 
-it('renders without crashing', () => {
+xit('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
