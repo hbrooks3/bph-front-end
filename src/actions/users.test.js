@@ -15,7 +15,7 @@ describe('async actions', () => {
         fetchMock.restore();
     })
 
-    it('gets user', () => {
+    xit('gets user', () => {
         const account = {auth: { uid: 123}, users: {123: {accountType: 0, loaded: true} }}
 
         fetchMock.getOnce(
