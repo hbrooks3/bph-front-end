@@ -139,6 +139,10 @@ function GeneralCard({user}) {
     );
   }
 
+  function setNumber(event){
+    return event.target.value.replace(/\D/,'');
+  }
+
   return (
     <Card>
       <Card.Header>General Information</Card.Header>
@@ -150,8 +154,8 @@ function GeneralCard({user}) {
               <Form.Control
                 readOnly={locked}
                 value={weight}
-                type='number'
-                onChange={event => setWeight(event.target.value)}
+                type='text'
+                onChange={event => setWeight(setNumber(event))}
               />
               <InputGroup.Append>
                 <InputGroup.Text>lbs</InputGroup.Text>
@@ -162,10 +166,10 @@ function GeneralCard({user}) {
             <Form.Label>Height</Form.Label>
             <InputGroup>
               <Form.Control 
-                type='number'
+                type='text'
                 readOnly={locked}
                 value={feet}
-                onChange={event => setFeet(event.target.value)}
+                onChange={event => setFeet(setNumber(event))}
               />
               <InputGroup.Append>
                 <InputGroup.Text>ft</InputGroup.Text>
@@ -175,10 +179,10 @@ function GeneralCard({user}) {
           <Form.Group>
             <InputGroup>
               <Form.Control 
-                type='number'
+                type='text'
                 readOnly={locked}
                 value={inches}
-                onChange={event => setInches(event.target.value)}
+                onChange={event => setInches(setNumber(event))}
               />
               <InputGroup.Append>
                 <InputGroup.Text>inches</InputGroup.Text>
