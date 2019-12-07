@@ -7,9 +7,9 @@ import { EXERCISE_ADD_SET } from './exercises'
 // actions constants
 const SET_GET = 'SET_GET';
 const SET_EDIT = 'SET_EDIT';
-const SET_DISSMISS_ERROR = 'SET_DISSMISS_ERROR';
+const SET_DISMISS_ERROR = 'SET_DISMISS_ERROR';
 const SETS_CLEAR = 'SETS_CLEAR';
-export { SET_GET, SET_EDIT, SET_DISSMISS_ERROR, SETS_CLEAR }
+export { SET_GET, SET_EDIT, SET_DISMISS_ERROR, SETS_CLEAR }
 
 // flag constants
 const FAILURE = 'FAILURE';
@@ -97,14 +97,20 @@ export const getSet = (setId) => (dispatch, getState) => {
   );
 }
 
-export const editSet = (set) => (dispatch) => {
+export const editSet = (set) => (dispatch, getState) => {
+  const accountType = getAccountType(getState());
+
+  if (!accountType) {
+    return;
+  }
+
   dispatch({
     type: SET_EDIT,
     id: set.id,
   });
 
   return callApi(
-    '/api/Coach/UpdateSet',
+    `/api/${accountType}/UpdateSet`,
     {
       method: 'PUT',
       body: JSON.stringify({ ...set }),
@@ -134,8 +140,8 @@ export const editSet = (set) => (dispatch) => {
   );
 }
 
-export const dissmissSetError = (setId) => ({
-  type: SET_DISSMISS_ERROR,
+export const dismissSetError = (setId) => ({
+  type: SET_DISMISS_ERROR,
   id: setId,
 });
 

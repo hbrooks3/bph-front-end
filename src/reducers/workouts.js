@@ -1,5 +1,8 @@
 // actions constants
-import { WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISSMISS_ERROR, WORKOUTS_CLEAR } from '../actions/workouts';
+import {
+  WORKOUT_GET, WORKOUT_EDIT, WORKOUT_ADD_EXERCISE, WORKOUT_DISMISS_ERROR, WORKOUTS_CLEAR,
+  WORKOUT_ADD_COMMENT, WORKOUT_DELETE_COMMENT,
+} from '../actions/workouts';
 
 // flag constants
 import { FAILURE, SUCCESS } from '../actions/workouts';
@@ -16,6 +19,7 @@ const workout = (state = {}, action) => {
             loaded: true,
             ...action.payload,
             exercises: action.payload.exerciseIds,
+            comments: action.payload.commentIds,
           }
         case FAILURE:
           return {
@@ -80,10 +84,56 @@ const workout = (state = {}, action) => {
             error: false,
           }
       }
-    case WORKOUT_DISSMISS_ERROR:
+    case WORKOUT_DISMISS_ERROR:
       return {
         ...state,
         error: false,
+      }
+    case WORKOUT_ADD_COMMENT:
+        switch (action.flag) {
+          case SUCCESS:
+            return {
+              ...state,
+              loading: false,
+              error: false,
+              comments: [...state.comments, action.payload.commentId]
+            }
+          case FAILURE:
+            return {
+              ...state,
+              loading: false,
+              error: true,
+              errorMessage: action.payload
+            }
+          default:
+            return {
+              ...state,
+              loading: true,
+              error: false,
+            }
+        }
+    case WORKOUT_DELETE_COMMENT:
+      switch (action.flag) {
+        case SUCCESS:
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            comments: state.comments.filter(id => id !== action.payload)
+          }
+        case FAILURE:
+          return {
+            ...state,
+            loading: false,
+            error: true,
+            errorMessage: action.payload
+          }
+        default:
+          return {
+            ...state,
+            loading: true,
+            error: false,
+          }
       }
     default:
       return state;
@@ -95,7 +145,9 @@ const workouts = (state = {}, action) => {
     case WORKOUT_EDIT:
     case WORKOUT_GET:
     case WORKOUT_ADD_EXERCISE:
-    case WORKOUT_DISSMISS_ERROR:
+    case WORKOUT_DISMISS_ERROR:
+    case WORKOUT_ADD_COMMENT:
+    case WORKOUT_DELETE_COMMENT:
       return {
         ...state,
         [action.id]: workout(state[action.id], action),

@@ -1,12 +1,14 @@
 // actions constants
-import { SET_GET, SET_EDIT, SET_DISMISS_ERROR, SETS_CLEAR } from '../actions/sets';
+import { 
+  COMMENT_GET, COMMENT_EDIT, COMMENT_DISMISS_ERROR, COMMENTS_CLEAR
+} from '../actions/comments';
 
 // flag constants
-import { FAILURE, SUCCESS } from '../actions/sets';
+import { FAILURE, SUCCESS } from '../actions/comments';
 
-const set = (state = {}, action) => {
+const comment = (state = {}, action) => {
   switch (action.type) {
-    case SET_GET:
+    case COMMENT_GET:
       switch (action.flag) {
         case SUCCESS:
           return {
@@ -33,7 +35,7 @@ const set = (state = {}, action) => {
             loaded: false,
           }
       }
-    case SET_EDIT:
+    case COMMENT_EDIT:
       switch (action.flag) {
         case SUCCESS:
           return {
@@ -56,7 +58,7 @@ const set = (state = {}, action) => {
             error: false,
           }
       }
-    case SET_DISMISS_ERROR:
+    case COMMENT_DISMISS_ERROR:
       return {
         ...state,
         error: false,
@@ -66,20 +68,20 @@ const set = (state = {}, action) => {
   };
 };
 
-const sets = (state = {}, action) => {
+const comments = (state = {}, action) => {
   switch (action.type) {
-    case SET_EDIT:
-    case SET_GET:
-    case SET_DISMISS_ERROR:
+    case COMMENT_GET:
+    case COMMENT_EDIT:
+    case COMMENT_DISMISS_ERROR:
       return {
         ...state,
-        [action.id]: set(state[action.id], action),
+        [action.id]: comment(state[action.id], action),
       };
-    case SETS_CLEAR:
+    case COMMENTS_CLEAR:
       return {};
     default:
       return state;
   };
 };
 
-export default sets;
+export default comments;

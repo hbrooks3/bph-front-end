@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 // react-bootstrap
 import Card from 'react-bootstrap/Card';
-// import Button from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
@@ -10,10 +10,11 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { useSelector, useDispatch } from 'react-redux';
 
 // views
-import FetchingCard from './FetchingCard'
+import FetchingCard from './FetchingCard';
+import LoadingCard from './LoadingCard';
 
 // actions
-import { getSet, dissmissSetError } from '../../actions/sets'
+import { getSet, dismissSetError, editSet } from '../../actions/sets';
 
 export default function SetCard({id, editable=false}) {
   const set = useSelector(state=>state.sets[id]);
@@ -31,21 +32,39 @@ export default function SetCard({id, editable=false}) {
     setActualRPE(set ? set.actualRPE || 0 : 0);
   }, [set]);
 
+  const submit = () => {
+    dispatch(
+      editSet({
+        ...set,
+        targetReps,
+        actualReps,
+        targetRPE,
+        actualRPE,
+      })
+    );
+  }
+
   if (!set || !set.loaded) {
     return (
       <FetchingCard
         id={id}
         type='sets'
         fetch={()=>dispatch(getSet(id))}
-        dismissError={()=>dispatch(dissmissSetError(id))}
+        dismissError={()=>dispatch(dismissSetError(id))}
       />
+    );
+  }
+
+  if (set.loading) {
+    return (
+      <LoadingCard />
     );
   }
 
   return (
     <Card>
       <Card.Body>
-        <Form>
+        <Form onSubmit={submit}>
           <Form.Group>
             <Form.Label>Reps</Form.Label>
             <InputGroup>
@@ -107,6 +126,9 @@ export default function SetCard({id, editable=false}) {
           </Form.Group>
         </Form>
       </Card.Body>
+      <Card.Body>
+          <Button onClick={submit}>Update</Button>
+        </Card.Body>
     </Card>
   );
 }

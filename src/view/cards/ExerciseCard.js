@@ -10,13 +10,17 @@ import Form from 'react-bootstrap/Form';
 import { useSelector, useDispatch } from 'react-redux';
 
 // views
-import FetchingCard from './FetchingCard'
+import FetchingCard from './FetchingCard';
+import LoadingCard from './LoadingCard';
+import CommentGroup from '../CommentGroup';
 
 // react-router
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getExercise, dissmissExerciseError } from '../../actions/exercises'
+import {
+  getExercise, dissmissExerciseError, editExercise, addComment, deleteComment
+} from '../../actions/exercises'
 
 export default function ExerciseCard({id, preview=false, editable=false}) {
   const exercise = useSelector(state=>state.exercises[id]);
@@ -31,6 +35,12 @@ export default function ExerciseCard({id, preview=false, editable=false}) {
         fetch={()=>dispatch(getExercise(id))}
         dismissError={()=>dispatch(dissmissExerciseError(id))}
       />
+    );
+  }
+
+  if (exercise.loading) {
+    return (
+      <LoadingCard />
     );
   }
 
@@ -56,15 +66,30 @@ export default function ExerciseCard({id, preview=false, editable=false}) {
       <Card.Body>
         <Card.Title>{exercise.name || 'Unnamed'}</Card.Title>
         <Card.Text>Number of Sets: {exercise.sets.length}</Card.Text>
-      </Card.Body> 
+      </Card.Body>
+      <CommentGroup
+        comments={exercise.comments}
+        ownerId={exercise.id}
+        add={addComment}
+        remove={deleteComment}
+      />
     </Card>
   );
 }
 
 function EditableCard({exercise}) {
   const [lock, setLock] = useState(true);
-
+  const dispatch = useDispatch();
   const [name, setName] = useState(exercise.name || 'Unnamed');
+
+  const submit = () => {
+    dispatch(
+      editExercise({
+        ...exercise,
+        name: name,
+      })
+    );
+  }
 
   if (lock) {
     return (
@@ -72,10 +97,16 @@ function EditableCard({exercise}) {
         <Card.Body>
           <Card.Title>{name}</Card.Title>
           <Card.Text>Number of Sets: {exercise.sets.length}</Card.Text>
-        </Card.Body>  
+        </Card.Body>
         <Card.Body>
           <Button onClick={()=>setLock(false)}>Edit</Button>
         </Card.Body>
+        <CommentGroup
+          comments={exercise.comments}
+          ownerId={exercise.id}
+          add={addComment}
+          remove={deleteComment}
+        />
       </Card>
     )
   }
@@ -83,7 +114,7 @@ function EditableCard({exercise}) {
   return (
     <Card>
       <Card.Body>
-        <Form>
+        <Form onSubmit={submit}>
           <Form.Row>
             <Form.Control
               className='card-title'
@@ -100,8 +131,15 @@ function EditableCard({exercise}) {
       </Card.Body>
 
       <Card.Body>
-        <Button onClick={()=>setLock(true)}>Cancel</Button>
+        <Button onClick={()=>setLock(true)} className='mr-2'>Cancel</Button>
+        <Button onClick={submit}>Submit</Button>
       </Card.Body>
+      <CommentGroup
+        comments={exercise.comments}
+        ownerId={exercise.id}
+        add={addComment}
+        remove={deleteComment}
+      />
     </Card>
   );
 }
