@@ -12,3 +12,11 @@ it('dissmisses auth error', () =>{
     }
     expect(authActions.dissmissAuthError()).toEqual(expectedAction);
 })
+
+xit('check session returns correctly', () =>{
+    const expectedResult = dispatch({
+        type: SESSION_VALID,
+        payload: {uid: response.userId},
+      });
+    expect(authActions.checkSession(()=>{})).toEqual(expectedResult);
+})
