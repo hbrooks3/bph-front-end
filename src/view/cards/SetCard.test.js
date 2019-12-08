@@ -13,7 +13,7 @@ const store = createStore(
 //  applyMiddleware(thunkMiddleware,logger),
 );
 
-xit('renders without crashing', () => {
+it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
@@ -23,5 +23,4 @@ xit('renders without crashing', () => {
       </Provider>,
     div
   );
-  ReactDOM.unmountComponentAtNode(div);
 });

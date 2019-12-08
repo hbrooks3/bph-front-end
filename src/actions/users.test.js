@@ -33,11 +33,12 @@ describe('async actions', () => {
 
         const store = mockStore({ todos: [] });
 
-        return store.dispatch(userActions.getUser('id', account)).then(() => {
+        return store.dispatch(userActions.getUser(store.getState)).then(() => {
             expect(store.getActions()).toEqual(expectedActions);
         })
     })
 })
+
 describe('account type', () => {
 
     it('gets account type Trainee', () =>{

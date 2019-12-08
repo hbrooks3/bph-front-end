@@ -13,15 +13,14 @@ const store = createStore(
 //  applyMiddleware(thunkMiddleware,logger),
 );
 
-xit('renders without crashing', () => {
+it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
       <MemoryRouter initialEntries={["/users/2"]}>
-        <PlanCard props={'type', 'id', 'fetch', 'dismissError'}/>
+        <PlanCard/>
       </MemoryRouter>
-    </Provider>,
+      </Provider>,
     div
   );
-  ReactDOM.unmountComponentAtNode(div);
 });
