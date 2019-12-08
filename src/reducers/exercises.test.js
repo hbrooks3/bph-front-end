@@ -1,5 +1,5 @@
-import reducer from './plans';
-import * as actions from '../actions/plans';
+import reducer from './exercises';
+import * as actions from '../actions/exercises';
 import expect from 'expect';
 
 it('should return the initial state', () => {
@@ -11,7 +11,7 @@ it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(expectedResult);
   });
 
-  it('should handle PLAN_GET', () => {
+  it('should handle EXERCISE_GET', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
@@ -20,13 +20,13 @@ it('should return the initial state', () => {
         }
     }
     const startAction = {
-      type: actions.PLAN_GET
+      type: actions.EXERCISE_GET
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle PLAN_EDIT', () => {
+  it('should handle EXERCISE_EDIT', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
@@ -34,35 +34,35 @@ it('should return the initial state', () => {
         }
     }
     const startAction = {
-      type: actions.PLAN_EDIT
+      type: actions.EXERCISE_EDIT
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle PLAN_DISSMISS_ERROR', () => {
+  it('should handle EXERCISE_DISSMISS_ERROR', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
         }
     }
     const startAction = {
-      type: actions.PLAN_DISSMISS_ERROR
+      type: actions.EXERCISE_DISSMISS_ERROR
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle PLANS_CLEAR', () => {
+  it('should handle EXERCISES_CLEAR', () => {
     const expectedResult = {}
     const startAction = {
-      type: actions.PLANS_CLEAR
+      type: actions.EXERCISES_CLEAR
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle PLAN_ADD_WORKOUT', () => {
+  it('should handle EXERCISE_ADD_SET', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
@@ -70,7 +70,35 @@ it('should return the initial state', () => {
         }
     }
     const startAction = {
-      type: actions.PLAN_ADD_WORKOUT
+      type: actions.EXERCISE_ADD_SET
+    };
+    // it's empty on purpose because it's just starting to fetch posts
+    expect(reducer({}, startAction)).toEqual(expectedResult);
+  });
+
+  it('should handle EXERCISE_ADD_COMMENT', () => {
+    const expectedResult = {
+        "undefined":{
+            "error": false,
+            "loading":true
+        }
+    }
+    const startAction = {
+      type: actions.EXERCISE_ADD_COMMENT
+    };
+    // it's empty on purpose because it's just starting to fetch posts
+    expect(reducer({}, startAction)).toEqual(expectedResult);
+  });
+
+  it('should handle EXERCISE_DELETE_COMMENT', () => {
+    const expectedResult = {
+        "undefined":{
+            "error": false,
+            "loading":true
+        }
+    }
+    const startAction = {
+      type: actions.EXERCISE_DELETE_COMMENT
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);

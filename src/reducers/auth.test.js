@@ -1,99 +1,97 @@
-import reducer from './workouts';
-import * as actions from '../actions/workouts';
+import reducer from './auth';
+import * as actions from '../actions/auth';
 import expect from 'expect';
 
 it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual({});
+    const expectedResult = {
+            "error": false,
+            "loading": false,
+            "loggedIn": false
+    }
+    // it's empty on purpose because it's just starting to fetch posts
+    expect(reducer(undefined, {})).toEqual(expectedResult);
   });
 
-  it('should handle WORKOUT_GET', () => {
+  it('should handle LOGOUT', () => {
     const expectedResult = {
-        "undefined":{
-            "error": false,
-            "loaded":false,
-            "loading":true
-        }
+        "error": false,
+        "loading": false,
+        "loggedIn": false
     }
     const startAction = {
-      type: actions.WORKOUT_GET
+      type: actions.LOGOUT
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle WORKOUT_EDIT', () => {
+  it('should handle CHECK_SESSION', () => {
     const expectedResult = {
-        "undefined":{
-            "error": false,
-            "loading":true
-        }
+        "error": false,
+        "loading": true
     }
     const startAction = {
-      type: actions.WORKOUT_EDIT
+      type: actions.CHECK_SESSION
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle WORKOUT_DISMISS_ERROR', () => {
+  xit('should handle SESSION_VALID', () => {
     const expectedResult = {
-        "undefined":{
-            "error": false,
-        }
+        "error": false,
+        "loading": true
     }
     const startAction = {
-      type: actions.WORKOUT_DISMISS_ERROR
+      type: actions.SESSION_VALID
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle WORKOUTS_CLEAR', () => {
-    const expectedResult = {}
+  it('should handle SESSION_INVALID', () => {
+    const expectedResult = {
+        "error": false,
+        "loading": false,
+        "loggedIn": false
+    }
     const startAction = {
-      type: actions.WORKOUTS_CLEAR
+      type: actions.SESSION_INVALID
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle WORKOUT_ADD_EXERCISE', () => {
+  it('should handle LOGIN', () => {
     const expectedResult = {
-        "undefined":{
-            "error": false,
-            "loading":true
-        }
+        loading: true,
+        error: false,
     }
     const startAction = {
-      type: actions.WORKOUT_ADD_EXERCISE
+      type: actions.LOGIN
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle WORKOUT_ADD_COMMENT', () => {
+  it('should handle REGISTER', () => {
     const expectedResult = {
-        "undefined":{
-            "error": false,
-            "loading":true
-        }
+        loading: true,
+        error: false,
     }
     const startAction = {
-      type: actions.WORKOUT_ADD_COMMENT
+      type: actions.REGISTER
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle WORKOUT_DELETE_COMMENT', () => {
+  it('should handle DISSMISS_AUTH_ERROR', () => {
     const expectedResult = {
-        "undefined":{
-            "error": false,
-            "loading":true
-        }
+        error: false,
     }
     const startAction = {
-      type: actions.WORKOUT_DELETE_COMMENT
+      type: actions.DISSMISS_AUTH_ERROR
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
