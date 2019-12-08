@@ -1,17 +1,12 @@
-import reducer from './plans';
-import * as actions from '../actions/plans';
+import reducer from './comments';
+import * as actions from '../actions/comments';
 import expect from 'expect';
 
 it('should return the initial state', () => {
-    const expectedResult = {
-        "undefined":{
-            "error": false,
-        }
-    }
-    expect(reducer(undefined, {})).toEqual(expectedResult);
+    expect(reducer(undefined, {})).toEqual({});
   });
 
-  it('should handle PLAN_GET', () => {
+  it('should handle COMMENT_GET', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
@@ -20,13 +15,13 @@ it('should return the initial state', () => {
         }
     }
     const startAction = {
-      type: actions.PLAN_GET
+      type: actions.COMMENT_GET
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle PLAN_EDIT', () => {
+  it('should handle COMMENT_EDIT', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
@@ -34,43 +29,29 @@ it('should return the initial state', () => {
         }
     }
     const startAction = {
-      type: actions.PLAN_EDIT
+      type: actions.COMMENT_EDIT
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle PLAN_DISSMISS_ERROR', () => {
+  it('should handle COMMENT_DISMISS_ERROR', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
         }
     }
     const startAction = {
-      type: actions.PLAN_DISSMISS_ERROR
+      type: actions.COMMENT_DISMISS_ERROR
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle PLANS_CLEAR', () => {
+  it('should handle COMMENTS_CLEAR', () => {
     const expectedResult = {}
     const startAction = {
-      type: actions.PLANS_CLEAR
-    };
-    // it's empty on purpose because it's just starting to fetch posts
-    expect(reducer({}, startAction)).toEqual(expectedResult);
-  });
-
-  it('should handle PLAN_ADD_WORKOUT', () => {
-    const expectedResult = {
-        "undefined":{
-            "error": false,
-            "loading":true
-        }
-    }
-    const startAction = {
-      type: actions.PLAN_ADD_WORKOUT
+      type: actions.COMMENTS_CLEAR
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
