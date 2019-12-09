@@ -25,12 +25,19 @@ export default function SetCard({id, editable=false}) {
   const [targetRPE, setTargetRPE] = useState(0);
   const [actualRPE, setActualRPE] = useState(0);
 
+  const [diff, setDiff] = useState(false);
+
   useEffect(() =>{
     setTargetReps(set ? set.targetReps || 0 : 0);
     setActualReps(set ? set.actualReps || 0 : 0);
     setTargetRPE(set ? set.targetRPE || 0 : 0);
     setActualRPE(set ? set.actualRPE || 0 : 0);
   }, [set]);
+
+  const update = (updater, value) => {
+    setDiff(true);
+    updater(value);
+  }
 
   const submit = () => {
     dispatch(
@@ -42,6 +49,7 @@ export default function SetCard({id, editable=false}) {
         actualRPE,
       })
     );
+    setDiff(false);
   }
 
   if (!set || !set.loaded) {
@@ -76,7 +84,7 @@ export default function SetCard({id, editable=false}) {
                 value={targetReps}
                 disabled={!editable}
                 type='number'
-                onChange={event => setTargetReps(event.target.value)}
+                onChange={event => update(setTargetReps, event.target.value)}
               />
             </InputGroup>
           </Form.Group>
@@ -90,7 +98,7 @@ export default function SetCard({id, editable=false}) {
               <Form.Control
                 value={actualReps}
                 type='number'
-                onChange={event => setActualReps(event.target.value)}
+                onChange={event => update(setActualReps, event.target.value)}
               />
             </InputGroup>
           </Form.Group>
@@ -106,7 +114,7 @@ export default function SetCard({id, editable=false}) {
                 value={targetRPE}
                 disabled={!editable}
                 type='number'
-                onChange={event => setTargetRPE(event.target.value)}
+                onChange={event => update(setTargetRPE, event.target.value)}
               />
             </InputGroup>
           </Form.Group>
@@ -120,15 +128,17 @@ export default function SetCard({id, editable=false}) {
               <Form.Control
                 value={actualRPE}
                 type='number'
-                onChange={event => setActualRPE(event.target.value)}
+                onChange={event => update(setActualRPE, event.target.value)}
               />
             </InputGroup>
           </Form.Group>
         </Form>
       </Card.Body>
-      <Card.Body>
+      {diff &&
+        <Card.Body>
           <Button onClick={submit}>Update</Button>
         </Card.Body>
+      }
     </Card>
   );
 }
