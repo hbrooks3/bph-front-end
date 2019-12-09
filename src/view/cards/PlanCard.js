@@ -20,7 +20,7 @@ import LoadingCard from './LoadingCard';
 import { useHistory } from 'react-router-dom';
 
 // actions
-import { getPlan, dissmissPlanError, editPlan } from '../../actions/plans';
+import { getPlan, dismissPlanError, editPlan } from '../../actions/plans';
 import { getUser } from '../../actions/users';
 
 export default function PlanCard({id, preview=false, editable=false}) {
@@ -34,7 +34,7 @@ export default function PlanCard({id, preview=false, editable=false}) {
         id={id}
         type='plans'
         fetch={()=>dispatch(getPlan(id))}
-        dismissError={()=>dispatch(dissmissPlanError(id))}
+        dismissError={()=>dispatch(dismissPlanError(id))}
       />
     );
   }

@@ -19,7 +19,7 @@ import { useHistory } from 'react-router-dom';
 
 // actions
 import {
-  getExercise, dissmissExerciseError, editExercise, addComment, deleteComment
+  getExercise, dismissExerciseError, editExercise, addComment, deleteComment
 } from '../../actions/exercises'
 
 export default function ExerciseCard({id, preview=false, editable=false}) {
@@ -33,7 +33,7 @@ export default function ExerciseCard({id, preview=false, editable=false}) {
         id={id}
         type='exercises'
         fetch={()=>dispatch(getExercise(id))}
-        dismissError={()=>dispatch(dissmissExerciseError(id))}
+        dismissError={()=>dispatch(dismissExerciseError(id))}
       />
     );
   }

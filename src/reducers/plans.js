@@ -1,5 +1,5 @@
 // actions constants
-import { PLAN_GET, PLAN_EDIT, PLAN_ADD_WORKOUT, PLAN_DISSMISS_ERROR, PLANS_CLEAR } from '../actions/plans';
+import { PLAN_GET, PLAN_EDIT, PLAN_ADD_WORKOUT, PLAN_DISMISS_ERROR, PLANS_CLEAR } from '../actions/plans';
 
 // flag constants
 import { FAILURE, SUCCESS } from '../actions/plans';
@@ -80,7 +80,7 @@ const plan = (state = {}, action) => {
             error: false,
           }
       }
-    case PLAN_DISSMISS_ERROR:
+    case PLAN_DISMISS_ERROR:
       return {
         ...state,
         error: false,
@@ -95,7 +95,7 @@ const plans = (state = {}, action) => {
     case PLAN_EDIT:
     case PLAN_GET:
     case PLAN_ADD_WORKOUT:
-    case PLAN_DISSMISS_ERROR:
+    case PLAN_DISMISS_ERROR:
       return {
         ...state,
         [action.id]: plan(state[action.id], action),

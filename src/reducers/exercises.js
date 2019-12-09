@@ -1,6 +1,6 @@
 // actions constants
 import {
-  EXERCISE_GET, EXERCISE_EDIT, EXERCISE_ADD_SET, EXERCISE_ADD_COMMENT, EXERCISE_DISSMISS_ERROR, 
+  EXERCISE_GET, EXERCISE_EDIT, EXERCISE_ADD_SET, EXERCISE_ADD_COMMENT, EXERCISE_DISMISS_ERROR, 
   EXERCISES_CLEAR, EXERCISE_DELETE_COMMENT
 } from '../actions/exercises';
 
@@ -130,7 +130,7 @@ const exercise = (state = {}, action) => {
             error: false,
           }
       }
-    case EXERCISE_DISSMISS_ERROR:
+    case EXERCISE_DISMISS_ERROR:
       return {
         ...state,
         error: false,
@@ -146,7 +146,7 @@ const exercises = (state = {}, action) => {
     case EXERCISE_GET:
     case EXERCISE_ADD_SET:
     case EXERCISE_ADD_COMMENT:
-    case EXERCISE_DISSMISS_ERROR:
+    case EXERCISE_DISMISS_ERROR:
     case EXERCISE_DELETE_COMMENT:
       return {
         ...state,
