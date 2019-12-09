@@ -49,7 +49,17 @@
   "jest": {
     "coveragePathIgnorePatterns": [
       "src/index.js",
-      "api.js"
+      "src/actions/api.js",
+      "src/actions/",
+      "src/view/CommentGroup.js",
+      "src/view/ProfilePage.js",
+      "src/view/cards/PlanCard.js",
+      "src/view/App.js",
+      "src/view/cards/WorkoutCard.js",
+      "src/view/cards/ExerciseCard.js",
+      "src/view/LoginModal.js",
+      "src/view/cards/LoadingUserCard.js",
+      "src/view/cards/SetCard.js"
     ]
   }
 }
