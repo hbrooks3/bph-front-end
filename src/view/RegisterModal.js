@@ -108,7 +108,7 @@ const RegisterModal = ({show, onClose, onRegister}) => {
       </Modal.Header>
       <Modal.Body>
         {
-          auth.isFetching ?
+          auth.loading ?
           <div className="text-center">
             <Spinner animation="border" />
           </div> :
@@ -166,10 +166,10 @@ const RegisterModal = ({show, onClose, onRegister}) => {
         }
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={()=>dispatch(register(email, password))} disabled={(!displayPasswordMatch || auth.isFetching)}>
+        <Button variant="primary" onClick={()=>dispatch(register(email, password))} disabled={(!displayPasswordMatch || auth.loading)}>
           Create
         </Button>
-        <Button variant="secondary" onClick={close} disabled={auth.isFetching}>
+        <Button variant="secondary" onClick={close} disabled={auth.loading}>
           Close
         </Button>
       </Modal.Footer>

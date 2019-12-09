@@ -28,7 +28,7 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
     if (auth.error) {
       dispatch(dissmissAuthError());
     };
-    if (auth.isFetching) {
+    if (auth.loading) {
       return;
     }
     onClose();
@@ -46,7 +46,7 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
       </Modal.Header>
       <Modal.Body>
         {
-          auth.isFetching ?
+          auth.loading ?
           <div className="text-center">
             <Spinner animation="border" />
           </div> :
@@ -90,10 +90,10 @@ const LoginModal = ({show, onClose, onLogin, switchToRegister}) => {
         }
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={()=>dispatch(login(email,password))} disabled={auth.isFetching}>
+        <Button variant="primary" onClick={()=>dispatch(login(email,password))} disabled={auth.loading}>
           Login
         </Button>
-        <Button variant="secondary" onClick={close} disabled={auth.isFetching}>
+        <Button variant="secondary" onClick={close} disabled={auth.loading}>
           Close
         </Button>
       </Modal.Footer>
