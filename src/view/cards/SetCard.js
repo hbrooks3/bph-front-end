@@ -24,6 +24,8 @@ export default function SetCard({id, editable=false}) {
   const [actualReps, setActualReps] = useState(0);
   const [targetRPE, setTargetRPE] = useState(0);
   const [actualRPE, setActualRPE] = useState(0);
+  const [targetWeight, setTargetWeight] = useState(0);
+  const [actualWeight, setActualWeight] = useState(0);
 
   const [diff, setDiff] = useState(false);
 
@@ -32,6 +34,8 @@ export default function SetCard({id, editable=false}) {
     setActualReps(set ? set.actualReps || 0 : 0);
     setTargetRPE(set ? set.targetRPE || 0 : 0);
     setActualRPE(set ? set.actualRPE || 0 : 0);
+    setTargetWeight(set ? set.targetWeight || 0 : 0);
+    setActualWeight(set ? set.actualWeight || 0 : 0);
   }, [set]);
 
   const update = (updater, value) => {
@@ -47,6 +51,8 @@ export default function SetCard({id, editable=false}) {
         actualReps,
         targetRPE,
         actualRPE,
+        targetWeight,
+        actualWeight,
       })
     );
     setDiff(false);
@@ -129,6 +135,36 @@ export default function SetCard({id, editable=false}) {
                 value={actualRPE}
                 type='number'
                 onChange={event => update(setActualRPE, event.target.value)}
+              />
+            </InputGroup>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Weight</Form.Label>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>Target</InputGroup.Text>
+              </InputGroup.Prepend>
+
+              <Form.Control
+                value={targetWeight}
+                disabled={!editable}
+                type='number'
+                onChange={event => update(setTargetWeight, event.target.value)}
+              />
+            </InputGroup>
+          </Form.Group>
+
+          <Form.Group>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>Actual</InputGroup.Text>
+              </InputGroup.Prepend>
+
+              <Form.Control
+                value={actualWeight}
+                type='number'
+                onChange={event => update(setActualWeight, event.target.value)}
               />
             </InputGroup>
           </Form.Group>
