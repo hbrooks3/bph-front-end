@@ -2,7 +2,7 @@
   "name": "bph-front-end",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://bph-back-end.azurewebsites.net",
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "bootstrap": "^4.4.1",
     "cross-fetch": "^3.0.4",
