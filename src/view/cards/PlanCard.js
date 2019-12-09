@@ -87,8 +87,10 @@ function Name({uid}) {
   useEffect(() => {
     if (!uid) {
       setName('Not Assigned');
-    } else if (user && user.loaded) {
+    } else if (user && user.loaded && (user.lastName || user.firstName)) {
       setName(`${user.firstName} ${user.lastName}`);
+    } else if (user && user.loaded) {
+      setName(user.email);
     } else if (!user || !(user.loading || user.error)) {
       dispatch(getUser(uid));
     }
