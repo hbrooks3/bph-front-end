@@ -6,10 +6,19 @@ import { Provider } from 'react-redux';
 import reducer from '../../reducers/index.js';
 import {MemoryRouter} from 'react-router-dom';
 
+const store = createStore(
+  reducer,
+//  applyMiddleware(thunkMiddleware,logger),
+);
 
-it('clears users', () =>{
-  const expectedAction = {
-      type: userActions.USERS_CLEAR
-  }
-  expect(userActions.clearUsers()).toEqual(expectedAction);
-})
+it('renders without crashing', () => {
+  const div = document.createElement('div');
+  ReactDOM.render(
+    <Provider store={store}>
+      <MemoryRouter initialEntries={["/users/2"]}>
+        <ExerciseCard/>
+      </MemoryRouter>
+      </Provider>,
+    div
+  );
+});

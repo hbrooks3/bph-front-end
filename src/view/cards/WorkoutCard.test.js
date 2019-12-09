@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import reducer from '../../reducers/index.js';
 import { useHistory } from 'react-router-dom';
 import {MemoryRouter} from 'react-router-dom';
+import * as WorkoutCardActions from './WorkoutCard.js';
 
 
 
@@ -15,7 +16,7 @@ const store = createStore(
 //  applyMiddleware(thunkMiddleware,logger),
 );
 
-xit('renders without crashing', () => {
+it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
     <Provider store={store}>
@@ -25,7 +26,11 @@ xit('renders without crashing', () => {
       </Provider>,
     div
   );
-  ReactDOM.unmountComponentAtNode(div);
 });
+
+// it('returns fetching card', () =>{
+//   //const account = {auth: {users: {123: {accountType: 0, loaded: true}} }}
+//   expect(WorkoutCardActions.EditableCard()
+// })
 
 

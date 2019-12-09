@@ -8,9 +8,9 @@ import { USER_ADD_PLAN } from './users'
 const PLAN_GET = 'PLAN_GET';
 const PLAN_EDIT = 'PLAN_EDIT';
 const PLAN_ADD_WORKOUT = 'PLAN_ADD_WORKOUT';
-const PLAN_DISSMISS_ERROR = 'PLAN_DISSMISS_ERROR';
+const PLAN_DISMISS_ERROR = 'PLAN_DISMISS_ERROR';
 const PLANS_CLEAR = 'PLANS_CLEAR';
-export { PLAN_GET, PLAN_EDIT, PLAN_ADD_WORKOUT, PLAN_DISSMISS_ERROR, PLANS_CLEAR }
+export { PLAN_GET, PLAN_EDIT, PLAN_ADD_WORKOUT, PLAN_DISMISS_ERROR, PLANS_CLEAR }
 
 // flag constants
 const FAILURE = 'FAILURE';
@@ -172,8 +172,8 @@ export const addWorkout = (id) => (dispatch) => {
   );
 }
 
-export const dissmissPlanError = (id) => ({
-  type: PLAN_DISSMISS_ERROR,
+export const dismissPlanError = (id) => ({
+  type: PLAN_DISMISS_ERROR,
   id
 });
 

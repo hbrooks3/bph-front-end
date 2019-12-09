@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LoadingCard from './LoadingCard.js';
+import LoadingUserCard from './LoadingUserCard.js';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../../reducers/index.js';
