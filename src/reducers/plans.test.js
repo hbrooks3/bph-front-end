@@ -3,12 +3,7 @@ import * as actions from '../actions/plans';
 import expect from 'expect';
 
 it('should return the initial state', () => {
-    const expectedResult = {
-        "undefined":{
-            "error": false,
-        }
-    }
-    expect(reducer(undefined, {})).toEqual(expectedResult);
+    expect(reducer(undefined, {})).toEqual({});
   });
 
   it('should handle PLAN_GET', () => {
@@ -40,14 +35,14 @@ it('should return the initial state', () => {
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle PLAN_DISSMISS_ERROR', () => {
+  it('should handle PLAN_DISMISS_ERROR', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
         }
     }
     const startAction = {
-      type: actions.PLAN_DISSMISS_ERROR
+      type: actions.PLAN_DISMISS_ERROR
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);

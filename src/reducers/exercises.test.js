@@ -3,12 +3,8 @@ import * as actions from '../actions/exercises';
 import expect from 'expect';
 
 it('should return the initial state', () => {
-    const expectedResult = {
-        "undefined":{
-            "error": false,
-        }
-    }
-    expect(reducer(undefined, {})).toEqual(expectedResult);
+
+    expect(reducer(undefined, {})).toEqual({});
   });
 
   it('should handle EXERCISE_GET', () => {
@@ -40,14 +36,14 @@ it('should return the initial state', () => {
     expect(reducer({}, startAction)).toEqual(expectedResult);
   });
 
-  it('should handle EXERCISE_DISSMISS_ERROR', () => {
+  it('should handle EXERCISE_DISMISS_ERROR', () => {
     const expectedResult = {
         "undefined":{
             "error": false,
         }
     }
     const startAction = {
-      type: actions.EXERCISE_DISSMISS_ERROR
+      type: actions.EXERCISE_DISMISS_ERROR
     };
     // it's empty on purpose because it's just starting to fetch posts
     expect(reducer({}, startAction)).toEqual(expectedResult);
